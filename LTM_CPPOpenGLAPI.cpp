@@ -19,7 +19,7 @@ int main(int argc, char *argv[]){
     if(!window){
         std::cout << "Failed to create GLFW window" << "\n";
         glfwTerminate();
-        return 1;
+        return -1;
     }
 
     glfwMakeContextCurrent(window);
