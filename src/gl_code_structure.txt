@@ -1,0 +1,6 @@
+Basic startup header files:
+	1.gl_setup.hpp - Startup configuration of OpenGL; More OpenGL settings; Binding of callback functions.
+	2.gl_values.hpp - Variables and definitions containing information and data needed to be used throughout the program.
+	3.gl_mesh_types.hpp - Declaration of all class types of custom mesh.
+	4.gl_control.hpp - Controlling operations during OpenGL runtime (Translate mesh, control viewport etc).
+	5.image_edit.h - Editing of image files to work with OpenGL.
