@@ -32,14 +32,16 @@ endif()
 
 add_subdirectory(external/glfw)
 
-target_include_directories(${PROJECT_NAME} 
+target_include_directories(${PROJECT_NAME}
+    PRIVATE external/glad/include
+    PRIVATE external/glad/src
     PRIVATE external/glfw/include
     # @This one is for including the generated .h file.
     PUBLIC ${CMAKE_CURRENT_BINARY_DIR} #CMAKE_CURRENT_BINARY_DIR: Full path to build directory for project.
     #${EXTRA_INCLUDES_DIRS}
 )
 
-target_link_directories(${PROJECT_NAME} 
+target_link_directories(${PROJECT_NAME}
     PRIVATE external/glfw/src
     #${EXTRA_LIB_DIRS}
 )

@@ -1,4 +1,6 @@
 #include <LTM_CPPOpenGLAPI.h>
+#include <glad/glad.h>
+#include <glad.c>
 #include <GLFW/glfw3.h>
 #include <iostream>
 
@@ -23,10 +25,18 @@ int main(int argc, char *argv[]){
     }
 
     glfwMakeContextCurrent(window);
+
+    if (!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress)) {
+        std::cout << "Failed to initialize GLAD" << std::endl;
+        return -2;
+    }
     
     while (!glfwWindowShouldClose(window)){
         glfwSwapBuffers(window);
         glfwPollEvents();
     }
+
+    glViewport(0, 0, 800, 600);
+
     return 0;
 }
