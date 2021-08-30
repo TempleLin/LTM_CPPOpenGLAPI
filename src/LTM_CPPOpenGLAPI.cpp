@@ -6,7 +6,6 @@
 #endif // !USE_3DFIRSTLIGHTINGSCENE
 
 #ifdef USE_3DFIRSTLIGHTINGSCENE
-
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
 
@@ -14,11 +13,15 @@
 #include "headers/gl_mesh_types.hpp"
 #include "headers/gl_control.hpp"
 
+#include <LTM_CPPOpenGLAPIConfig.h>
+#ifdef SHOW_API_VERSION
+    #include <iostream>
+#endif
+
 #ifdef FUNCTION_TIME_TESTING
-#include <chrono>
-#ifndef PURE_TESTING
-#include <iostream>
-#endif // !PURE_TESTING
+    #include <chrono>
+    #ifndef PURE_TESTING
+    #endif // !PURE_TESTING
 
 void function_time_testing();
 
@@ -28,7 +31,6 @@ void testTime1(GLMesh& mesh);
 
 #ifdef PURE_TESTING
 #ifndef FUNCTION_TIME_TESTING
-#include <iostream>
 #endif // !FUNCTION_TIME_TESTING
 
 void pure_testing();
@@ -37,6 +39,11 @@ void pure_testing();
 
 
 int main() {
+#ifdef SHOW_API_VERSION
+    std::cout << "API Version: " << LTM_CPPOPENGLAPICONFIG_MAJOR 
+        << "." << LTM_CPPOPENGLAPICONFIG_MINOR << "\n";
+#endif
+    
 #ifndef PURE_TESTING
     GLFWwindow* window = configureOpenGL();
     unsigned int vertexShaderHandle{ 0 }, fragmentShaderHandle{ 0 }, shaderProgramHandle{ 0 };

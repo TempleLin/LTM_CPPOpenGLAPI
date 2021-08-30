@@ -13,7 +13,10 @@ file(GLOB SOURCES
 
 add_executable(${PROJECT_NAME} ${SOURCES})
 
-configure_file(src/headers/LTM_CPPOpenGLAPI.h.in LTM_CPPOpenGLAPI.h @ONLY)
+
+set(SHOW_API_VERSION "SHOW_API_VERSION")
+
+configure_file(src/headers/LTM_CPPOpenGLAPIConfig.h.in LTM_CPPOpenGLAPIConfig.h @ONLY)
 
 
 #       DOWNLOAD ALL THE SUBMODULES
