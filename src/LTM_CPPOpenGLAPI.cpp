@@ -1,6 +1,5 @@
 #ifndef USE_3DFIRSTLIGHTINGSCENE
 #define USE_3DFIRSTLIGHTINGSCENE
-#define CURRENT_RELATIVE_FOLDERPATH "src/_3DCameraMoveWithMouse"
 //#define FUNCTION_TIME_TESTING //Uncomment this if want to testing timing between function calls.
 //#define PURE_TESTING //Uncomment this to disable current main execution and do pure testing.
 //#define WIREFRAME_MODE

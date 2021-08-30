@@ -2,6 +2,7 @@
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
 #include "headers/image_edit.hpp"
+#include "headers/gl_values.hpp"
 #include <iostream>
 
 GLMesh::GLMesh(std::string meshName, glm::vec3 position, unsigned int& shaderProgram, unsigned int* vao, unsigned int* vbo) {
@@ -41,7 +42,7 @@ void GLMesh::setTexture0(std::string texturePath) {
     setTextureWrapFilter(GL_REPEAT, GL_REPEAT, GL_LINEAR, GL_LINEAR);
 
     int width, height, nrChannels;
-    unsigned char* data = loadImage(texturePath, width, height, nrChannels);
+    unsigned char* data = loadImage(CURRENT_RELATIVE_FOLDERPATH + texturePath, width, height, nrChannels);
     if (data) {
         glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, data);
         glGenerateMipmap(GL_TEXTURE_2D);

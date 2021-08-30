@@ -1,7 +1,7 @@
 #pragma once
 #include <glm/glm.hpp>
 
-#define CURRENT_RELATIVE_FOLDERPATH "src/"
+#define CURRENT_RELATIVE_FOLDERPATH "../src/"
 
 #define WINDOWWIDTH 800
 #define WINDOWHEIGHT 600
