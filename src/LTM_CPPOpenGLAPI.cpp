@@ -2,6 +2,8 @@
 #include <glad/glad.h>
 #include <glad.c>
 #include <GLFW/glfw3.h>
+#include <glm/glm.hpp>
+#include <glm/gtx/string_cast.hpp>
 #include <iostream>
 
 int main(int argc, char *argv[]){
@@ -29,6 +31,14 @@ int main(int argc, char *argv[]){
     if (!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress)) {
         std::cout << "Failed to initialize GLAD" << std::endl;
         return -2;
+    }
+
+    try {
+        glm::mat4 testMatrix = glm::mat4(1.0f);
+        glm::mat4 testMatrix2 = glm::translate(testMatrix, glm::vec3(0.0f, 0.0f, -3.0f));
+        std::cout << glm::to_string(testMatrix2);
+    } catch (...){
+        std::cout << "Something wrong with GLM." << "\n";
     }
     
     while (!glfwWindowShouldClose(window)){

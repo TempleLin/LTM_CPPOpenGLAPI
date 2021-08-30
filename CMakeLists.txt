@@ -4,9 +4,9 @@ cmake_minimum_required(VERSION 3.21.1)
 set (CMAKE_CXX_STANDARD 17)
 project(LTM_CPPOpenGLAPI VERSION 0.1)
 
-add_executable(${PROJECT_NAME} LTM_CPPOpenGLAPI.cpp)
+add_executable(${PROJECT_NAME} src/LTM_CPPOpenGLAPI.cpp)
 
-configure_file(LTM_CPPOpenGLAPI.h.in LTM_CPPOpenGLAPI.h @ONLY)
+configure_file(src/headers/LTM_CPPOpenGLAPI.h.in LTM_CPPOpenGLAPI.h @ONLY)
 
 
 #       DOWNLOAD ALL THE SUBMODULES
@@ -36,6 +36,7 @@ target_include_directories(${PROJECT_NAME}
     PRIVATE external/glad/include
     PRIVATE external/glad/src
     PRIVATE external/glfw/include
+    PRIVATE external/glm
     # @This one is for including the generated .h file.
     PUBLIC ${CMAKE_CURRENT_BINARY_DIR} #CMAKE_CURRENT_BINARY_DIR: Full path to build directory for project.
     #${EXTRA_INCLUDES_DIRS}
