@@ -40,7 +40,7 @@ void pure_testing();
 
 int main() {
 #ifdef SHOW_API_VERSION
-    std::cout << "API Version: " << LTM_CPPOPENGLAPICONFIG_MAJOR 
+    std::cout << SHOW_API_VERSION << LTM_CPPOPENGLAPICONFIG_MAJOR 
         << "." << LTM_CPPOPENGLAPICONFIG_MINOR << "\n";
 #endif
     

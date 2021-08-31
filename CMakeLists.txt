@@ -14,7 +14,7 @@ file(GLOB SOURCES
 add_executable(${PROJECT_NAME} ${SOURCES})
 
 
-set(SHOW_API_VERSION "SHOW_API_VERSION")
+set(SHOW_API_VERSION "API Version: ")
 
 configure_file(src/headers/LTM_CPPOpenGLAPIConfig.h.in LTM_CPPOpenGLAPIConfig.h @ONLY)
 
