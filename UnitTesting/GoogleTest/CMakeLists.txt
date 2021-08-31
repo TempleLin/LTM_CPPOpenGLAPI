@@ -1,8 +1,10 @@
 cmake_minimum_required(VERSION 3.14)
-project(LTM_CPPOpenGLAPI_TESTING)
+project(LTM_CPPOpenGLAPI_TESTING VERSION 0.0)
 
 # GoogleTest requires at least C++11
 set(CMAKE_CXX_STANDARD 11)
+
+message("API Version: ${CMAKE_PROJECT_VERSION}")
 
 include(FetchContent)
 FetchContent_Declare(

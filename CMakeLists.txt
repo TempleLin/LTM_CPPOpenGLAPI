@@ -41,6 +41,8 @@ endif()
 
 
 add_subdirectory(external/glfw)
+# @Add GoogleTest as subdirectory.
+add_subdirectory(UnitTesting/GoogleTest)
 
 target_include_directories(${PROJECT_NAME}
     PRIVATE external/glad/include
