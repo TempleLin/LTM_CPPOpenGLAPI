@@ -4,6 +4,8 @@ cmake_minimum_required(VERSION 3.21.1)
 set (CMAKE_CXX_STANDARD 17)
 project(LTM_CPPOpenGLAPI VERSION 0.1)
 
+#---PASS ALL SOURCE FILES TO EXTERNAL----------------------------------------------------------
+
 file(GLOB SOURCES 
     src/*.c
     src/*.cpp 
@@ -13,10 +15,8 @@ file(GLOB SOURCES
 
 add_executable(${PROJECT_NAME} ${SOURCES})
 
+#-------------------------------------------------------------
 
-set(SHOW_API_VERSION "API Version: ")
-
-configure_file(src/headers/LTM_CPPOpenGLAPIConfig.h.in LTM_CPPOpenGLAPIConfig.h @ONLY)
 
 
 #       DOWNLOAD ALL THE SUBMODULES
@@ -43,20 +43,39 @@ add_subdirectory(external/glfw)
 
 
 
+#---COMPARE API AND UNIT TESTING VERSION TO PASS TO CONFIG TO PRINT OUT IN CONSOLE-------------------------------------------------------------
+
 # @Check version of the Unit Testing solution.
 option(COMPARE_TESTING_VERSION ON)
 # @Add GoogleTest as subdirectory.
 add_subdirectory(UnitTesting/GoogleTest)
 
 if(COMPARE_TESTING_VERSION)
-  message("API Version: ${CMAKE_PROJECT_VERSION}")
-  message("Unit Testing Version: ${TESTING_VERSION}")
-
-  if(${CMAKE_PROJECT_VERSION} GREATER ${TESTING_VERSION}
-      OR ${CMAKE_PROJECT_VERSION} LESS ${TESTING_VERSION})
-      message("API and Unit Testing version not match.")
-  endif()
+    message("API Version: ${CMAKE_PROJECT_VERSION}")
+    message("Unit Testing Version: ${TESTING_VERSION}")
 endif()
+
+if(DEFINED TESTING_VERSION)
+    if(${CMAKE_PROJECT_VERSION} GREATER ${TESTING_VERSION} OR ${CMAKE_PROJECT_VERSION} LESS ${TESTING_VERSION})
+        set(API_TESTING_VERSIONNOTMATCH "API and Unit Testing version not match.")
+        message("${API_TESTING_VERSIONNOTMATCH}")
+    endif()
+else()
+    message(WARNING "Unit Testing version not set from subdirectory. Can't compare version with API.")
+endif()
+
+set(SHOW_API_VERSION "API Version: ")
+set(SHOW_TESTING_VERSION "Unit Testing Version: ")
+if(DEFINED API_TESTING_VERSIONNOTMATCH)
+    set(API_TESTING_VER_COMPARE_MESSAGE "${API_TESTING_VERSIONNOTMATCH}")
+else()
+    set(API_TESTING_VER_COMPARE_MESSAGE "API and Unit Testing version match.")
+endif()
+
+#--------------------------------------------------------------------------------------------------------------------------
+
+
+configure_file(src/headers/LTM_CPPOpenGLAPIConfig.h.in LTM_CPPOpenGLAPIConfig.h @ONLY)
 
 
 

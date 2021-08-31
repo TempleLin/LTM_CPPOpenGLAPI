@@ -40,8 +40,21 @@ void pure_testing();
 
 int main() {
 #ifdef SHOW_API_VERSION
-    std::cout << SHOW_API_VERSION << LTM_CPPOPENGLAPICONFIG_MAJOR 
-        << "." << LTM_CPPOPENGLAPICONFIG_MINOR << "\n";
+    #ifndef API_VERSION
+        std::cout << "Set to show API version but version not defined in config." << "\n";
+    #else
+        std::cout << SHOW_API_VERSION << API_VERSION << "\n";
+    #endif
+#endif
+#ifdef SHOW_TESTING_VERSION
+    #ifndef TESTING_VERSION
+        std::cout << "Set to show Unit Testing version but version not defined in config." << "\n";
+    #else
+        std::cout << SHOW_TESTING_VERSION << TESTING_VERSION << "\n";
+    #endif
+#endif
+#ifdef API_TESTING_VER_COMPARE_MESSAGE
+    std::cout << API_TESTING_VER_COMPARE_MESSAGE << "\n";
 #endif
     
 #ifndef PURE_TESTING
