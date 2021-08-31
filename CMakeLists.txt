@@ -39,10 +39,26 @@ if(NOT EXISTS "${PROJECT_SOURCE_DIR}/external/glfw/CMakeLists.txt")
     message(FATAL_ERROR "The glfw submodules was not downloaded! GIT_SUBMODULE was turned off or failed.")
 endif()
 
-
 add_subdirectory(external/glfw)
+
+
+
+# @Check version of the Unit Testing solution.
+option(COMPARE_TESTING_VERSION ON)
 # @Add GoogleTest as subdirectory.
 add_subdirectory(UnitTesting/GoogleTest)
+
+if(COMPARE_TESTING_VERSION)
+  message("API Version: ${CMAKE_PROJECT_VERSION}")
+  message("Unit Testing Version: ${TESTING_VERSION}")
+
+  if(${CMAKE_PROJECT_VERSION} GREATER ${TESTING_VERSION}
+      OR ${CMAKE_PROJECT_VERSION} LESS ${TESTING_VERSION})
+      message("API and Unit Testing version not match.")
+  endif()
+endif()
+
+
 
 target_include_directories(${PROJECT_NAME}
     PRIVATE external/glad/include

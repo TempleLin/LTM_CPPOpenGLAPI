@@ -4,7 +4,10 @@ project(LTM_CPPOpenGLAPI_TESTING VERSION 0.0)
 # GoogleTest requires at least C++11
 set(CMAKE_CXX_STANDARD 11)
 
-message("API Version: ${CMAKE_PROJECT_VERSION}")
+# @Give version of the Unit Testing solution to root.
+if (COMPARE_TESTING_VERSION)
+  set (TESTING_VERSION "${PROJECT_VERSION}" PARENT_SCOPE)
+endif()
 
 include(FetchContent)
 FetchContent_Declare(
