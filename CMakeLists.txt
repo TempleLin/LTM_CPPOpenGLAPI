@@ -49,9 +49,9 @@ add_subdirectory(external/glfw)
 #---GLFW LIBRARY SUBDIRECTORY WILL ALSO PASS TO GOOGLE TESTING SUBDIRECTORY SINCE IT'S ADDED FIRST---------------------
 
 list(APPEND PROJECT_INCLUDE_DIRS
-    PUBLIC "${CMAKE_SOURCE_DIR}/external/glad/include" 
-    PUBLIC "${CMAKE_SOURCE_DIR}/external/glad/src" 
-    PUBLIC "${CMAKE_SOURCE_DIR}/external/glfw/include" 
+    PUBLIC "${CMAKE_SOURCE_DIR}/external/glad/include"
+    PUBLIC "${CMAKE_SOURCE_DIR}/external/glad/src"
+    PUBLIC "${CMAKE_SOURCE_DIR}/external/glfw/include"
     PUBLIC "${CMAKE_SOURCE_DIR}/external/glm"
     PUBLIC "${CMAKE_SOURCE_DIR}/external/stb_image"
 )
@@ -110,6 +110,8 @@ endif()
 #--------------------------------------------------------------------------------------------------------------------------
 #--------------------------------------------------------------------------------------------------------------------------
 
+
+set(PROJECT_SOURCE_FOLDERPATH "${PROJECT_SOURCE_DIR}")
 
 configure_file(src/headers/LTM_CPPOpenGLAPIConfig.h.in LTM_CPPOpenGLAPIConfig.h @ONLY)
 

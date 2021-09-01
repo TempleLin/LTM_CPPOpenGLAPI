@@ -5,6 +5,7 @@
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
 #include "headers/gl_values.hpp"
+#include <LTM_CPPOpenGLAPIConfig.h>
 
 //--------------------------------------------------Configuration--------------------------------------------------
 
@@ -55,8 +56,8 @@ void framebuffer_size_callback(GLFWwindow* window, int width, int height) {
 
 void createShaderProgram(unsigned int& vertexShader, std::string vsPath, unsigned int& fragmentShader, std::string fsPath, unsigned int& shaderProgram) {
     // 1. retrieve the vertex/fragment source code from filePath
-    std::string vertexPath = std::string(CURRENT_RELATIVE_FOLDERPATH).append(vsPath);
-    std::string fragmentPath = std::string(CURRENT_RELATIVE_FOLDERPATH).append(fsPath);
+    std::string vertexPath = std::string(PROJECT_SOURCE_FOLDERPATH).append(vsPath);
+    std::string fragmentPath = std::string(PROJECT_SOURCE_FOLDERPATH).append(fsPath);
     std::string vertexCode, fragmentCode;
     std::ifstream vShaderFile, fShaderFile;
     // ensure ifstream objects can throw exceptions:
