@@ -61,18 +61,13 @@ void GLMesh::setTexture0(std::string texturePath) {
     glUniform1i(glGetUniformLocation(this->shaderProgram, "ourTexture"), 0);
 }
 
-void GLMesh::setColor(float R, float G, float B, float A) {
-    if (R > 1.0f || G > 1.0f || B > 1.0f) {
-        this->color[0] = R / 255.f;
-        this->color[1] = G / 255.f;
-        this->color[2] = B / 255.f;
+void GLMesh::setColor(glm::vec4 rgbaValue) {
+    if (rgbaValue[0] > 1.0f || rgbaValue[1] > 1.0f || rgbaValue[2] > 1.0f || rgbaValue[3] > 1.0f) {
+        this->color = rgbaValue / 255.f;
     } else {
-        this->color[0] = R;
-        this->color[1] = G;
-        this->color[2] = B;
+        this->color = rgbaValue;
     }
-    this->color[3] = A;
-    glUniform4f(glGetUniformLocation(this->shaderProgram, "ourColor"), R, G, B, A);
+    glUniform4f(glGetUniformLocation(this->shaderProgram, "ourColor"), rgbaValue[0], rgbaValue[1], rgbaValue[2], rgbaValue[3]);
 }
 std::string& GLMesh::getMeshName() {
     return this->meshName;
@@ -80,13 +75,13 @@ std::string& GLMesh::getMeshName() {
 unsigned int GLMesh::getTexture0() {
     return texture0 ? *texture0 : NULL;
 }
-unsigned int& GLMesh::getVAO() {
+unsigned int GLMesh::getVAO() {
     return this->vao;
 }
-unsigned int& GLMesh::getVBO() {
+unsigned int GLMesh::getVBO() {
     return this->vbo;
 }
-unsigned int& GLMesh::getShaderProgram() {
+unsigned int GLMesh::getShaderProgram() {
     return this->shaderProgram;
 }
 unsigned int GLMesh::getVerticesCount() {

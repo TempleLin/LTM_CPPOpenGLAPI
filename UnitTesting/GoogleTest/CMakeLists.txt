@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.21.1)
-project(LTM_CPPOpenGLAPI_TESTING VERSION 0.0)
+project(LTM_CPPOpenGLAPI_UNIT_TESTING VERSION 0.0)
 
 # GoogleTest requires at least C++11
 set(CMAKE_CXX_STANDARD 11)
@@ -21,7 +21,7 @@ FetchContent_MakeAvailable(googletest)
 enable_testing()
 
 add_executable( ${PROJECT_NAME}
-  LTM_CPPOpenGLAPI_TESTING.cpp
+  LTM_CPPOpenGLAPI_UNIT_TESTING.cpp
 )
 target_link_libraries( ${PROJECT_NAME}
   PUBLIC gtest_main

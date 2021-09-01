@@ -45,8 +45,8 @@ add_subdirectory(external/glfw)
 
 
 
-#---CREATE AND LINK DIRS FIRST BEFORE ADDING GOOGLE TESTING SUBDIRECTORY TO PASS VARS TO IT----------------------------
-#---GLFW LIBRARY SUBDIRECTORY WILL ALSO PASS TO GOOGLE TESTING SUBDIRECTORY SINCE IT'S ADDED FIRST---------------------
+#---CREATE AND LINK DIRS FIRST BEFORE ADDING SUBDIRECTORIES TO PASS VARS TO IT----------------------------
+#---GLFW LIBRARY SUBDIRECTORY WILL ALSO PASS TO SUBDIRECTORIES SINCE IT'S ADDED FIRST---------------------
 
 list(APPEND PROJECT_INCLUDE_DIRS
     PUBLIC "${CMAKE_SOURCE_DIR}/external/glad/include"
@@ -75,6 +75,11 @@ target_link_libraries(${PROJECT_NAME} glfw)
 #--------------------------------------------------------------------------------------------------------------------------------
 #--------------------------------------------------------------------------------------------------------------------------------
 
+#---ADD EXPERIMENTAL TESTS DIRECTORY AS SUBDIRECTORY--------------------------------------------------------------------------------------
+
+add_subdirectory(ExperimentalTests/)
+
+#--------------------------------------------------------------------------------------------------------------------------
 
 
 #---ADD GOOGLE TESTING DIRECTORY AS SUBDIRECTORY--------------------------------------------------------------------------------------
