@@ -108,7 +108,7 @@ BasicCubeMesh::BasicCubeMesh(std::string meshName, glm::vec3 position, unsigned 
     verticesCount = 36;
     vertices = new float[cubeVerticesArraySize] {
         //Positions          //Textures
-        -0.5f, -0.5f, -0.5f, 0.0f, 0.0f,
+            -0.5f, -0.5f, -0.5f, 0.0f, 0.0f,
             0.5f, -0.5f, -0.5f, 1.0f, 0.0f,
             0.5f, 0.5f, -0.5f, 1.0f, 1.0f,
             0.5f, 0.5f, -0.5f, 1.0f, 1.0f,
