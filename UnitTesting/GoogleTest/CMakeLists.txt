@@ -32,6 +32,7 @@ target_link_directories( ${PROJECT_NAME}
 )
 target_include_directories( ${PROJECT_NAME}
   PUBLIC ${PROJECT_INCLUDE_DIRS}
+  PUBLIC ${CMAKE_CURRENT_BINARY_DIR}
 )
 
 include(GoogleTest)

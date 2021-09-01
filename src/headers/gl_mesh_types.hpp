@@ -18,14 +18,14 @@ public:
     GLMesh(std::string meshName, glm::vec3 position, unsigned int& shaderProgram, unsigned int* vao = nullptr, unsigned int* vbo = nullptr);
     bool isTextureEnabled();
     void setTexture0(std::string texturePath);
-    void setColor(glm::vec4 rgbaValue);
+    void setColor(float R, float G, float B, float A);
     std::string& getMeshName();
     unsigned int getTexture0();
-    unsigned int getVAO();
-    unsigned int getVBO();
+    unsigned int& getVAO();
+    unsigned int& getVBO();
     unsigned int getVerticesCount();
     glm::vec3& getPosition();
-    unsigned int getShaderProgram();
+    unsigned int& getShaderProgram();
     ~GLMesh();
 };
 
