@@ -4,18 +4,20 @@ cmake_minimum_required(VERSION 3.21.1)
 set (CMAKE_CXX_STANDARD 17)
 project(LTM_CPPOpenGLAPI VERSION 0.1)
 
-#---PASS ALL SOURCE FILES TO EXTERNAL----------------------------------------------------------
+#---PASS ALL SOURCE FILES TO EXECUTABLE----------------------------------------------------------
+#---"CONFIGURE_DEPENDS" WILL LET CMAKE AUTO CHECK/RESET FILES ON WHEN BUILD IS INVOKED-----------
 
-file(GLOB SOURCES 
+file(GLOB SOURCES CONFIGURE_DEPENDS
     src/*.c
-    src/*.cpp 
-    src/headers/*.h 
+    src/*.cpp
+    src/headers/*.h
     src/headers/*.hpp
 )
 
 add_executable(${PROJECT_NAME} ${SOURCES})
 
-#-------------------------------------------------------------
+#------------------------------------------------------------------------------------------------
+#------------------------------------------------------------------------------------------------
 
 
 
@@ -43,6 +45,39 @@ add_subdirectory(external/glfw)
 
 
 
+#---CREATE AND LINK DIRS FIRST BEFORE ADDING GOOGLE TESTING SUBDIRECTORY TO PASS VARS TO IT----------------------------
+#---GLFW LIBRARY SUBDIRECTORY WILL ALSO PASS TO GOOGLE TESTING SUBDIRECTORY SINCE IT'S ADDED FIRST---------------------
+
+list(APPEND PROJECT_INCLUDE_DIRS
+    PUBLIC "${CMAKE_SOURCE_DIR}/external/glad/include" 
+    PUBLIC "${CMAKE_SOURCE_DIR}/external/glad/src" 
+    PUBLIC "${CMAKE_SOURCE_DIR}/external/glfw/include" 
+    PUBLIC "${CMAKE_SOURCE_DIR}/external/glm"
+    PUBLIC "${CMAKE_SOURCE_DIR}/external/stb_image"
+)
+list(APPEND PROJECT_LINK_DIRS
+    PUBLIC "${CMAKE_SOURCE_DIR}/external/glfw/src"
+)
+
+
+target_include_directories(${PROJECT_NAME}
+    ${PROJECT_INCLUDE_DIRS}
+    # @This one is for including the generated .h file.
+    PUBLIC ${CMAKE_CURRENT_BINARY_DIR} #CMAKE_CURRENT_BINARY_DIR: Full path to build directory for project.
+)
+
+target_link_directories(${PROJECT_NAME}
+    ${PROJECT_LINK_DIRS}
+)
+
+target_link_libraries(${PROJECT_NAME} glfw)
+
+#--------------------------------------------------------------------------------------------------------------------------------
+#--------------------------------------------------------------------------------------------------------------------------------
+
+
+
+#---ADD GOOGLE TESTING DIRECTORY AS SUBDIRECTORY--------------------------------------------------------------------------------------
 #---COMPARE API AND UNIT TESTING VERSION TO PASS TO CONFIG TO PRINT OUT IN CONSOLE-------------------------------------------------------------
 
 # @Check version of the Unit Testing solution.
@@ -73,26 +108,8 @@ else()
 endif()
 
 #--------------------------------------------------------------------------------------------------------------------------
+#--------------------------------------------------------------------------------------------------------------------------
 
 
 configure_file(src/headers/LTM_CPPOpenGLAPIConfig.h.in LTM_CPPOpenGLAPIConfig.h @ONLY)
 
-
-
-target_include_directories(${PROJECT_NAME}
-    PRIVATE external/glad/include
-    PRIVATE external/glad/src
-    PRIVATE external/glfw/include
-    PRIVATE external/glm
-    PRIVATE external/stb_image
-    # @This one is for including the generated .h file.
-    PUBLIC ${CMAKE_CURRENT_BINARY_DIR} #CMAKE_CURRENT_BINARY_DIR: Full path to build directory for project.
-    #${EXTRA_INCLUDES_DIRS}
-)
-
-target_link_directories(${PROJECT_NAME}
-    PRIVATE external/glfw/src
-    #${EXTRA_LIB_DIRS}
-)
-
-target_link_libraries(${PROJECT_NAME} glfw)

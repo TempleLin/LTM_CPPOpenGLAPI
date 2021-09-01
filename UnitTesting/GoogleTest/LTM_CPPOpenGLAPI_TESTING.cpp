@@ -1,4 +1,5 @@
 #include <gtest/gtest.h>
+#include <glad/glad.h>
 #include <iostream>
 
 // Demonstrate some basic assertions.
