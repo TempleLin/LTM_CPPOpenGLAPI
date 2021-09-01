@@ -1,5 +1,3 @@
-#include <iostream>
-
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
 
@@ -9,10 +7,8 @@
 
 #include <LTM_CPPOpenGLAPIConfig.h>
 
-void checkConfigsFromCMake();
-
 int main() {
-    checkConfigsFromCMake();
+    CHECK_CONFIGS_FROM_CMAKE();
     
     GLFWwindow* window = configureOpenGL();
     unsigned int vertexShaderHandle{ 0 }, fragmentShaderHandle{ 0 }, shaderProgramHandle{ 0 };
@@ -49,30 +45,4 @@ int main() {
     glDeleteVertexArrays(1, &basicLightingCube0.getVAO());
     glDeleteBuffers(1, &basicLightingCube0.getVBO());
     glDeleteProgram(shaderProgramHandle);
-}
-
-
-void checkConfigsFromCMake() {
-    std::cout << "-----------------CHECK CONFIGS FROM CMAKE-----------------------" << std::endl;
-#ifdef SHOW_API_VERSION
-    #ifndef API_VERSION
-        std::cout << "ERROR: Set to show API version but version not defined in config." << "\n";
-    #else
-        std::cout << SHOW_API_VERSION << API_VERSION << "\n";
-    #endif
-#endif
-#ifdef SHOW_TESTING_VERSION
-    #ifndef TESTING_VERSION
-        std::cout << "ERROR: Set to show Unit Testing version but version not defined in config." << "\n";
-    #else
-        std::cout << SHOW_TESTING_VERSION << TESTING_VERSION << "\n";
-    #endif
-#endif
-#ifdef API_TESTING_VER_COMPARE_MESSAGE
-    std::cout << API_TESTING_VER_COMPARE_MESSAGE << "\n";
-#endif
-#ifndef PROJECT_SOURCE_FOLDERPATH
-    std::cout << "WARNING: Project source folderpath not defined in config. Files might not load properly in program." << "\n";
-#endif
-    std::cout << "---------------------------------------------------------------\n" << std::endl;
 }

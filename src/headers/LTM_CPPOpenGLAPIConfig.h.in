@@ -1,3 +1,4 @@
+#pragma once
 #define API_VERSION @CMAKE_PROJECT_VERSION@
 #define TESTING_VERSION @TESTING_VERSION@
 
@@ -6,3 +7,32 @@
 #cmakedefine API_TESTING_VER_COMPARE_MESSAGE "@API_TESTING_VER_COMPARE_MESSAGE@"
 
 #cmakedefine PROJECT_SOURCE_FOLDERPATH "@PROJECT_SOURCE_FOLDERPATH@/src/"
+
+
+#include <iostream>
+
+#define CHECK_CONFIGS_FROM_CMAKE() checkConfigsFromCMake()
+
+inline void checkConfigsFromCMake(){
+#ifdef SHOW_API_VERSION
+    #ifndef API_VERSION
+        std::cout << "ERROR: Set to show API version but version not defined in config." << "\n";
+    #else
+        std::cout << SHOW_API_VERSION << API_VERSION << "\n";
+    #endif
+#endif
+#ifdef SHOW_TESTING_VERSION
+    #ifndef TESTING_VERSION
+        std::cout << "ERROR: Set to show Unit Testing version but version not defined in config." << "\n";
+    #else
+        std::cout << SHOW_TESTING_VERSION << TESTING_VERSION << "\n";
+    #endif
+#endif
+#ifdef API_TESTING_VER_COMPARE_MESSAGE
+    std::cout << API_TESTING_VER_COMPARE_MESSAGE << "\n";
+#endif
+#ifndef PROJECT_SOURCE_FOLDERPATH
+    std::cout << "WARNING: Project source folderpath not defined in config. Files might not load properly in program." << "\n";
+#endif
+    std::cout << "---------------------------------------------------------------\n" << std::endl;
+}

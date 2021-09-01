@@ -114,4 +114,3 @@ endif()
 set(PROJECT_SOURCE_FOLDERPATH "${PROJECT_SOURCE_DIR}")
 
 configure_file(src/headers/LTM_CPPOpenGLAPIConfig.h.in LTM_CPPOpenGLAPIConfig.h @ONLY)
-
