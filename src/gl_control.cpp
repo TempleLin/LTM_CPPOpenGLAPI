@@ -42,8 +42,10 @@ void drawBasicMesh(GLMesh& mesh) {
     glBindVertexArray(mesh.getVAO());
     static unsigned int modelLoc = glGetUniformLocation(mesh.getShaderProgram(), "model");
     glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(modelMatrix));
-    glActiveTexture(GL_TEXTURE0);
-    glBindTexture(GL_TEXTURE_2D, mesh.getTexture0());
+    if (mesh.isTextureEnabled()) {
+        glActiveTexture(GL_TEXTURE0);
+        glBindTexture(GL_TEXTURE_2D, mesh.getTexture0());
+    }
     glUseProgram(mesh.getShaderProgram());
     glDrawArrays(GL_TRIANGLES, 0, mesh.getVerticesCount());
 }

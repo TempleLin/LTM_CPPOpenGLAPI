@@ -4,19 +4,22 @@
 
 class GLMesh {
 protected:
+    bool enableTexture = false;
     std::string meshName;
     glm::vec3 position;
     float* vertices;
-    unsigned int* texture0;
-    glm::vec3 color;
+    unsigned int* texture0 = nullptr;
+    glm::vec4 color;
     unsigned int vao, vbo;
     unsigned int verticesCount;
     unsigned int shaderProgram;
     void setTextureWrapFilter(unsigned int wrap_s, unsigned int wrap_t, unsigned int min_filter, unsigned int max_filter);
 public:
     GLMesh(std::string meshName, glm::vec3 position, unsigned int& shaderProgram, unsigned int* vao = nullptr, unsigned int* vbo = nullptr);
+    bool isTextureEnabled();
     void setTexture0(std::string texturePath);
-    void setColor(float R, float G, float B);
+    void setColor(float R, float G, float B, float A);
+    std::string& getMeshName();
     unsigned int getTexture0();
     unsigned int &getVAO();
     unsigned int &getVBO();
@@ -26,9 +29,9 @@ public:
     ~GLMesh();
 };
 
-class BasicLightingCube : public GLMesh {
+class BasicCubeMesh : public GLMesh {
 private:
     int cubeVerticesArraySize;
 public:
-    BasicLightingCube(std::string meshName, glm::vec3 position, unsigned int& shaderProgram, unsigned int* vao = nullptr, unsigned int* vbo = nullptr);
+    BasicCubeMesh(std::string meshName, glm::vec3 position, unsigned int& shaderProgram, unsigned int* vao = nullptr, unsigned int* vbo = nullptr);
 };

@@ -1,6 +1,19 @@
 #include <gtest/gtest.h>
 #include <glad/glad.h>
 #include <iostream>
+#include <chrono>
+
+#define COUNT_FUNCTION_DURATION
+
+#ifdef COUNT_FUNCTION_DURATION
+using std::chrono::high_resolution_clock;
+using std::chrono::duration_cast;
+using std::chrono::duration;
+using std::chrono::milliseconds;
+void testGLMPassDuration() {
+
+}
+#endif
 
 // Demonstrate some basic assertions.
 TEST(HelloTest, BasicAssertions) {

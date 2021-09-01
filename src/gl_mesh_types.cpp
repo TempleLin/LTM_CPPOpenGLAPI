@@ -25,6 +25,8 @@ GLMesh::GLMesh(std::string meshName, glm::vec3 position, unsigned int& shaderPro
         glBindBuffer(GL_ARRAY_BUFFER, this->vbo);
     }
     this->shaderProgram = shaderProgram;
+    this->color = glm::vec4(0, 0, 0, 0);
+    glUniform4f(glGetUniformLocation(this->shaderProgram, "ourColor"), 0, 0, 0, 1);
     std::cout << "GLMesh: " << meshName << " Constructed" << std::endl;
 }
 
@@ -35,8 +37,13 @@ void GLMesh::setTextureWrapFilter(unsigned int wrap_s, unsigned int wrap_t, unsi
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, max_filter);
 }
 
+bool GLMesh::isTextureEnabled() {
+    return this->enableTexture;
+}
+
 void GLMesh::setTexture0(std::string texturePath) {
-    texture0 = new GLuint(0);
+    this->enableTexture = true;
+    this->texture0 = new GLuint(0);
     glGenTextures(1, this->texture0);
     glBindTexture(GL_TEXTURE_2D, *texture0);
 
@@ -51,10 +58,10 @@ void GLMesh::setTexture0(std::string texturePath) {
     } else {
         std::cout << "Failed to load texture." << std::endl;
     }
-    glUniform1i(glGetUniformLocation(shaderProgram, "ourTexture"), 0);
+    glUniform1i(glGetUniformLocation(this->shaderProgram, "ourTexture"), 0);
 }
 
-void GLMesh::setColor(float R, float G, float B) {
+void GLMesh::setColor(float R, float G, float B, float A) {
     if (R > 1.0f || G > 1.0f || B > 1.0f) {
         this->color[0] = R / 255.f;
         this->color[1] = G / 255.f;
@@ -64,8 +71,12 @@ void GLMesh::setColor(float R, float G, float B) {
         this->color[1] = G;
         this->color[2] = B;
     }
+    this->color[3] = A;
+    glUniform4f(glGetUniformLocation(this->shaderProgram, "ourColor"), R, G, B, A);
 }
-
+std::string& GLMesh::getMeshName() {
+    return this->meshName;
+}
 unsigned int GLMesh::getTexture0() {
     return texture0 ? *texture0 : NULL;
 }
@@ -92,7 +103,7 @@ GLMesh::~GLMesh() {
     texture0 = nullptr;
 }
 
-BasicLightingCube::BasicLightingCube(std::string meshName, glm::vec3 position, unsigned int& shaderProgram, unsigned int* vao, unsigned int* vbo) : GLMesh(meshName, position, shaderProgram, vao, vbo) {
+BasicCubeMesh::BasicCubeMesh(std::string meshName, glm::vec3 position, unsigned int& shaderProgram, unsigned int* vao, unsigned int* vbo) : GLMesh(meshName, position, shaderProgram, vao, vbo) {
     cubeVerticesArraySize = 180;
     verticesCount = 36;
     vertices = new float[cubeVerticesArraySize] {

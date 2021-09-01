@@ -16,11 +16,12 @@ int main() {
     createShaderProgram(vertexShaderHandle, "shaders/shaderVS.glsl", fragmentShaderHandle, "shaders/shaderFS.glsl", shaderProgramHandle);
     glUseProgram(shaderProgramHandle);
 
-    BasicLightingCube basicLightingCube0("Basic Lighting Cube 0", glm::vec3(0.5f, 0.8f, -1.0f), shaderProgramHandle);
+    BasicCubeMesh basicLightingCube0("Basic Lighting Cube 0", glm::vec3(0.5f, 0.8f, -1.0f), shaderProgramHandle);
     basicLightingCube0.setTexture0("assets/imgs/container.jpg");
 
-    BasicLightingCube basicLightingCube1("Basic Lighting Cube 1", glm::vec3(-0.5f, -0.3f, -0.3f), shaderProgramHandle);
-    basicLightingCube1.setTexture0("assets/imgs/container.jpg");
+    createShaderProgram(vertexShaderHandle, "shaders/shaderVS.glsl", fragmentShaderHandle, "shaders/shaderFS.glsl", shaderProgramHandle);
+    BasicCubeMesh basicLightingCube1("Basic Lighting Cube 1", glm::vec3(-0.5f, -0.3f, -0.3f), shaderProgramHandle);
+    basicLightingCube1.setColor(1, 1, 1, 1);
 
     while (!glfwWindowShouldClose(window)) {
         glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
