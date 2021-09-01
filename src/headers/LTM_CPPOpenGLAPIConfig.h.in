@@ -13,7 +13,8 @@
 
 #define CHECK_CONFIGS_FROM_CMAKE() checkConfigsFromCMake()
 
-inline void checkConfigsFromCMake(){
+#ifdef CMAKE_CHECK_CONFIGS
+void checkConfigsFromCMake(){
 #ifdef SHOW_API_VERSION
     #ifndef API_VERSION
         std::cout << "ERROR: Set to show API version but version not defined in config." << "\n";
@@ -36,3 +37,8 @@ inline void checkConfigsFromCMake(){
 #endif
     std::cout << "---------------------------------------------------------------\n" << std::endl;
 }
+#else
+inline void checkConfigsFromCMake(){
+    std::cout << "ERROR: CMAKE_CHECK_CONFIGS macro not defined. Can't check configs." << "\n";
+}
+#endif

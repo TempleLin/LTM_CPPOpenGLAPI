@@ -5,6 +5,7 @@
 #include "headers/gl_mesh_types.hpp"
 #include "headers/gl_control.hpp"
 
+#define CMAKE_CHECK_CONFIGS
 #include <LTM_CPPOpenGLAPIConfig.h>
 
 int main() {
