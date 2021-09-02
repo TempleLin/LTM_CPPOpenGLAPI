@@ -12,6 +12,22 @@ file(GLOB SOURCES CONFIGURE_DEPENDS
     src/*.cpp
     src/headers/*.h
     src/headers/*.hpp
+
+    external/dear_imgui/imconfig.h
+    external/dear_imgui/imgui_demo.cpp
+    external/dear_imgui/imgui_draw.cpp
+    external/dear_imgui/imgui_internal.h
+    external/dear_imgui/imgui_tables.cpp
+    external/dear_imgui/imgui_widgets.cpp
+    external/dear_imgui/imgui.cpp
+    external/dear_imgui/imgui.h
+    external/dear_imgui/imstb_rectpack.h
+    external/dear_imgui/imstb_textedit.h
+    external/dear_imgui/imstb_truetype.h
+    external/dear_imgui/backends/imgui_impl_opengl3.h
+    external/dear_imgui/backends/imgui_impl_opengl3.cpp
+    external/dear_imgui/backends/imgui_impl_glfw.h
+    external/dear_imgui/backends/imgui_impl_glfw.cpp
 )
 
 add_executable(${PROJECT_NAME} ${SOURCES})
@@ -21,7 +37,8 @@ add_executable(${PROJECT_NAME} ${SOURCES})
 
 
 
-#       DOWNLOAD ALL THE SUBMODULES
+#---DOWNLOAD ALL THE SUBMODULES------------------------------------------------------------------
+
 find_package(Git QUIET)
 if(GIT_FOUND AND EXISTS "${PROJECT_SOURCE_DIR}/.git")
 # Update submodules as needed
@@ -43,6 +60,19 @@ endif()
 
 add_subdirectory(external/glfw)
 
+#------------------------------------------------------------------------------------------------
+
+#---INSTALL DEAR IMGUI AS LIBARY-----------------------------------------------------------------
+
+
+list(APPEND DEAR_IMGUI_INCLUDE 
+    "external/dear_imgui"
+    "external/dear_imgui/backends"
+)
+
+
+#------------------------------------------------------------------------------------------------
+
 
 
 #---CREATE AND LINK DIRS FIRST BEFORE ADDING SUBDIRECTORIES TO PASS VARS TO IT----------------------------
@@ -54,6 +84,7 @@ list(APPEND PROJECT_INCLUDE_DIRS
     PUBLIC "${CMAKE_SOURCE_DIR}/external/glfw/include"
     PUBLIC "${CMAKE_SOURCE_DIR}/external/glm"
     PUBLIC "${CMAKE_SOURCE_DIR}/external/stb_image"
+    PUBLIC "${CMAKE_SOURCE_DIR}/external/dear_imgui"
 )
 list(APPEND PROJECT_LINK_DIRS
     PUBLIC "${CMAKE_SOURCE_DIR}/external/glfw/src"
@@ -64,13 +95,16 @@ target_include_directories(${PROJECT_NAME}
     ${PROJECT_INCLUDE_DIRS}
     # @This one is for including the generated .h file.
     PUBLIC ${CMAKE_CURRENT_BINARY_DIR} #CMAKE_CURRENT_BINARY_DIR: Full path to build directory for project.
+    PUBLIC ${DEAR_IMGUI_INCLUDE}
 )
 
 target_link_directories(${PROJECT_NAME}
     ${PROJECT_LINK_DIRS}
 )
 
-target_link_libraries(${PROJECT_NAME} glfw)
+target_link_libraries(${PROJECT_NAME} 
+    glfw
+)
 
 #--------------------------------------------------------------------------------------------------------------------------------
 #--------------------------------------------------------------------------------------------------------------------------------

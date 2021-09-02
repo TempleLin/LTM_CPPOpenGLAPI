@@ -1,7 +1,7 @@
 #include "headers/gl_values.hpp"
 
-float windowWidth { 800 };
-float windowHeight { 600 };
+float windowWidth { 1200 };
+float windowHeight { 960 };
 
 float fovMax { 45.0f };
 float fovMin { 1.0f };
@@ -19,3 +19,5 @@ float deltaTime { 0.0f };
 float lastFrame { 0.0f };
 
 float cameraMoveSpeed { 2.5f };
+
+glm::vec4 viewBackGroundColor{ 0.2f, 0.3f, 0.3f, 1.0f };
