@@ -6,25 +6,17 @@
 #include <iostream>
 #include <LTM_CPPOpenGLAPIConfig.h>
 
-GLMesh::GLMesh(std::string meshName, glm::vec3 position, unsigned int& shaderProgram, unsigned int* vao, unsigned int* vbo) {
+
+GLMesh::GLMesh(std::string meshName, glm::vec3 position, unsigned int& shaderProgram, unsigned int vao, unsigned int vbo) {
     this->meshName = meshName;
     this->position = position;
-    color[0] = color[1] = color[2] = 1;
-    if (vao) {
-        this->vao = *vao;
-        glBindVertexArray(this->vao);
-    } else {
-        glGenVertexArrays(1, &this->vao);
-        glBindVertexArray(this->vao);
-    }
-    if (vbo) {
-        this->vbo = *vbo;
-        glBindBuffer(GL_ARRAY_BUFFER, this->vbo);
-    } else {
-        glGenBuffers(1, &this->vbo);
-        glBindBuffer(GL_ARRAY_BUFFER, this->vbo);
-    }
+
+    this->vao = vao;
+    glBindVertexArray(this->vao);
+    this->vbo = vbo;
+    glBindBuffer(GL_ARRAY_BUFFER, this->vbo);
     this->shaderProgram = shaderProgram;
+
     this->color = glm::vec4(0, 0, 0, 0);
     glUniform4f(glGetUniformLocation(this->shaderProgram, "ourColor"), 0, 0, 0, 1);
     std::cout << "GLMesh: " << meshName << " Constructed" << std::endl;
@@ -104,7 +96,7 @@ GLMesh::~GLMesh() {
     texture0 = nullptr;
 }
 
-BasicCubeMesh::BasicCubeMesh(std::string meshName, glm::vec3 position, unsigned int& shaderProgram, unsigned int* vao, unsigned int* vbo) : GLMesh(meshName, position, shaderProgram, vao, vbo) {
+BasicCubeMesh::BasicCubeMesh(std::string meshName, glm::vec3 position, unsigned int& shaderProgram, unsigned int vao, unsigned int vbo) : GLMesh(meshName, position, shaderProgram, vao, vbo) {
     cubeVerticesArraySize = 180;
     verticesCount = 36;
     vertices = new float[cubeVerticesArraySize] {

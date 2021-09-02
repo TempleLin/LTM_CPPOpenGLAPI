@@ -29,11 +29,14 @@ int main() {
     createShaderProgram(vertexShaderHandle, "shaders/shaderVS.glsl", fragmentShaderHandle, "shaders/shaderFS.glsl", shaderProgramHandle);
     glUseProgram(shaderProgramHandle);
 
-    BasicCubeMesh basicLightingCube0("Basic Lighting Cube 0", glm::vec3(0.5f, 0.8f, -1.0f), shaderProgramHandle);
+    unsigned int vaos[2], vbos[2];
+    createVAOs(2, vaos);
+    createVBOs(2, vbos);
+    BasicCubeMesh basicLightingCube0("Basic Lighting Cube 0", glm::vec3(0.5f, 0.8f, -1.0f), shaderProgramHandle, vaos[0], vbos[0]);
     basicLightingCube0.setTexture0("assets/imgs/container.jpg");
 
     createShaderProgram(vertexShaderHandle, "shaders/shaderVS.glsl", fragmentShaderHandle, "shaders/shaderFS.glsl", shaderProgramHandle);
-    BasicCubeMesh basicLightingCube1("Basic Lighting Cube 1", glm::vec3(-0.5f, -0.3f, -0.3f), shaderProgramHandle);
+    BasicCubeMesh basicLightingCube1("Basic Lighting Cube 1", glm::vec3(-0.5f, -0.3f, -0.3f), shaderProgramHandle, vaos[1], vbos[1]);
     basicLightingCube1.setColor(1, 1, 1, 1);
 
     // Our state (Dear ImGUI)
@@ -117,7 +120,5 @@ int main() {
     ImGui_ImplGlfw_Shutdown();
     ImGui::DestroyContext();
 
-    glDeleteVertexArrays(1, &basicLightingCube0.getVAO());
-    glDeleteBuffers(1, &basicLightingCube0.getVBO());
-    glDeleteProgram(shaderProgramHandle);
+    cleanGLObjectsGarbage();
 }
