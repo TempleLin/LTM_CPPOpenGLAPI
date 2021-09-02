@@ -25,7 +25,7 @@ GLFWwindow* configureOpenGL() {
     glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
 #endif
 
-    GLFWwindow* window = glfwCreateWindow(WINDOWWIDTH, WINDOWHEIGHT, "OpenGLMain", NULL, NULL);
+    GLFWwindow* window = glfwCreateWindow(windowWidth, windowHeight, "OpenGLMain", NULL, NULL);
     if (window == NULL) {
         std::cout << "Failed to create GLFW window" << std::endl;
         glfwTerminate();
@@ -39,7 +39,7 @@ GLFWwindow* configureOpenGL() {
         return nullptr;
     }
 
-    glViewport(0, 0, WINDOWWIDTH, WINDOWHEIGHT);
+    glViewport(0, 0, windowWidth, windowHeight);
 
     glfwSetFramebufferSizeCallback(window, framebuffer_size_callback);
 

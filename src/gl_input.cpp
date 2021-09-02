@@ -4,7 +4,7 @@
 #include <GLFW/glfw3.h>
 
 void mouse_move_callback(GLFWwindow* window, double xpos, double ypos) {
-    static float lastX{ WINDOWWIDTH / 2 }, lastY{ WINDOWHEIGHT / 2 };
+    static float lastX{ windowWidth / 2 }, lastY{ windowHeight / 2 };
     /*
     * @To make sure the first time mouse clicks inside the window won't cause huge movement in mouse.
     *  Instead will be set as first default value.
@@ -64,10 +64,10 @@ void mouse_scroll_callback(GLFWwindow* window, double xoffset, double yoffset) {
     *  Since it must be projected to the same NDC(Normalized Device Coordinates), it will give the illusion of zooming.
     */
     fov -= (float)yoffset;
-    if (fov < FOV_MIN)
-        fov = FOV_MIN;
-    if (fov > FOV_MAX)
-        fov = FOV_MAX;
+    if (fov < fovMin)
+        fov = fovMin;
+    if (fov > fovMax)
+        fov = fovMax;
 }
 
 void processInput(GLFWwindow* window) {
