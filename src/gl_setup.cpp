@@ -5,6 +5,7 @@
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
 #include "headers/gl_values.hpp"
+#include "headers/gl_input.hpp"
 #include <LTM_CPPOpenGLAPIConfig.h>
 
 //--------------------------------------------------Configuration--------------------------------------------------
@@ -41,6 +42,14 @@ GLFWwindow* configureOpenGL() {
     glViewport(0, 0, WINDOWWIDTH, WINDOWHEIGHT);
 
     glfwSetFramebufferSizeCallback(window, framebuffer_size_callback);
+
+    glfwSetCursorPosCallback(window, mouse_move_callback);
+    /*
+    * @First we will tell GLFW that it should hide the cursor and capture it. Capturing a cursor means that, 
+    *  once the application has focus, the mouse cursor stays within the center of the window (unless the application loses focus or quits). 
+    */
+    glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
+    glfwSetScrollCallback(window, mouse_scroll_callback);
 
     return window;
 }

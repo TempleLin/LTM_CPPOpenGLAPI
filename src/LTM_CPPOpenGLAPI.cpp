@@ -4,6 +4,7 @@
 #include "headers/gl_setup.hpp"
 #include "headers/gl_mesh_types.hpp"
 #include "headers/gl_control.hpp"
+#include "headers/gl_input.hpp"
 
 #define CMAKE_CHECK_CONFIGS
 #include <LTM_CPPOpenGLAPIConfig.h>
@@ -28,6 +29,8 @@ int main() {
 
         // @Clear both color buffer and Z-depth buffer before each frame render.
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+        setDeltaTime();
+        processInput(window);
 
         setMeshCoordSystem(basicLightingCube0.getShaderProgram());
         setBasicMeshSpawnPos(basicLightingCube0);

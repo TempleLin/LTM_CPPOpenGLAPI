@@ -9,6 +9,11 @@
 #include <glm/gtc/type_ptr.hpp>
 #include <glm/gtx/string_cast.hpp>
 
+void setDeltaTime() { 
+    float currentFrame = glfwGetTime();
+    deltaTime = currentFrame - lastFrame;
+    lastFrame = currentFrame;
+}
 
 void setMeshCoordSystem(unsigned int& shaderProgram) {
     glUseProgram(shaderProgram);
@@ -18,10 +23,10 @@ void setMeshCoordSystem(unsigned int& shaderProgram) {
 
     modelMatrix = glm::mat4(1.0f);
     viewMatrix = glm::mat4(1.0f);
-    viewMatrix = glm::translate(viewMatrix, glm::vec3(0.0f, 0.0f, -3.0f));
+    viewMatrix = glm::lookAt(cameraPos, cameraPos + cameraFront, cameraUp);
 
     projectionMatrix = glm::mat4(1.0f);
-    projectionMatrix = glm::perspective(glm::radians(45.0f), 800.0f / 600.0f, 0.1f, 100.0f);
+    projectionMatrix = glm::perspective(glm::radians(fov), 800.0f / 600.0f, 0.1f, 100.0f);
 
     static unsigned int viewLoc = glGetUniformLocation(shaderProgram, "view");
     static unsigned int projectionLoc = glGetUniformLocation(shaderProgram, "projection");

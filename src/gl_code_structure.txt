@@ -4,3 +4,4 @@ Basic startup header files:
 	3.gl_mesh_types.hpp - Declaration of all class types of custom mesh.
 	4.gl_control.hpp - Controlling operations during OpenGL runtime (Translate mesh, control viewport etc).
 	5.image_edit.h - Editing of image files to work with OpenGL.
+	6.gl_input.h - Input controls from user during OpenGL runtime.
