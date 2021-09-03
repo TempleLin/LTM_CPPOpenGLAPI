@@ -15,7 +15,7 @@ protected:
     unsigned int shaderProgram;
     void setTextureWrapFilter(unsigned int wrap_s, unsigned int wrap_t, unsigned int min_filter, unsigned int max_filter);
 public:
-    GLMesh(std::string meshName, glm::vec3 position, unsigned int& shaderProgram, unsigned int vao, unsigned int vbo);
+    GLMesh(std::string meshName, glm::vec3 position, unsigned int shaderProgram, unsigned int vao, unsigned int vbo);
     bool isTextureEnabled();
     void setTexture0(std::string texturePath);
     void setColor(float R, float G, float B, float A);
@@ -33,5 +33,5 @@ class BasicCubeMesh : public GLMesh {
 private:
     int cubeVerticesArraySize;
 public:
-    BasicCubeMesh(std::string meshName, glm::vec3 position, unsigned int& shaderProgram, unsigned int vao, unsigned int vbo);
+    BasicCubeMesh(std::string meshName, glm::vec3 position, unsigned int shaderProgram, unsigned int vao, unsigned int vbo);
 };

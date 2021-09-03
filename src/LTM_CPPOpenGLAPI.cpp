@@ -34,6 +34,7 @@ int main() {
     createVBOs(2, vbos);
     BasicCubeMesh basicLightingCube0("Basic Lighting Cube 0", glm::vec3(0.5f, 0.8f, -1.0f), shaderProgramHandle, vaos[0], vbos[0]);
     basicLightingCube0.setTexture0("assets/imgs/container.jpg");
+    basicLightingCube0.setColor(0, 0, 1, 1);
 
     createShaderProgram(vertexShaderHandle, "shaders/shaderVS.glsl", fragmentShaderHandle, "shaders/shaderFS.glsl", shaderProgramHandle);
     BasicCubeMesh basicLightingCube1("Basic Lighting Cube 1", glm::vec3(-0.5f, -0.3f, -0.3f), shaderProgramHandle, vaos[1], vbos[1]);
@@ -43,6 +44,8 @@ int main() {
     bool show_demo_window = true;
     bool show_another_window = false;
     ImVec4 clear_color = ImVec4(0.45f, 0.55f, 0.60f, 1.00f);
+
+    enableMeshesTransparency();
 
     while (!glfwWindowShouldClose(window)) {
         glfwPollEvents();

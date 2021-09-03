@@ -57,11 +57,18 @@ void drawBasicMesh(GLMesh& mesh) {
     if (mesh.isTextureEnabled()) {
         glActiveTexture(GL_TEXTURE0);
         glBindTexture(GL_TEXTURE_2D, mesh.getTexture0());
+    } else {
+        glActiveTexture(0);
+        glBindTexture(GL_TEXTURE_2D, 0);
     }
     glUseProgram(mesh.getShaderProgram());
     glDrawArrays(GL_TRIANGLES, 0, mesh.getVerticesCount());
 }
 
+void enableMeshesTransparency() {
+    glEnable(GL_BLEND);
+    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+}
 
 void checkCompileErrors(unsigned int shader, char* type) {
     GLint success;

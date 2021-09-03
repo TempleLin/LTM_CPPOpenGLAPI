@@ -7,7 +7,7 @@
 #include <LTM_CPPOpenGLAPIConfig.h>
 
 
-GLMesh::GLMesh(std::string meshName, glm::vec3 position, unsigned int& shaderProgram, unsigned int vao, unsigned int vbo) {
+GLMesh::GLMesh(std::string meshName, glm::vec3 position, unsigned int shaderProgram, unsigned int vao, unsigned int vbo) {
     this->meshName = meshName;
     this->position = position;
 
@@ -17,8 +17,8 @@ GLMesh::GLMesh(std::string meshName, glm::vec3 position, unsigned int& shaderPro
     glBindBuffer(GL_ARRAY_BUFFER, this->vbo);
     this->shaderProgram = shaderProgram;
 
-    this->color = glm::vec4(0, 0, 0, 0);
-    glUniform4f(glGetUniformLocation(this->shaderProgram, "ourColor"), 0, 0, 0, 1);
+    this->color = glm::vec4(0, 0, 0, 1);
+    glUniform4f(glGetUniformLocation(this->shaderProgram, "objectColor"), 0, 0, 0, 1);
     std::cout << "GLMesh: " << meshName << " Constructed" << std::endl;
 }
 
@@ -65,7 +65,7 @@ void GLMesh::setColor(float R, float G, float B, float A) {
         this->color[2] = B;
         this->color[3] = A;
     }
-    glUniform4f(glGetUniformLocation(this->shaderProgram, "ourColor"), R, G, B, A);
+    glUniform4f(glGetUniformLocation(this->shaderProgram, "objectColor"), R, G, B, A);
 }
 std::string& GLMesh::getMeshName() {
     return this->meshName;
@@ -96,7 +96,7 @@ GLMesh::~GLMesh() {
     texture0 = nullptr;
 }
 
-BasicCubeMesh::BasicCubeMesh(std::string meshName, glm::vec3 position, unsigned int& shaderProgram, unsigned int vao, unsigned int vbo) : GLMesh(meshName, position, shaderProgram, vao, vbo) {
+BasicCubeMesh::BasicCubeMesh(std::string meshName, glm::vec3 position, unsigned int shaderProgram, unsigned int vao, unsigned int vbo) : GLMesh(meshName, position, shaderProgram, vao, vbo) {
     cubeVerticesArraySize = 180;
     verticesCount = 36;
     vertices = new float[cubeVerticesArraySize] {
