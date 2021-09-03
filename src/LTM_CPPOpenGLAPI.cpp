@@ -34,12 +34,12 @@ int main() {
     createVBOs(2, vbos);
     BasicCubeMesh basicLightingCube0("Basic Lighting Cube 0", glm::vec3(0.5f, 0.8f, -1.0f), shaderProgramHandle, vaos[0], vbos[0]);
     basicLightingCube0.setTexture0("assets/imgs/container.jpg");
-    basicLightingCube0.setColor(0, 0, 1, 1);
+    basicLightingCube0.setColor(glm::vec4(0, 0, 1, 1), true);
 
     createShaderProgram(vertexShaderHandle, "shaders/shaderVS.glsl", fragmentShaderHandle, "shaders/shaderFS.glsl", shaderProgramHandle);
     BasicCubeMesh basicLightingCube1("Basic Lighting Cube 1", glm::vec3(-0.5f, -0.3f, -0.3f), shaderProgramHandle, vaos[1], vbos[1]);
     basicLightingCube1.setTexture0("assets/imgs/container.jpg");
-    basicLightingCube1.setColor(1, 0, 0, 1);
+    basicLightingCube1.setColor(glm::vec4(1, 0, 0, 1), true);
 
     // Our state (Dear ImGUI)
     bool show_demo_window = true;

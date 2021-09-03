@@ -18,7 +18,7 @@ public:
     GLMesh(std::string meshName, glm::vec3 position, unsigned int shaderProgram, unsigned int vao, unsigned int vbo);
     bool isTextureEnabled();
     void setTexture0(std::string texturePath);
-    void setColor(float R, float G, float B, float A);
+    void setColor(glm::vec4 color, bool isNormalized);
     std::string& getMeshName();
     unsigned int getTexture0();
     unsigned int& getVAO();

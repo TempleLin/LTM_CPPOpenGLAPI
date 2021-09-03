@@ -60,21 +60,15 @@ void GLMesh::setTexture0(std::string texturePath) {
     glUniform1i(ourTexture, 0);
 }
 
-void GLMesh::setColor(float R, float G, float B, float A) {
-    if (R > 1.0f || G > 1.0f || B > 1.0f || A > 1.0f) {
-        this->color[0] = R / 255.f;
-        this->color[1] = G / 255.f;
-        this->color[2] = B / 255.f;
-        this->color[3] = A / 255.f;
+void GLMesh::setColor(glm::vec4 color, bool isNormalized) {
+    if (isNormalized) {
+        this->color = color;
     } else {
-        this->color[0] = R;
-        this->color[1] = G;
-        this->color[2] = B;
-        this->color[3] = A;
+        this->color = color / 255.f;
     }
     glUseProgram(this->shaderProgram);
     int ourColor = glGetUniformLocation(this->shaderProgram, "objectColor");
-    glUniform4f(ourColor, R, G, B, A);
+    glUniform4fv(ourColor, 1, &color[0]);
 }
 std::string& GLMesh::getMeshName() {
     return this->meshName;
