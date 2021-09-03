@@ -1,9 +1,10 @@
 #pragma once
 #include <vector>
-class GLMesh;
+#include "gl_mesh_types.hpp"
 
 // @Keep track of all OpenGL objects to be removed.
 extern std::vector<unsigned int> vaoGarbageCollector, vboGarbageCollector, programGarbageCollector;
+extern std::vector<GLMesh*> meshesCollector;
 
 // @Set delta time according to each fps.
 void setDeltaTime();

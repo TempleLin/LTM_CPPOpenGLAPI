@@ -16,6 +16,7 @@
 #include <glm/gtx/string_cast.hpp>
 
 std::vector<unsigned int> vaoGarbageCollector, vboGarbageCollector, programGarbageCollector;
+std::vector<GLMesh*> meshesCollector;
 
 void setDeltaTime() { 
     float currentFrame = glfwGetTime();

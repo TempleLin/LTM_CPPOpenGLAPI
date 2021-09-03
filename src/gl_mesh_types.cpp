@@ -3,6 +3,7 @@
 #include <GLFW/glfw3.h>
 #include "headers/image_edit.hpp"
 #include "headers/gl_values.hpp"
+#include "headers/gl_control.hpp"
 #include <iostream>
 #include <LTM_CPPOpenGLAPIConfig.h>
 
@@ -20,10 +21,11 @@ GLMesh::GLMesh(std::string meshName, glm::vec3 position, unsigned int shaderProg
 
     this->color = glm::vec4(0, 0, 0, 1);
     glUniform1ui(glGetUniformLocation(this->shaderProgram, "enableTexture"), false);
-    glUniform4f(glGetUniformLocation(this->shaderProgram, "objectColor"), 0, 0, 0, 1);
-    glUniform4f(glGetUniformLocation(this->shaderProgram, "ambientColor"), 1, 1, 1, 1);
-    glUniform4f(glGetUniformLocation(this->shaderProgram, "ambientStrength"), 1.f, 1.f, 1.f, 1.f);
+    glUniform4fv(glGetUniformLocation(this->shaderProgram, "objectColor"), 1, &defaultObjectColor[0]);
+    glUniform4fv(glGetUniformLocation(this->shaderProgram, "ambientColor"), 1, &defaultAmbientColor[0]);
+    glUniform4fv(glGetUniformLocation(this->shaderProgram, "ambientStrength"), 1, &defaultAmbientStrength[0]);
     std::cout << "GLMesh: " << meshName << " Constructed" << std::endl;
+    meshesCollector.push_back(this);
 }
 
 void GLMesh::setTextureWrapFilter(unsigned int wrap_s, unsigned int wrap_t, unsigned int min_filter, unsigned int max_filter) {
