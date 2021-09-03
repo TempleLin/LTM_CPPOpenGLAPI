@@ -12,6 +12,7 @@ file(GLOB SOURCES CONFIGURE_DEPENDS
     src/*.cpp
     src/headers/*.h
     src/headers/*.hpp
+    src/shaders/*.glsl
 
     external/dear_imgui/imconfig.h
     external/dear_imgui/imgui_demo.cpp
@@ -151,5 +152,6 @@ endif()
 
 
 set(PROJECT_SOURCE_FOLDERPATH "${PROJECT_SOURCE_DIR}")
+set(PROJECT_SOURCE_RELATIVEPATH "../src")
 
 configure_file(src/headers/LTM_CPPOpenGLAPIConfig.h.in LTM_CPPOpenGLAPIConfig.h @ONLY)
