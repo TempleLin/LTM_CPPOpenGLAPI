@@ -16,9 +16,13 @@ GLMesh::GLMesh(std::string meshName, glm::vec3 position, unsigned int shaderProg
     this->vbo = vbo;
     glBindBuffer(GL_ARRAY_BUFFER, this->vbo);
     this->shaderProgram = shaderProgram;
+    glUseProgram(this->shaderProgram);
 
     this->color = glm::vec4(0, 0, 0, 1);
+    glUniform1ui(glGetUniformLocation(this->shaderProgram, "enableTexture"), false);
     glUniform4f(glGetUniformLocation(this->shaderProgram, "objectColor"), 0, 0, 0, 1);
+    glUniform4f(glGetUniformLocation(this->shaderProgram, "ambientColor"), 1, 1, 1, 1);
+    glUniform4f(glGetUniformLocation(this->shaderProgram, "ambientStrength"), 1.f, 1.f, 1.f, 1.f);
     std::cout << "GLMesh: " << meshName << " Constructed" << std::endl;
 }
 
@@ -35,6 +39,7 @@ bool GLMesh::isTextureEnabled() {
 
 void GLMesh::setTexture0(std::string texturePath) {
     this->enableTexture = true;
+    glUniform1ui(glGetUniformLocation(this->shaderProgram, "enableTexture"), true);
     this->texture0 = new GLuint(0);
     glGenTextures(1, this->texture0);
     glBindTexture(GL_TEXTURE_2D, *texture0);
@@ -50,7 +55,9 @@ void GLMesh::setTexture0(std::string texturePath) {
     } else {
         std::cout << "Failed to load texture." << std::endl;
     }
-    glUniform1i(glGetUniformLocation(this->shaderProgram, "ourTexture"), 0);
+    glUseProgram(this->shaderProgram);
+    int ourTexture = glGetUniformLocation(this->shaderProgram, "ourTexture");
+    glUniform1i(ourTexture, 0);
 }
 
 void GLMesh::setColor(float R, float G, float B, float A) {
@@ -65,7 +72,9 @@ void GLMesh::setColor(float R, float G, float B, float A) {
         this->color[2] = B;
         this->color[3] = A;
     }
-    glUniform4f(glGetUniformLocation(this->shaderProgram, "objectColor"), R, G, B, A);
+    glUseProgram(this->shaderProgram);
+    int ourColor = glGetUniformLocation(this->shaderProgram, "objectColor");
+    glUniform4f(ourColor, R, G, B, A);
 }
 std::string& GLMesh::getMeshName() {
     return this->meshName;

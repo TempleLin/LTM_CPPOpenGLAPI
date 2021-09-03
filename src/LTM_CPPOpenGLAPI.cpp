@@ -38,7 +38,8 @@ int main() {
 
     createShaderProgram(vertexShaderHandle, "shaders/shaderVS.glsl", fragmentShaderHandle, "shaders/shaderFS.glsl", shaderProgramHandle);
     BasicCubeMesh basicLightingCube1("Basic Lighting Cube 1", glm::vec3(-0.5f, -0.3f, -0.3f), shaderProgramHandle, vaos[1], vbos[1]);
-    basicLightingCube1.setColor(1, 1, 1, 1);
+    basicLightingCube1.setTexture0("assets/imgs/container.jpg");
+    basicLightingCube1.setColor(1, 0, 0, 1);
 
     // Our state (Dear ImGUI)
     bool show_demo_window = true;

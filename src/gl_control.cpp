@@ -62,6 +62,8 @@ void drawBasicMesh(GLMesh& mesh) {
         glBindTexture(GL_TEXTURE_2D, 0);
     }
     glUseProgram(mesh.getShaderProgram());
+    glm::vec4 blackColor = glm::vec4(1, 1, 1, 1);
+    glUniform1fv(mesh.getShaderProgram(), 1, &blackColor[0]);
     glDrawArrays(GL_TRIANGLES, 0, mesh.getVerticesCount());
 }
 
