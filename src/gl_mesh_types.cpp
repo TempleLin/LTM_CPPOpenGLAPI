@@ -1,12 +1,14 @@
+#include <iostream>
+
 #include "headers/gl_mesh_types.hpp"
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
+#include <glm/gtx/string_cast.hpp>
+
 #include "headers/image_edit.hpp"
 #include "headers/gl_values.hpp"
 #include "headers/gl_control.hpp"
-#include <iostream>
 #include <LTM_CPPOpenGLAPIConfig.h>
-
 
 GLMesh::GLMesh(std::string meshName, glm::vec3 position, unsigned int shaderProgram, unsigned int vao, unsigned int vbo) {
     this->meshName = meshName;
@@ -19,11 +21,15 @@ GLMesh::GLMesh(std::string meshName, glm::vec3 position, unsigned int shaderProg
     this->shaderProgram = shaderProgram;
     glUseProgram(this->shaderProgram);
 
-    this->color = glm::vec4(0, 0, 0, 1);
-    glUniform1ui(glGetUniformLocation(this->shaderProgram, "enableTexture"), false);
-    glUniform4fv(glGetUniformLocation(this->shaderProgram, "objectColor"), 1, &defaultObjectColor[0]);
-    glUniform4fv(glGetUniformLocation(this->shaderProgram, "ambientColor"), 1, &defaultAmbientColor[0]);
-    glUniform4fv(glGetUniformLocation(this->shaderProgram, "ambientStrength"), 1, &defaultAmbientStrength[0]);
+    this->color = GLGC::getDefaultObjectColor();
+    this->glUniEnableTexture = glGetUniformLocation(this->shaderProgram, "enableTexture");
+    this->glUniObjectColor = glGetUniformLocation(this->shaderProgram, "objectColor");
+    this->glUniAmbientColor = glGetUniformLocation(this->shaderProgram, "ambientColor");
+    this->glUniAmbientStrength = glGetUniformLocation(this->shaderProgram, "ambientStrength");
+    glUniform1ui(glUniEnableTexture, false);
+    glUniform4fv(glUniObjectColor, 1, &GLGC::getDefaultObjectColor()[0]);
+    glUniform4fv(glUniAmbientColor, 1, &GLGC::getDefaultAmbientColor()[0]);
+    glUniform4fv(glUniAmbientStrength, 1, &GLGC::getDefaultAmbientStrength()[0]);
     std::cout << "GLMesh: " << meshName << " Constructed" << std::endl;
     meshesCollector.push_back(this);
 }
@@ -41,7 +47,7 @@ bool GLMesh::isTextureEnabled() {
 
 void GLMesh::setTexture0(std::string texturePath) {
     this->enableTexture = true;
-    glUniform1ui(glGetUniformLocation(this->shaderProgram, "enableTexture"), true);
+    glUniform1ui(this->glUniEnableTexture, true);
     this->texture0 = new GLuint(0);
     glGenTextures(1, this->texture0);
     glBindTexture(GL_TEXTURE_2D, *texture0);
@@ -69,9 +75,52 @@ void GLMesh::setColor(glm::vec4 color, bool isNormalized) {
         this->color = color / 255.f;
     }
     glUseProgram(this->shaderProgram);
-    int ourColor = glGetUniformLocation(this->shaderProgram, "objectColor");
-    glUniform4fv(ourColor, 1, &color[0]);
+    glUniform4fv(this->glUniObjectColor, 1, &this->color[0]);
+    this->hasDefaultColor = false;
 }
+void GLMesh::setAmbientColor(glm::vec4 ambientColor, bool isNormalized) {
+    if (isNormalized) {
+        this->ambientColor = ambientColor;
+    } else {
+        this->color = ambientColor / 255.f;
+    }
+    glUseProgram(this->shaderProgram);
+    glUniform4fv(glUniAmbientColor, 1, &this->ambientColor[0]);
+    this->hasDefaultAmbientColor = false;
+}
+void GLMesh::setAmbientStrength(glm::vec4 ambientStrength, bool isNormalized) {
+    if (isNormalized) {
+        this->ambientStrength = ambientStrength;
+    } else {
+        this->ambientStrength = ambientStrength / 255.f;
+    }
+    glUseProgram(this->shaderProgram);
+    glUniform4fv(glUniAmbientStrength, 1, &this->ambientStrength[0]);
+    this->hasDefaultAmbientStrength = false;
+}
+void GLMesh::setToDefaultColor() {
+    setColor(GLGlobalControl::getDefaultObjectColor(), true);
+    this->hasDefaultColor = true;
+    std::cout << "Now color is: " << glm::to_string(this->color) << std::endl;
+}
+void GLMesh::setToDefaultAmbientColor() {
+    setAmbientColor(GLGlobalControl::getDefaultAmbientColor(), true);
+    this->hasDefaultAmbientColor = true;
+}
+void GLMesh::setToDefaultAmbientStrength() {
+    setAmbientStrength(GLGlobalControl::getDefaultAmbientStrength(), true);
+    this->hasDefaultAmbientStrength = true;
+}
+bool GLMesh::isDefaultColor() {
+    return this->hasDefaultColor;
+}
+bool GLMesh::isDefaultAmbientColor() {
+    return this->hasDefaultAmbientColor;
+}
+bool GLMesh::isDefaultAmbientStrength() {
+    return this->hasDefaultAmbientStrength;
+}
+
 std::string& GLMesh::getMeshName() {
     return this->meshName;
 }

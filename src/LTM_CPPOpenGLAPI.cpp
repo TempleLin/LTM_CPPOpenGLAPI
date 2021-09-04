@@ -46,7 +46,10 @@ int main() {
     bool show_another_window = false;
     ImVec4 clear_color = ImVec4(0.45f, 0.55f, 0.60f, 1.00f);
 
-    enableMeshesTransparency();
+    GLGC::enableMeshesTransparency();
+    GLGC::resetAllMeshesColor();
+    GLGC::changeDefaultColor(glm::vec4(0, 0, 1, 1));
+    GLGC::changeDefaultColor(glm::vec4(0, 1, 1, 1));
 
     while (!glfwWindowShouldClose(window)) {
         glfwPollEvents();
@@ -93,11 +96,12 @@ int main() {
         }
 
         
-        glClearColor(viewBackGroundColor.x, viewBackGroundColor.y, viewBackGroundColor.z, viewBackGroundColor.w);
+        glClearColor(GLGC::getViewBackgroundColor().r, GLGC::getViewBackgroundColor().g, 
+            GLGC::getViewBackgroundColor().b, GLGC::getViewBackgroundColor().a);
         // @Clear both color buffer and Z-depth buffer before each frame render.
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-        setDeltaTime();
+        GLGC::setDeltaTime();
 
         setMeshCoordSystem(basicLightingCube0.getShaderProgram());
         setBasicMeshSpawnPos(basicLightingCube0);
@@ -125,4 +129,5 @@ int main() {
     ImGui::DestroyContext();
 
     cleanGLObjectsGarbage();
+    GLGC::destructAllPointersValue();
 }

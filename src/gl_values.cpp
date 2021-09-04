@@ -19,9 +19,3 @@ float deltaTime { 0.0f };
 float lastFrame { 0.0f };
 
 float cameraMoveSpeed { 2.5f };
-
-glm::vec4 viewBackGroundColor{ 0.2f, 0.3f, 0.3f, 1.0f };
-
-glm::vec4 defaultObjectColor{ 0, 0, 0, 1 };
-glm::vec4 defaultAmbientColor{ 1, 1, 1, 1 };
-glm::vec4 defaultAmbientStrength{ 1.f, 1.f, 1.f, 1.f };

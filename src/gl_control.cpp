@@ -18,11 +18,6 @@
 std::vector<unsigned int> vaoGarbageCollector, vboGarbageCollector, programGarbageCollector;
 std::vector<GLMesh*> meshesCollector;
 
-void setDeltaTime() { 
-    float currentFrame = glfwGetTime();
-    deltaTime = currentFrame - lastFrame;
-    lastFrame = currentFrame;
-}
 
 void setMeshCoordSystem(unsigned int& shaderProgram) {
     glUseProgram(shaderProgram);
@@ -63,14 +58,7 @@ void drawBasicMesh(GLMesh& mesh) {
         glBindTexture(GL_TEXTURE_2D, 0);
     }
     glUseProgram(mesh.getShaderProgram());
-    glm::vec4 blackColor = glm::vec4(1, 1, 1, 1);
-    glUniform1fv(mesh.getShaderProgram(), 1, &blackColor[0]);
     glDrawArrays(GL_TRIANGLES, 0, mesh.getVerticesCount());
-}
-
-void enableMeshesTransparency() {
-    glEnable(GL_BLEND);
-    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 }
 
 void checkCompileErrors(unsigned int shader, char* type) {
@@ -185,4 +173,83 @@ void cleanGLObjectsGarbage() {
     cleanProgramsGarbage();
     cleanVAOsGarbage();
     cleanVBOsGarbage();
+}
+
+
+std::unique_ptr<glm::vec4> GLGlobalControl::viewBackgroundColor = std::make_unique<glm::vec4>(0.2f, 0.3f, 0.3f, 1.0f);
+std::unique_ptr<glm::vec4> GLGlobalControl::defaultObjectColor = std::make_unique<glm::vec4>(0.f, 0.f, 0.f, 1.f);
+std::unique_ptr<glm::vec4> GLGlobalControl::defaultAmbientColor = std::make_unique<glm::vec4>(1.f, 1.f, 1.f, 1.f);
+std::unique_ptr<glm::vec4> GLGlobalControl::defaultAmbientStrength = std::make_unique<glm::vec4>(1.f, 1.f, 1.f, 1.f);
+
+void GLGlobalControl::setDeltaTime() {
+    float currentFrame = glfwGetTime();
+    deltaTime = currentFrame - lastFrame;
+    lastFrame = currentFrame;
+}
+void GLGlobalControl::enableMeshesTransparency() {
+    glEnable(GL_BLEND);
+    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+}
+glm::vec4 GLGlobalControl::getViewBackgroundColor() {
+    return *viewBackgroundColor;
+}
+glm::vec4 GLGlobalControl::getDefaultObjectColor() {
+    return *defaultObjectColor;
+}
+glm::vec4 GLGlobalControl::getDefaultAmbientColor() {
+    return *defaultAmbientColor;
+}
+glm::vec4 GLGlobalControl::getDefaultAmbientStrength() {
+    return *defaultAmbientStrength;
+}
+void GLGlobalControl::changeDefaultColor(glm::vec4 color) {
+    *defaultObjectColor = color;
+    for (std::vector<GLMesh*>::iterator it = meshesCollector.begin(); it != meshesCollector.end(); ++it) {
+        if ((*it)->isDefaultColor()) {
+            (*it)->setToDefaultColor();
+        }
+    }
+}
+void GLGlobalControl::changeDefaultAmbientColor(glm::vec4 ambientColor) {
+    *defaultAmbientColor = ambientColor;
+    for (std::vector<GLMesh*>::iterator it = meshesCollector.begin(); it != meshesCollector.end(); ++it) {
+        if ((*it)->isDefaultAmbientColor()) {
+            (*it)->setToDefaultAmbientColor();
+        }
+    }
+}
+void GLGlobalControl::changeDefaultAmbientStrength(glm::vec4 ambientStrength) {
+    *defaultAmbientStrength = ambientStrength;
+    for (std::vector<GLMesh*>::iterator it = meshesCollector.begin(); it != meshesCollector.end(); ++it) {
+        if ((*it)->isDefaultAmbientStrength()) {
+            (*it)->setToDefaultAmbientStrength();
+        }
+    }
+}
+void GLGlobalControl::resetAllDefaultValues() {
+    *viewBackgroundColor = glm::vec4(0.2f, 0.3f, 0.3f, 1.0f);
+    *defaultObjectColor = glm::vec4(0.f, 0.f, 0.f, 1.f);
+    *defaultAmbientColor = glm::vec4(1.f, 1.f, 1.f, 1.f);
+    *defaultAmbientStrength = glm::vec4(1.f, 1.f, 1.f, 1.f);
+}
+void GLGlobalControl::resetAllMeshesColor() {
+    for (std::vector<GLMesh*>::iterator it = meshesCollector.begin(); it != meshesCollector.end(); ++it) {
+        (*it)->setToDefaultColor();
+    }
+}
+void GLGlobalControl::resetAllMeshesAmbientColor() {
+    for (std::vector<GLMesh*>::iterator it = meshesCollector.begin(); it != meshesCollector.end(); ++it) {
+        (*it)->setToDefaultAmbientColor();
+    }
+}
+void GLGlobalControl::resetAllMeshesAmbientStrength() {
+    for (std::vector<GLMesh*>::iterator it = meshesCollector.begin(); it != meshesCollector.end(); ++it) {
+        (*it)->setToDefaultAmbientStrength();
+    }
+}
+void GLGlobalControl::destructAllPointersValue() {
+    viewBackgroundColor.reset();
+    defaultObjectColor.reset();
+    defaultAmbientColor.reset();
+    defaultAmbientStrength.reset();
 }
