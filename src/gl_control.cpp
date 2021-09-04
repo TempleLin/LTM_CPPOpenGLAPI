@@ -202,24 +202,24 @@ glm::vec4 GLGlobalControl::getDefaultAmbientColor() {
 glm::vec4 GLGlobalControl::getDefaultAmbientStrength() {
     return *defaultAmbientStrength;
 }
-void GLGlobalControl::changeDefaultColor(glm::vec4 color) {
-    *defaultObjectColor = color;
+void GLGlobalControl::changeDefaultColor(glm::vec4 color, bool normalized) {
+    *defaultObjectColor = normalized ? color : color / 255.f;
     for (std::vector<GLMesh*>::iterator it = meshesCollector.begin(); it != meshesCollector.end(); ++it) {
         if ((*it)->isDefaultColor()) {
             (*it)->setToDefaultColor();
         }
     }
 }
-void GLGlobalControl::changeDefaultAmbientColor(glm::vec4 ambientColor) {
-    *defaultAmbientColor = ambientColor;
+void GLGlobalControl::changeDefaultAmbientColor(glm::vec4 ambientColor, bool normalized) {
+    *defaultAmbientColor = normalized ? ambientColor : ambientColor / 255.f;
     for (std::vector<GLMesh*>::iterator it = meshesCollector.begin(); it != meshesCollector.end(); ++it) {
         if ((*it)->isDefaultAmbientColor()) {
             (*it)->setToDefaultAmbientColor();
         }
     }
 }
-void GLGlobalControl::changeDefaultAmbientStrength(glm::vec4 ambientStrength) {
-    *defaultAmbientStrength = ambientStrength;
+void GLGlobalControl::changeDefaultAmbientStrength(glm::vec4 ambientStrength, bool normalized) {
+    *defaultAmbientStrength = normalized ? ambientStrength : ambientStrength / 255.f;
     for (std::vector<GLMesh*>::iterator it = meshesCollector.begin(); it != meshesCollector.end(); ++it) {
         if ((*it)->isDefaultAmbientStrength()) {
             (*it)->setToDefaultAmbientStrength();

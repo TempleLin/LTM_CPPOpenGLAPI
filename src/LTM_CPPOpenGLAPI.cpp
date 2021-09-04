@@ -48,8 +48,12 @@ int main() {
 
     GLGC::enableMeshesTransparency();
     GLGC::resetAllMeshesColor();
-    GLGC::changeDefaultColor(glm::vec4(0, 0, 1, 1));
-    GLGC::changeDefaultColor(glm::vec4(0, 1, 1, 1));
+    GLGC::changeDefaultColor(glm::vec4(0, 0, 1, 1), true);
+    GLGC::changeDefaultColor(glm::vec4(1, 1, 1, 1), true);
+    GLGC::changeDefaultAmbientColor(glm::vec4(1, 0.2, 0.6, 1), true);
+    basicLightingCube1.setColor(glm::vec4(0, 0, 1, .6f), true);
+    basicLightingCube1.setAmbientStrength(glm::vec4(1, 1, 1, 1), true);
+    basicLightingCube1.setAmbientColor(glm::vec4(1, 1, 1, 1), true);
 
     while (!glfwWindowShouldClose(window)) {
         glfwPollEvents();

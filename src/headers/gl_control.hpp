@@ -40,9 +40,9 @@ public:
 	static glm::vec4 getDefaultObjectColor();
 	static glm::vec4 getDefaultAmbientColor();
 	static glm::vec4 getDefaultAmbientStrength();
-	static void changeDefaultColor(glm::vec4 color); // @Changes all current meshes having default color.
-	static void changeDefaultAmbientColor(glm::vec4 ambientColor);
-	static void changeDefaultAmbientStrength(glm::vec4 ambientStrength);
+	static void changeDefaultColor(glm::vec4 color, bool normalized); // @Changes all current meshes having default color.
+	static void changeDefaultAmbientColor(glm::vec4 ambientColor, bool normalized);
+	static void changeDefaultAmbientStrength(glm::vec4 ambientStrength, bool normalized);
 	static void resetAllDefaultValues();
 	static void resetAllMeshesColor();
 	static void resetAllMeshesAmbientColor();
