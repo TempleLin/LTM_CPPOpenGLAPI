@@ -8,6 +8,7 @@ uniform vec4 ambientColor;
 uniform vec4 ambientStrength;
 uniform vec3 lightColor;
 uniform vec3 lightPos;
+uniform float lightStrength;
 
 in vec3 FragPos; // @Position of the fragment(vertex) in world space.
 in vec2 TexCoord;
@@ -23,7 +24,7 @@ void main()
     vec4 diffuse = vec4(diff * lightColor, 1);
     if (enableTexture){
         // @Multiply the texture by color mixes the RGB color and texture.
-        FragColor = texture(ourTexture, TexCoord) * (ambientColor * objectColor) * (ambientStrength + diffuse);
+        FragColor = texture(ourTexture, TexCoord) * (ambientColor * objectColor) * (ambientStrength + diffuse * lightStrength);
     } else {
         FragColor = ambientColor * objectColor * (ambientStrength + (diffuse, 1));
     }

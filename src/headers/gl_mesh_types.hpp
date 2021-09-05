@@ -25,7 +25,8 @@ protected:
     unsigned int vao, vbo;
     unsigned int verticesCount;
     unsigned int shaderProgram;
-    int glUniObjectColor, glUniAmbientColor, glUniAmbientStrength, glUniEnableTexture, glUniAffectedLightPos, glUniAffectedLightColor;
+    int glUniObjectColor, glUniAmbientColor, glUniAmbientStrength, 
+        glUniEnableTexture, glUniAffectedLightPos, glUniAffectedLightColor, glUniAffectedLightStrength;
     bool hasDefaultColor{ true }, hasDefaultAmbientColor{ true }, hasDefaultAmbientStrength{ true };
     void setTextureWrapFilter(unsigned int wrap_s, unsigned int wrap_t, unsigned int min_filter, unsigned int max_filter);
 public:
@@ -42,7 +43,7 @@ public:
     bool isDefaultAmbientColor();
     bool isDefaultAmbientStrength();
 
-    void detectGlobalLightSource(glm::vec3& lightPos, glm::vec3& lightColor);
+    void detectGlobalLightSource(glm::vec3& lightPos, glm::vec3& lightColor, float lightStrength);
 
     std::string& getName();
     unsigned int getTexture0();
@@ -60,7 +61,7 @@ protected:
     GLLightSource* lightSource;
 public:
     GLEmitterble(glm::vec4& color, glm::vec3& position, float& lightStrength);
-    void enableLightEmit(float strength);
+    void enableLightEmit();
     void changeLightStrength(float strength);
     void disableLightEmit();
     ~GLEmitterble();

@@ -192,7 +192,7 @@ void GLGlobalControl::updateGlobalLightSource() {
     auto lightSourcesIT = globalLightSources.begin();
     GLLightSource& firstLightSource = **lightSourcesIT;
     for (std::vector<GLMesh*>::iterator meshIT = meshesCollector.begin(); meshIT != meshesCollector.end(); ++meshIT) {
-        (*meshIT)->detectGlobalLightSource(firstLightSource.getPosition(), glm::vec3(firstLightSource.getColor()));
+        (*meshIT)->detectGlobalLightSource(firstLightSource.getPosition(), glm::vec3(firstLightSource.getColor()), firstLightSource.getStrength());
     }
 }
 void GLGlobalControl::enableMeshesTransparency() {

@@ -31,15 +31,16 @@ int main() {
     unsigned int vaos[2], vbos[2];
     createVAOs(2, vaos);
     createVBOs(2, vbos);
-    GLBasicCubeMesh basicLightingCube0("Basic Lighting Cube 0", glm::vec3(0.5f, 0.8f, -1.0f), shaderProgramHandle, vaos[0], vbos[0]);
-    basicLightingCube0.setTexture0("assets/imgs/container.jpg");
-    basicLightingCube0.setColor(glm::vec4(0, 0, 1, 1), true);
+    GLBasicCubeMesh basicCube0("Basic Lighting Cube 0", glm::vec3(0.5f, 0.8f, -1.0f), shaderProgramHandle, vaos[0], vbos[0]);
+    basicCube0.setTexture0("assets/imgs/container.jpg");
+    basicCube0.setColor(glm::vec4(1, 1, 1, 1), true);
 
     createShaderProgram(vertexShaderHandle, "shaders/shaderVS.glsl", fragmentShaderHandle, "shaders/shaderFS.glsl", shaderProgramHandle);
-    GLEmmiterbleCubeMesh basicLightingCube1("Basic Lighting Cube 1", glm::vec3(-0.5f, -0.3f, -0.3f), shaderProgramHandle, vaos[1], vbos[1], 1);
-    basicLightingCube1.enableLightEmit(10.0f);
-    //basicLightingCube1.setTexture0("assets/imgs/container.jpg");
-    //basicLightingCube1.setColor(glm::vec4(1, 0, 0, 1), true);
+    GLEmmiterbleCubeMesh emitterbleCube0("Basic Lighting Cube 1", glm::vec3(-0.5f, -0.3f, -0.3f), shaderProgramHandle, vaos[1], vbos[1], 10.0f);
+    emitterbleCube0.enableLightEmit();
+    emitterbleCube0.changeLightStrength(3.f);
+    emitterbleCube0.setAmbientStrength(glm::vec4(1, 1, 1, 1), true);
+    emitterbleCube0.setAmbientColor(glm::vec4(1, 1, 1, 1), true);
 
     // Our state (Dear ImGUI)
     bool show_demo_window = true;
@@ -48,12 +49,10 @@ int main() {
 
     GLGC::enableMeshesTransparency();
     GLGC::resetAllMeshesColor();
-    GLGC::changeDefaultColor(glm::vec4(1, 0, 0, 1), true);
+    GLGC::changeDefaultColor(glm::vec4(1, 1, 1, 1), true);
     //GLGC::changeDefaultAmbientColor(glm::vec4(1, 0.2, 0.6, 1), true);
     GLGC::changeDefaultAmbientStrength(glm::vec4(.1f, .1f, .1f, 1), true);
-    basicLightingCube1.setColor(glm::vec4(1, 1, 1, 1.f), true);
-    basicLightingCube1.setAmbientStrength(glm::vec4(1, 1, 1, 1), true);
-    basicLightingCube1.setAmbientColor(glm::vec4(1, 1, 1, 1), true);
+    emitterbleCube0.setColor(glm::vec4(1, 1, 1, 1), true);
 
     while (!glfwWindowShouldClose(window)) {
         glfwPollEvents();
@@ -108,15 +107,15 @@ int main() {
         GLGC::setDeltaTime();
         GLGC::updateGlobalLightSource();
 
-        setMeshCoordSystem(basicLightingCube0.getShaderProgram());
-        setBasicMeshSpawnPos(basicLightingCube0);
-        spinBasicMeshAnim(basicLightingCube0);
-        drawBasicMesh(basicLightingCube0);
+        setMeshCoordSystem(basicCube0.getShaderProgram());
+        setBasicMeshSpawnPos(basicCube0);
+        spinBasicMeshAnim(basicCube0);
+        drawBasicMesh(basicCube0);
 
-        setMeshCoordSystem(basicLightingCube1.getShaderProgram());
-        setBasicMeshSpawnPos(basicLightingCube1);
-        spinBasicMeshAnim(basicLightingCube1);
-        drawBasicMesh(basicLightingCube1);
+        setMeshCoordSystem(emitterbleCube0.getShaderProgram());
+        setBasicMeshSpawnPos(emitterbleCube0);
+        spinBasicMeshAnim(emitterbleCube0);
+        drawBasicMesh(emitterbleCube0);
 
         processInput(window);
 

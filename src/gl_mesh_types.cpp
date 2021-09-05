@@ -43,10 +43,13 @@ GLMesh::GLMesh(std::string meshName, glm::vec3 position, unsigned int shaderProg
     this->glUniAmbientStrength = glGetUniformLocation(this->shaderProgram, "ambientStrength");
     this->glUniAffectedLightPos = glGetUniformLocation(this->shaderProgram, "lightPos");
     this->glUniAffectedLightColor = glGetUniformLocation(this->shaderProgram, "lightColor");
+    this->glUniAffectedLightStrength = glGetUniformLocation(this->shaderProgram, "lightStrength");
     glUniform1ui(glUniEnableTexture, false);
     glUniform4fv(glUniObjectColor, 1, &GLGC::getDefaultObjectColor()[0]);
     glUniform4fv(glUniAmbientColor, 1, &GLGC::getDefaultAmbientColor()[0]);
     glUniform4fv(glUniAmbientStrength, 1, &GLGC::getDefaultAmbientStrength()[0]);
+    glUniform4f(glUniAffectedLightColor, 1, 1, 1, 1);
+    glUniform1f(glUniAffectedLightStrength, 1.f);
     std::cout << "GLMesh: " << meshName << " Constructed" << std::endl;
     meshesCollector.push_back(this);
 }
@@ -137,12 +140,13 @@ bool GLMesh::isDefaultAmbientStrength() {
     return this->hasDefaultAmbientStrength;
 }
 
-void GLMesh::detectGlobalLightSource(glm::vec3& lightPos, glm::vec3& lightColor) {
+void GLMesh::detectGlobalLightSource(glm::vec3& lightPos, glm::vec3& lightColor, float lightStrength) {
     std::cout << "Light position: " << lightPos.x << "," << lightPos.y << "," << lightPos.z << "\n";
     std::cout << "Light color: " << lightColor.r << "," << lightColor.g << "," << lightColor.b << "\n";
     glUseProgram(this->shaderProgram);
     glUniform3fv(glUniAffectedLightPos, 1, &lightPos[0]);
     glUniform3fv(glUniAffectedLightColor, 1, &lightColor[0]);
+    glUniform1f(glUniAffectedLightStrength, lightStrength);
 }
 
 std::string& GLMesh::getName() {
@@ -233,9 +237,9 @@ GLBasicCubeMesh::GLBasicCubeMesh(std::string meshName, glm::vec3 position, unsig
 
 GLEmitterble::GLEmitterble(glm::vec4& color, glm::vec3& position, float& lightStrength) {
     this->lightStrength = lightStrength;
-    lightSource = new GLLightSource(color, position, lightStrength);
+    lightSource = new GLLightSource(color, position, this->lightStrength);
 }
-void GLEmitterble::enableLightEmit(float strength) {
+void GLEmitterble::enableLightEmit() {
     // TODO: Put the lightsource into a vector of pointer lightsources if doesn't exist.
     for (std::list<GLLightSource*>::iterator it = globalLightSources.begin(); it != globalLightSources.end(); ++it) {
         if (*it == this->lightSource) {
