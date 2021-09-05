@@ -4,12 +4,12 @@
 
 class GLLightSource {
 private:
-    glm::vec4* color;
+    glm::vec3* color;
     glm::vec3* position;
     float* strength;
 public:
-    GLLightSource(glm::vec4& color, glm::vec3& position, float& strength);
-    glm::vec4& getColor();
+    GLLightSource(glm::vec3& color, glm::vec3& position, float& strength);
+    glm::vec3& getColor();
     glm::vec3& getPosition();
     float getStrength();
 };
@@ -21,7 +21,8 @@ protected:
     glm::vec3 position;
     float* vertices;
     unsigned int* texture0 = nullptr;
-    glm::vec4 color, ambientColor, ambientStrength;
+    glm::vec3 color, ambientColor;
+    float ambientStrength;
     unsigned int vao, vbo;
     unsigned int verticesCount;
     unsigned int shaderProgram;
@@ -32,9 +33,9 @@ protected:
 public:
     GLMesh(std::string meshName, glm::vec3 position, unsigned int shaderProgram, unsigned int vao, unsigned int vbo);
     void setTexture0(std::string texturePath);
-    void setColor(glm::vec4 color, bool isNormalized);
-    void setAmbientColor(glm::vec4 ambientColor, bool isNormalized);
-    void setAmbientStrength(glm::vec4 ambientStrength, bool isNormalized);
+    void setColor(glm::vec3 color, bool isNormalized);
+    void setAmbientColor(glm::vec3 ambientColor, bool isNormalized);
+    void setAmbientStrength(float ambientStrength);
     void setToDefaultColor(); // @Resets to world value defaultObjectColor
     void setToDefaultAmbientColor(); // @Resets to world value defaultAmbientColor
     void setToDefaultAmbientStrength(); // @Resets to world value defaultAmbientStrength
@@ -62,7 +63,7 @@ protected:
     float lightStrength;
     GLLightSource* lightSource;
 public:
-    GLEmitterble(glm::vec4& color, glm::vec3& position, float& lightStrength);
+    GLEmitterble(glm::vec3& color, glm::vec3& position, float& lightStrength);
     void enableLightEmit();
     void changeLightStrength(float strength);
     void disableLightEmit();

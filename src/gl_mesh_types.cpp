@@ -10,12 +10,12 @@
 #include "headers/gl_control.hpp"
 #include <LTM_CPPOpenGLAPIConfig.h>
 
-GLLightSource::GLLightSource(glm::vec4& color, glm::vec3& position, float& strength) {
+GLLightSource::GLLightSource(glm::vec3& color, glm::vec3& position, float& strength) {
     this->color = &color;
     this->position = &position;
     this->strength = &strength;
 }
-glm::vec4& GLLightSource::getColor() {
+glm::vec3& GLLightSource::getColor() {
     return *(this->color);
 }
 glm::vec3& GLLightSource::getPosition() {
@@ -49,7 +49,7 @@ GLMesh::GLMesh(std::string meshName, glm::vec3 position, unsigned int shaderProg
     glUniform1ui(glUniEnableTexture, false);
     glUniform4fv(glUniObjectColor, 1, &GLGC::getDefaultObjectColor()[0]);
     glUniform4fv(glUniAmbientColor, 1, &GLGC::getDefaultAmbientColor()[0]);
-    glUniform4fv(glUniAmbientStrength, 1, &GLGC::getDefaultAmbientStrength()[0]);
+    glUniform1f(glUniAmbientStrength, GLGC::getDefaultAmbientStrength());
     glUniform4f(glUniAffectedLightColor, 1, 1, 1, 1);
     glUniform1f(glUniAffectedLightStrength, 1.f);
     std::cout << "GLMesh: " << meshName << " Constructed" << std::endl;
@@ -90,7 +90,7 @@ void GLMesh::setTexture0(std::string texturePath) {
     glUniform1i(ourTexture, 0);
 }
 
-void GLMesh::setColor(glm::vec4 color, bool isNormalized) {
+void GLMesh::setColor(glm::vec3 color, bool isNormalized) {
     if (isNormalized) {
         this->color = color;
     } else {
@@ -100,7 +100,7 @@ void GLMesh::setColor(glm::vec4 color, bool isNormalized) {
     glUniform4fv(this->glUniObjectColor, 1, &this->color[0]);
     this->hasDefaultColor = false;
 }
-void GLMesh::setAmbientColor(glm::vec4 ambientColor, bool isNormalized) {
+void GLMesh::setAmbientColor(glm::vec3 ambientColor, bool isNormalized) {
     if (isNormalized) {
         this->ambientColor = ambientColor;
     } else {
@@ -110,14 +110,10 @@ void GLMesh::setAmbientColor(glm::vec4 ambientColor, bool isNormalized) {
     glUniform4fv(glUniAmbientColor, 1, &this->ambientColor[0]);
     this->hasDefaultAmbientColor = false;
 }
-void GLMesh::setAmbientStrength(glm::vec4 ambientStrength, bool isNormalized) {
-    if (isNormalized) {
-        this->ambientStrength = ambientStrength;
-    } else {
-        this->ambientStrength = ambientStrength / 255.f;
-    }
+void GLMesh::setAmbientStrength(float ambientStrength) {
+    this->ambientStrength = ambientStrength;
     glUseProgram(this->shaderProgram);
-    glUniform4fv(glUniAmbientStrength, 1, &this->ambientStrength[0]);
+    glUniform1f(glUniAmbientStrength, this->ambientStrength);
     this->hasDefaultAmbientStrength = false;
 }
 void GLMesh::setToDefaultColor() {
@@ -129,7 +125,7 @@ void GLMesh::setToDefaultAmbientColor() {
     this->hasDefaultAmbientColor = true;
 }
 void GLMesh::setToDefaultAmbientStrength() {
-    setAmbientStrength(GLGC::getDefaultAmbientStrength(), true);
+    setAmbientStrength(GLGC::getDefaultAmbientStrength());
     this->hasDefaultAmbientStrength = true;
 }
 bool GLMesh::isDefaultColor() {
@@ -240,7 +236,7 @@ GLBasicCubeMesh::GLBasicCubeMesh(std::string meshName, glm::vec3 position, unsig
     glEnableVertexAttribArray(2);
 }
 
-GLEmitterble::GLEmitterble(glm::vec4& color, glm::vec3& position, float& lightStrength) {
+GLEmitterble::GLEmitterble(glm::vec3& color, glm::vec3& position, float& lightStrength) {
     this->lightStrength = lightStrength;
     lightSource = new GLLightSource(color, position, this->lightStrength);
 }

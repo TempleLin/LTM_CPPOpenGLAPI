@@ -5,10 +5,11 @@ uniform vec3 cameraViewPos;
 uniform vec4 objectColor;
 // @Ambient light is the minimum light around. Making it not completely dark.
 uniform vec4 ambientColor;
-uniform vec4 ambientStrength;
+uniform float ambientStrength;
 uniform vec3 lightColor;
 uniform vec3 lightPos;
 uniform float lightStrength;
+uniform float objectOpacity;
 
 in vec3 FragPos; // @Position of the fragment(vertex) in world space.
 in vec2 TexCoord;
@@ -45,4 +46,5 @@ void main()
     } else {
         FragColor = (ambient + diffuse + (specular,1)) * objectColor;
     }
+    FragColor.a = 1;
 }

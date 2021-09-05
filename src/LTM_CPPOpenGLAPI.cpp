@@ -39,7 +39,7 @@ int main() {
     GLEmmiterbleCubeMesh emitterbleCube0("Basic Lighting Cube 1", glm::vec3(-10.f, -10.f, -10.f), shaderProgramHandle, vaos[1], vbos[1], 10.0f);
     emitterbleCube0.enableLightEmit();
     emitterbleCube0.changeLightStrength(10.f);
-    emitterbleCube0.setAmbientStrength(glm::vec4(1, 1, 1, 1), true);
+    emitterbleCube0.setAmbientStrength(1.f);
     emitterbleCube0.setAmbientColor(glm::vec4(1, 1, 1, 1), true);
 
     // Our state (Dear ImGUI)
@@ -49,10 +49,11 @@ int main() {
 
     GLGC::enableMeshesTransparency();
     GLGC::resetAllMeshesColor();
-    GLGC::changeDefaultColor(glm::vec4(1, 1, 1, 1), true);
+    GLGC::changeDefaultColor(glm::vec3(1, 1, 1), true);
     //GLGC::changeDefaultAmbientColor(glm::vec4(1, 0.2, 0.6, 1), true);
-    GLGC::changeDefaultAmbientStrength(glm::vec4(.1f, .1f, .1f, 1), true);
-    emitterbleCube0.setColor(glm::vec4(1, 1, 1, 1), true);
+    GLGC::changeDefaultAmbientStrength(.1f);
+    emitterbleCube0.setColor(glm::vec3(0, 1, 1), true);
+    basicCube0.setColor(glm::vec3(1, 0, 1), true);
 
     while (!glfwWindowShouldClose(window)) {
         glfwPollEvents();
@@ -100,7 +101,7 @@ int main() {
 
         // @glClearColor does not do any clearing itself -- it just sets what the color will be when you do actually clear. 
         glClearColor(GLGC::getViewBackgroundColor().r, GLGC::getViewBackgroundColor().g, 
-            GLGC::getViewBackgroundColor().b, GLGC::getViewBackgroundColor().a);
+            GLGC::getViewBackgroundColor().b, 1);
         // @Clear both color buffer and Z-depth buffer before each frame render.
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 

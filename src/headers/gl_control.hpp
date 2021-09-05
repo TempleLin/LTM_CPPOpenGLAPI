@@ -30,23 +30,23 @@ void cleanGLObjectsGarbage();
 
 class GLGlobalControl {
 private:
-	static std::unique_ptr<glm::vec4> viewBackgroundColor;
-	static std::unique_ptr<glm::vec4> defaultObjectColor;
-	static std::unique_ptr<glm::vec4> defaultAmbientColor;
-	static std::unique_ptr<glm::vec4> defaultAmbientStrength;
+	static std::unique_ptr<glm::vec3> viewBackgroundColor;
+	static std::unique_ptr<glm::vec3> defaultObjectColor;
+	static std::unique_ptr<glm::vec3> defaultAmbientColor;
+	static std::unique_ptr<float> defaultAmbientStrength;
 public:
 	// @Set delta time according to each fps.
 	static void setDeltaTime();
 	static void updateGlobalLightSource();
 	static void updateCameraViewPosToMeshes();
 	static void enableMeshesTransparency();
-	static glm::vec4 getViewBackgroundColor();
-	static glm::vec4 getDefaultObjectColor();
-	static glm::vec4 getDefaultAmbientColor();
-	static glm::vec4 getDefaultAmbientStrength();
-	static void changeDefaultColor(glm::vec4 color, bool normalized); // @Changes all current meshes having default color.
-	static void changeDefaultAmbientColor(glm::vec4 ambientColor, bool normalized);
-	static void changeDefaultAmbientStrength(glm::vec4 ambientStrength, bool normalized);
+	static glm::vec3 getViewBackgroundColor();
+	static glm::vec3 getDefaultObjectColor();
+	static glm::vec3 getDefaultAmbientColor();
+	static float getDefaultAmbientStrength();
+	static void changeDefaultColor(glm::vec3 color, bool normalized); // @Changes all current meshes having default color.
+	static void changeDefaultAmbientColor(glm::vec3 ambientColor, bool normalized);
+	static void changeDefaultAmbientStrength(float ambientStrength);
 	static void resetAllDefaultValues();
 	static void resetAllMeshesColor();
 	static void resetAllMeshesAmbientColor();

@@ -177,10 +177,10 @@ void cleanGLObjectsGarbage() {
 }
 
 
-std::unique_ptr<glm::vec4> GLGlobalControl::viewBackgroundColor = std::make_unique<glm::vec4>(0.2f, 0.3f, 0.3f, 1.0f);
-std::unique_ptr<glm::vec4> GLGlobalControl::defaultObjectColor = std::make_unique<glm::vec4>(0.f, 0.f, 0.f, 1.f);
-std::unique_ptr<glm::vec4> GLGlobalControl::defaultAmbientColor = std::make_unique<glm::vec4>(1.f, 1.f, 1.f, 1.f);
-std::unique_ptr<glm::vec4> GLGlobalControl::defaultAmbientStrength = std::make_unique<glm::vec4>(.1f, .1f, .1f, 1.f);
+std::unique_ptr<glm::vec3> GLGlobalControl::viewBackgroundColor = std::make_unique<glm::vec3>(0.2f, 0.3f, 0.3f);
+std::unique_ptr<glm::vec3> GLGlobalControl::defaultObjectColor = std::make_unique<glm::vec3>(0.f, 0.f, 0.f);
+std::unique_ptr<glm::vec3> GLGlobalControl::defaultAmbientColor = std::make_unique<glm::vec3>(1.f, 1.f, 1.f);
+std::unique_ptr<float> GLGlobalControl::defaultAmbientStrength = std::make_unique<float>(.1f);
 
 void GLGlobalControl::setDeltaTime() {
     float currentFrame = glfwGetTime();
@@ -204,19 +204,19 @@ void GLGlobalControl::enableMeshesTransparency() {
     glEnable(GL_BLEND);
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 }
-glm::vec4 GLGlobalControl::getViewBackgroundColor() {
+glm::vec3 GLGlobalControl::getViewBackgroundColor() {
     return *viewBackgroundColor;
 }
-glm::vec4 GLGlobalControl::getDefaultObjectColor() {
+glm::vec3 GLGlobalControl::getDefaultObjectColor() {
     return *defaultObjectColor;
 }
-glm::vec4 GLGlobalControl::getDefaultAmbientColor() {
+glm::vec3 GLGlobalControl::getDefaultAmbientColor() {
     return *defaultAmbientColor;
 }
-glm::vec4 GLGlobalControl::getDefaultAmbientStrength() {
+float GLGlobalControl::getDefaultAmbientStrength() {
     return *defaultAmbientStrength;
 }
-void GLGlobalControl::changeDefaultColor(glm::vec4 color, bool normalized) {
+void GLGlobalControl::changeDefaultColor(glm::vec3 color, bool normalized) {
     *defaultObjectColor = normalized ? color : color / 255.f;
     for (std::vector<GLMesh*>::iterator it = meshesCollector.begin(); it != meshesCollector.end(); ++it) {
         if ((*it)->isDefaultColor()) {
@@ -224,7 +224,7 @@ void GLGlobalControl::changeDefaultColor(glm::vec4 color, bool normalized) {
         }
     }
 }
-void GLGlobalControl::changeDefaultAmbientColor(glm::vec4 ambientColor, bool normalized) {
+void GLGlobalControl::changeDefaultAmbientColor(glm::vec3 ambientColor, bool normalized) {
     *defaultAmbientColor = normalized ? ambientColor : ambientColor / 255.f;
     for (std::vector<GLMesh*>::iterator it = meshesCollector.begin(); it != meshesCollector.end(); ++it) {
         if ((*it)->isDefaultAmbientColor()) {
@@ -232,8 +232,8 @@ void GLGlobalControl::changeDefaultAmbientColor(glm::vec4 ambientColor, bool nor
         }
     }
 }
-void GLGlobalControl::changeDefaultAmbientStrength(glm::vec4 ambientStrength, bool normalized) {
-    *defaultAmbientStrength = normalized ? ambientStrength : ambientStrength / 255.f;
+void GLGlobalControl::changeDefaultAmbientStrength(float ambientStrength) {
+    *defaultAmbientStrength = ambientStrength;
     for (std::vector<GLMesh*>::iterator it = meshesCollector.begin(); it != meshesCollector.end(); ++it) {
         if ((*it)->isDefaultAmbientStrength()) {
             (*it)->setToDefaultAmbientStrength();
@@ -244,7 +244,7 @@ void GLGlobalControl::resetAllDefaultValues() {
     *viewBackgroundColor = glm::vec4(0.2f, 0.3f, 0.3f, 1.0f);
     *defaultObjectColor = glm::vec4(0.f, 0.f, 0.f, 1.f);
     *defaultAmbientColor = glm::vec4(1.f, 1.f, 1.f, 1.f);
-    *defaultAmbientStrength = glm::vec4(1.f, 1.f, 1.f, 1.f);
+    *defaultAmbientStrength = .1f;
 }
 void GLGlobalControl::resetAllMeshesColor() {
     for (std::vector<GLMesh*>::iterator it = meshesCollector.begin(); it != meshesCollector.end(); ++it) {
