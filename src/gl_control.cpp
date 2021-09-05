@@ -17,6 +17,7 @@
 
 std::vector<unsigned int> vaoGarbageCollector, vboGarbageCollector, programGarbageCollector;
 std::vector<GLMesh*> meshesCollector;
+std::list<GLLightSource*> globalLightSources;
 
 
 void setMeshCoordSystem(unsigned int& shaderProgram) {
@@ -179,12 +180,20 @@ void cleanGLObjectsGarbage() {
 std::unique_ptr<glm::vec4> GLGlobalControl::viewBackgroundColor = std::make_unique<glm::vec4>(0.2f, 0.3f, 0.3f, 1.0f);
 std::unique_ptr<glm::vec4> GLGlobalControl::defaultObjectColor = std::make_unique<glm::vec4>(0.f, 0.f, 0.f, 1.f);
 std::unique_ptr<glm::vec4> GLGlobalControl::defaultAmbientColor = std::make_unique<glm::vec4>(1.f, 1.f, 1.f, 1.f);
-std::unique_ptr<glm::vec4> GLGlobalControl::defaultAmbientStrength = std::make_unique<glm::vec4>(1.f, 1.f, 1.f, 1.f);
+std::unique_ptr<glm::vec4> GLGlobalControl::defaultAmbientStrength = std::make_unique<glm::vec4>(.1f, .1f, .1f, 1.f);
 
 void GLGlobalControl::setDeltaTime() {
     float currentFrame = glfwGetTime();
     deltaTime = currentFrame - lastFrame;
     lastFrame = currentFrame;
+}
+void GLGlobalControl::updateGlobalLightSource() {
+    if (globalLightSources.empty()) return;
+    auto lightSourcesIT = globalLightSources.begin();
+    GLLightSource& firstLightSource = **lightSourcesIT;
+    for (std::vector<GLMesh*>::iterator meshIT = meshesCollector.begin(); meshIT != meshesCollector.end(); ++meshIT) {
+        (*meshIT)->detectGlobalLightSource(firstLightSource.getPosition(), glm::vec3(firstLightSource.getColor()));
+    }
 }
 void GLGlobalControl::enableMeshesTransparency() {
     glEnable(GL_BLEND);

@@ -10,8 +10,23 @@
 #include "headers/gl_control.hpp"
 #include <LTM_CPPOpenGLAPIConfig.h>
 
+GLLightSource::GLLightSource(glm::vec4& color, glm::vec3& position, float& strength) {
+    this->color = &color;
+    this->position = &position;
+    this->strength = &strength;
+}
+glm::vec4& GLLightSource::getColor() {
+    return *(this->color);
+}
+glm::vec3& GLLightSource::getPosition() {
+    return *(this->position);
+}
+float GLLightSource::getStrength() {
+    return *(this->strength);
+}
+
 GLMesh::GLMesh(std::string meshName, glm::vec3 position, unsigned int shaderProgram, unsigned int vao, unsigned int vbo) {
-    this->meshName = meshName;
+    this->name = meshName;
     this->position = position;
 
     this->vao = vao;
@@ -26,6 +41,8 @@ GLMesh::GLMesh(std::string meshName, glm::vec3 position, unsigned int shaderProg
     this->glUniObjectColor = glGetUniformLocation(this->shaderProgram, "objectColor");
     this->glUniAmbientColor = glGetUniformLocation(this->shaderProgram, "ambientColor");
     this->glUniAmbientStrength = glGetUniformLocation(this->shaderProgram, "ambientStrength");
+    this->glUniAffectedLightPos = glGetUniformLocation(this->shaderProgram, "lightPos");
+    this->glUniAffectedLightColor = glGetUniformLocation(this->shaderProgram, "lightColor");
     glUniform1ui(glUniEnableTexture, false);
     glUniform4fv(glUniObjectColor, 1, &GLGC::getDefaultObjectColor()[0]);
     glUniform4fv(glUniAmbientColor, 1, &GLGC::getDefaultAmbientColor()[0]);
@@ -99,16 +116,15 @@ void GLMesh::setAmbientStrength(glm::vec4 ambientStrength, bool isNormalized) {
     this->hasDefaultAmbientStrength = false;
 }
 void GLMesh::setToDefaultColor() {
-    setColor(GLGlobalControl::getDefaultObjectColor(), true);
+    setColor(GLGC::getDefaultObjectColor(), true);
     this->hasDefaultColor = true;
-    std::cout << "Now color is: " << glm::to_string(this->color) << std::endl;
 }
 void GLMesh::setToDefaultAmbientColor() {
-    setAmbientColor(GLGlobalControl::getDefaultAmbientColor(), true);
+    setAmbientColor(GLGC::getDefaultAmbientColor(), true);
     this->hasDefaultAmbientColor = true;
 }
 void GLMesh::setToDefaultAmbientStrength() {
-    setAmbientStrength(GLGlobalControl::getDefaultAmbientStrength(), true);
+    setAmbientStrength(GLGC::getDefaultAmbientStrength(), true);
     this->hasDefaultAmbientStrength = true;
 }
 bool GLMesh::isDefaultColor() {
@@ -121,8 +137,16 @@ bool GLMesh::isDefaultAmbientStrength() {
     return this->hasDefaultAmbientStrength;
 }
 
-std::string& GLMesh::getMeshName() {
-    return this->meshName;
+void GLMesh::detectGlobalLightSource(glm::vec3& lightPos, glm::vec3& lightColor) {
+    std::cout << "Light position: " << lightPos.x << "," << lightPos.y << "," << lightPos.z << "\n";
+    std::cout << "Light color: " << lightColor.r << "," << lightColor.g << "," << lightColor.b << "\n";
+    glUseProgram(this->shaderProgram);
+    glUniform3fv(glUniAffectedLightPos, 1, &lightPos[0]);
+    glUniform3fv(glUniAffectedLightColor, 1, &lightColor[0]);
+}
+
+std::string& GLMesh::getName() {
+    return this->name;
 }
 unsigned int GLMesh::getTexture0() {
     return texture0 ? *texture0 : NULL;
@@ -150,57 +174,95 @@ GLMesh::~GLMesh() {
     texture0 = nullptr;
 }
 
-BasicCubeMesh::BasicCubeMesh(std::string meshName, glm::vec3 position, unsigned int shaderProgram, unsigned int vao, unsigned int vbo) : GLMesh(meshName, position, shaderProgram, vao, vbo) {
-    cubeVerticesArraySize = 180;
+GLBasicCubeMesh::GLBasicCubeMesh(std::string meshName, glm::vec3 position, unsigned int shaderProgram, unsigned int vao, unsigned int vbo) : GLMesh(meshName, position, shaderProgram, vao, vbo) {
+    cubeVerticesArraySize = 288;
     verticesCount = 36;
     vertices = new float[cubeVerticesArraySize] {
-             //Positions         //Textures
-            -0.5f, -0.5f, -0.5f, 0.0f, 0.0f,
-             0.5f, -0.5f, -0.5f, 1.0f, 0.0f,
-             0.5f,  0.5f, -0.5f, 1.0f, 1.0f,
-             0.5f,  0.5f, -0.5f, 1.0f, 1.0f,
-            -0.5f,  0.5f, -0.5f, 0.0f, 1.0f,
-            -0.5f, -0.5f, -0.5f, 0.0f, 0.0f,
+             //Positions(3).....  //Normals(3)....... //Texture0(2)
+            -0.5f, -0.5f, -0.5f,  0.0f,  0.0f, -1.0f,  0.0f,  0.0f,
+             0.5f, -0.5f, -0.5f,  0.0f,  0.0f, -1.0f,  1.0f,  0.0f,
+             0.5f,  0.5f, -0.5f,  0.0f,  0.0f, -1.0f,  1.0f,  1.0f,
+             0.5f,  0.5f, -0.5f,  0.0f,  0.0f, -1.0f,  1.0f,  1.0f,
+            -0.5f,  0.5f, -0.5f,  0.0f,  0.0f, -1.0f,  0.0f,  1.0f,
+            -0.5f, -0.5f, -0.5f,  0.0f,  0.0f, -1.0f,  0.0f,  0.0f,
 
-            -0.5f, -0.5f,  0.5f, 0.0f, 0.0f,
-             0.5f, -0.5f,  0.5f, 1.0f, 0.0f,
-             0.5f,  0.5f,  0.5f, 1.0f, 1.0f,
-             0.5f,  0.5f,  0.5f, 1.0f, 1.0f,
-            -0.5f,  0.5f,  0.5f, 0.0f, 1.0f,
-            -0.5f, -0.5f,  0.5f, 0.0f, 0.0f,
+            -0.5f, -0.5f,  0.5f,  0.0f,  0.0f,  1.0f,  0.0f,  0.0f,
+             0.5f, -0.5f,  0.5f,  0.0f,  0.0f,  1.0f,  1.0f,  0.0f,
+             0.5f,  0.5f,  0.5f,  0.0f,  0.0f,  1.0f,  1.0f,  1.0f,
+             0.5f,  0.5f,  0.5f,  0.0f,  0.0f,  1.0f,  1.0f,  1.0f,
+            -0.5f,  0.5f,  0.5f,  0.0f,  0.0f,  1.0f,  0.0f,  1.0f,
+            -0.5f, -0.5f,  0.5f,  0.0f,  0.0f,  1.0f,  0.0f,  0.0f,
 
-            -0.5f,  0.5f,  0.5f, 1.0f, 0.0f,
-            -0.5f,  0.5f, -0.5f, 1.0f, 1.0f,
-            -0.5f, -0.5f, -0.5f, 0.0f, 1.0f,
-            -0.5f, -0.5f, -0.5f, 0.0f, 1.0f,
-            -0.5f, -0.5f,  0.5f, 0.0f, 0.0f,
-            -0.5f,  0.5f,  0.5f, 1.0f, 0.0f,
+            -0.5f,  0.5f,  0.5f, -1.0f,  0.0f,  0.0f,  1.0f,  0.0f,
+            -0.5f,  0.5f, -0.5f, -1.0f,  0.0f,  0.0f,  1.0f,  1.0f,
+            -0.5f, -0.5f, -0.5f, -1.0f,  0.0f,  0.0f,  0.0f,  1.0f,
+            -0.5f, -0.5f, -0.5f, -1.0f,  0.0f,  0.0f,  0.0f,  1.0f,
+            -0.5f, -0.5f,  0.5f, -1.0f,  0.0f,  0.0f,  0.0f,  0.0f,
+            -0.5f,  0.5f,  0.5f, -1.0f,  0.0f,  0.0f,  1.0f,  0.0f,
 
-             0.5f,  0.5f,  0.5f, 1.0f, 0.0f,
-             0.5f,  0.5f, -0.5f, 1.0f, 1.0f,
-             0.5f, -0.5f, -0.5f, 0.0f, 1.0f,
-             0.5f, -0.5f, -0.5f, 0.0f, 1.0f,
-             0.5f, -0.5f,  0.5f, 0.0f, 0.0f,
-             0.5f,  0.5f,  0.5f, 1.0f, 0.0f,
+             0.5f,  0.5f,  0.5f,  1.0f,  0.0f,  0.0f,  1.0f,  0.0f,
+             0.5f,  0.5f, -0.5f,  1.0f,  0.0f,  0.0f,  1.0f,  1.0f,
+             0.5f, -0.5f, -0.5f,  1.0f,  0.0f,  0.0f,  0.0f,  1.0f,
+             0.5f, -0.5f, -0.5f,  1.0f,  0.0f,  0.0f,  0.0f,  1.0f,
+             0.5f, -0.5f,  0.5f,  1.0f,  0.0f,  0.0f,  0.0f,  0.0f,
+             0.5f,  0.5f,  0.5f,  1.0f,  0.0f,  0.0f,  1.0f,  0.0f,
 
-            -0.5f, -0.5f, -0.5f, 0.0f, 1.0f,
-             0.5f, -0.5f, -0.5f, 1.0f, 1.0f,
-             0.5f, -0.5f,  0.5f, 1.0f, 0.0f,
-             0.5f, -0.5f,  0.5f, 1.0f, 0.0f,
-            -0.5f, -0.5f,  0.5f, 0.0f, 0.0f,
-            -0.5f, -0.5f, -0.5f, 0.0f, 1.0f,
+            -0.5f, -0.5f, -0.5f,  0.0f, -1.0f,  0.0f,  0.0f,  1.0f,
+             0.5f, -0.5f, -0.5f,  0.0f, -1.0f,  0.0f,  1.0f,  1.0f,
+             0.5f, -0.5f,  0.5f,  0.0f, -1.0f,  0.0f,  1.0f,  0.0f,
+             0.5f, -0.5f,  0.5f,  0.0f, -1.0f,  0.0f,  1.0f,  0.0f,
+            -0.5f, -0.5f,  0.5f,  0.0f, -1.0f,  0.0f,  0.0f,  0.0f,
+            -0.5f, -0.5f, -0.5f,  0.0f, -1.0f,  0.0f,  0.0f,  1.0f,
 
-            -0.5f,  0.5f, -0.5f, 0.0f, 1.0f,
-             0.5f,  0.5f, -0.5f, 1.0f, 1.0f,
-             0.5f,  0.5f,  0.5f, 1.0f, 0.0f,
-             0.5f,  0.5f,  0.5f, 1.0f, 0.0f,
-            -0.5f,  0.5f,  0.5f, 0.0f, 0.0f,
-            -0.5f,  0.5f, -0.5f, 0.0f, 1.0f
+            -0.5f,  0.5f, -0.5f,  0.0f,  1.0f,  0.0f,  0.0f,  1.0f,
+             0.5f,  0.5f, -0.5f,  0.0f,  1.0f,  0.0f,  1.0f,  1.0f,
+             0.5f,  0.5f,  0.5f,  0.0f,  1.0f,  0.0f,  1.0f,  0.0f,
+             0.5f,  0.5f,  0.5f,  0.0f,  1.0f,  0.0f,  1.0f,  0.0f,
+            -0.5f,  0.5f,  0.5f,  0.0f,  1.0f,  0.0f,  0.0f,  0.0f,
+            -0.5f,  0.5f, -0.5f,  0.0f,  1.0f,  0.0f,  0.0f,  1.0f
     };
 
     glBufferData(GL_ARRAY_BUFFER, cubeVerticesArraySize * sizeof(float), &vertices[0], GL_STATIC_DRAW);
-    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void*)0);
+    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)0); // @Positions attributes.
     glEnableVertexAttribArray(0);
-    glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void*)(3 * sizeof(float)));
+    glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)(3 * sizeof(float))); // @Normals attributes.
     glEnableVertexAttribArray(1);
+    glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)(6 * sizeof(float))); // @Texture0 attributes. 
+    glEnableVertexAttribArray(2);
+}
+
+GLEmitterble::GLEmitterble(glm::vec4& color, glm::vec3& position, float& lightStrength) {
+    this->lightStrength = lightStrength;
+    lightSource = new GLLightSource(color, position, lightStrength);
+}
+void GLEmitterble::enableLightEmit(float strength) {
+    // TODO: Put the lightsource into a vector of pointer lightsources if doesn't exist.
+    for (std::list<GLLightSource*>::iterator it = globalLightSources.begin(); it != globalLightSources.end(); ++it) {
+        if (*it == this->lightSource) {
+            return;
+        }
+    }
+    globalLightSources.push_front(this->lightSource);
+}
+void GLEmitterble::changeLightStrength(float strength) {
+    this->lightStrength = strength;
+}
+void GLEmitterble::disableLightEmit() {
+    // TODO: Remove the lightsource from a vector of pointer lightsources if exists.
+    for (std::list<GLLightSource*>::iterator it = globalLightSources.begin(); it != globalLightSources.end(); ++it) {
+        if (*it == this->lightSource) {
+            globalLightSources.erase(it);
+            return;
+        }
+    }
+}
+GLEmitterble::~GLEmitterble() {
+    disableLightEmit();
+    delete lightSource;
+    // TODO: Remove the lightsource from a vector of pointer lightsources if still exists.
+}
+
+GLEmmiterbleCubeMesh::GLEmmiterbleCubeMesh(std::string meshName, glm::vec3 position, unsigned int shaderProgram, unsigned int vao, unsigned int vbo, float lightStrength)
+    : GLBasicCubeMesh(meshName, position, shaderProgram, vao, vbo), GLEmitterble(this->color, position, lightStrength){
+
 }

@@ -1,11 +1,13 @@
 #pragma once
 #include <vector>
+#include <list>
 #include <memory>
 #include "gl_mesh_types.hpp"
 
 // @Keep track of all OpenGL objects to be removed.
 extern std::vector<unsigned int> vaoGarbageCollector, vboGarbageCollector, programGarbageCollector;
 extern std::vector<GLMesh*> meshesCollector;
+extern std::list<GLLightSource*> globalLightSources;
 
 void setMeshCoordSystem(unsigned int& shaderProgram);
 
@@ -35,6 +37,7 @@ private:
 public:
 	// @Set delta time according to each fps.
 	static void setDeltaTime();
+	static void updateGlobalLightSource();
 	static void enableMeshesTransparency();
 	static glm::vec4 getViewBackgroundColor();
 	static glm::vec4 getDefaultObjectColor();
