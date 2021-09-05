@@ -37,6 +37,7 @@ GLMesh::GLMesh(std::string meshName, glm::vec3 position, unsigned int shaderProg
     glUseProgram(this->shaderProgram);
 
     this->color = GLGC::getDefaultObjectColor();
+    this->glUniViewCameraPos = glGetUniformLocation(this->shaderProgram, "cameraViewPos");
     this->glUniEnableTexture = glGetUniformLocation(this->shaderProgram, "enableTexture");
     this->glUniObjectColor = glGetUniformLocation(this->shaderProgram, "objectColor");
     this->glUniAmbientColor = glGetUniformLocation(this->shaderProgram, "ambientColor");
@@ -44,6 +45,7 @@ GLMesh::GLMesh(std::string meshName, glm::vec3 position, unsigned int shaderProg
     this->glUniAffectedLightPos = glGetUniformLocation(this->shaderProgram, "lightPos");
     this->glUniAffectedLightColor = glGetUniformLocation(this->shaderProgram, "lightColor");
     this->glUniAffectedLightStrength = glGetUniformLocation(this->shaderProgram, "lightStrength");
+    glUniform4fv(glUniViewCameraPos, 1, &cameraPos[0]);
     glUniform1ui(glUniEnableTexture, false);
     glUniform4fv(glUniObjectColor, 1, &GLGC::getDefaultObjectColor()[0]);
     glUniform4fv(glUniAmbientColor, 1, &GLGC::getDefaultAmbientColor()[0]);
@@ -147,6 +149,9 @@ void GLMesh::detectGlobalLightSource(glm::vec3& lightPos, glm::vec3& lightColor,
     glUniform3fv(glUniAffectedLightPos, 1, &lightPos[0]);
     glUniform3fv(glUniAffectedLightColor, 1, &lightColor[0]);
     glUniform1f(glUniAffectedLightStrength, lightStrength);
+}
+void GLMesh::detectViewCameraPos(glm::vec3& cameraPos) {
+    glUniform3fv(this->glUniViewCameraPos, 1, &cameraPos[0]);
 }
 
 std::string& GLMesh::getName() {

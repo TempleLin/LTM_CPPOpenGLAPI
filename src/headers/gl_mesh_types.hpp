@@ -25,7 +25,7 @@ protected:
     unsigned int vao, vbo;
     unsigned int verticesCount;
     unsigned int shaderProgram;
-    int glUniObjectColor, glUniAmbientColor, glUniAmbientStrength, 
+    int glUniViewCameraPos, glUniObjectColor, glUniAmbientColor, glUniAmbientStrength, 
         glUniEnableTexture, glUniAffectedLightPos, glUniAffectedLightColor, glUniAffectedLightStrength;
     bool hasDefaultColor{ true }, hasDefaultAmbientColor{ true }, hasDefaultAmbientStrength{ true };
     void setTextureWrapFilter(unsigned int wrap_s, unsigned int wrap_t, unsigned int min_filter, unsigned int max_filter);
@@ -43,7 +43,9 @@ public:
     bool isDefaultAmbientColor();
     bool isDefaultAmbientStrength();
 
+    // @Called by global control.
     void detectGlobalLightSource(glm::vec3& lightPos, glm::vec3& lightColor, float lightStrength);
+    void detectViewCameraPos(glm::vec3& cameraPos);
 
     std::string& getName();
     unsigned int getTexture0();

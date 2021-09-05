@@ -32,13 +32,13 @@ int main() {
     createVAOs(2, vaos);
     createVBOs(2, vbos);
     GLBasicCubeMesh basicCube0("Basic Lighting Cube 0", glm::vec3(0.5f, 0.8f, -1.0f), shaderProgramHandle, vaos[0], vbos[0]);
-    basicCube0.setTexture0("assets/imgs/container.jpg");
+    basicCube0.setTexture0("assets/imgs/360_F_144681519_gw1oCkcy5WzZ6RI9utXh61eIWkgcdiZ9.jpg");
     basicCube0.setColor(glm::vec4(1, 1, 1, 1), true);
 
     createShaderProgram(vertexShaderHandle, "shaders/shaderVS.glsl", fragmentShaderHandle, "shaders/shaderFS.glsl", shaderProgramHandle);
-    GLEmmiterbleCubeMesh emitterbleCube0("Basic Lighting Cube 1", glm::vec3(-0.5f, -0.3f, -0.3f), shaderProgramHandle, vaos[1], vbos[1], 10.0f);
+    GLEmmiterbleCubeMesh emitterbleCube0("Basic Lighting Cube 1", glm::vec3(-10.f, -10.f, -10.f), shaderProgramHandle, vaos[1], vbos[1], 10.0f);
     emitterbleCube0.enableLightEmit();
-    emitterbleCube0.changeLightStrength(3.f);
+    emitterbleCube0.changeLightStrength(10.f);
     emitterbleCube0.setAmbientStrength(glm::vec4(1, 1, 1, 1), true);
     emitterbleCube0.setAmbientColor(glm::vec4(1, 1, 1, 1), true);
 
@@ -106,6 +106,7 @@ int main() {
 
         GLGC::setDeltaTime();
         GLGC::updateGlobalLightSource();
+        GLGC::updateCameraViewPosToMeshes();
 
         setMeshCoordSystem(basicCube0.getShaderProgram());
         setBasicMeshSpawnPos(basicCube0);

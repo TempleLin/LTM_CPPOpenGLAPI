@@ -38,6 +38,7 @@ public:
 	// @Set delta time according to each fps.
 	static void setDeltaTime();
 	static void updateGlobalLightSource();
+	static void updateCameraViewPosToMeshes();
 	static void enableMeshesTransparency();
 	static glm::vec4 getViewBackgroundColor();
 	static glm::vec4 getDefaultObjectColor();

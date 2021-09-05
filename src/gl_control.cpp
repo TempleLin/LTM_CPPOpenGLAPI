@@ -195,6 +195,11 @@ void GLGlobalControl::updateGlobalLightSource() {
         (*meshIT)->detectGlobalLightSource(firstLightSource.getPosition(), glm::vec3(firstLightSource.getColor()), firstLightSource.getStrength());
     }
 }
+void GLGlobalControl::updateCameraViewPosToMeshes() {
+    for (std::vector<GLMesh*>::iterator meshIT = meshesCollector.begin(); meshIT != meshesCollector.end(); ++meshIT) {
+        (*meshIT)->detectViewCameraPos(cameraPos);
+    }
+}
 void GLGlobalControl::enableMeshesTransparency() {
     glEnable(GL_BLEND);
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);

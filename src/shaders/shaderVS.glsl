@@ -18,6 +18,6 @@ void main()
     TexCoord = aTexCoord;
     FragPos = vec3(model * vec4(aPos, 1.0));
 
-    // @mat3(transpose(inverse(model))) receives the normal vectors in world space coordinates.
+    // @mat3(transpose(inverse(model))) converts normal to world space.
     Normal = mat3(transpose(inverse(model))) * aNormal;
 }
