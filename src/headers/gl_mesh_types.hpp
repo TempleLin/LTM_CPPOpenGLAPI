@@ -22,11 +22,12 @@ protected:
     float* vertices;
     unsigned int* texture0 = nullptr;
     glm::vec3 color, ambientColor;
+    float opacity;
     float ambientStrength;
     unsigned int vao, vbo;
     unsigned int verticesCount;
     unsigned int shaderProgram;
-    int glUniViewCameraPos, glUniObjectColor, glUniAmbientColor, glUniAmbientStrength, 
+    int glUniViewCameraPos, glUniObjectColor, glUniObjectOpacity, glUniAmbientColor, glUniAmbientStrength, 
         glUniEnableTexture, glUniAffectedLightPos, glUniAffectedLightColor, glUniAffectedLightStrength;
     bool hasDefaultColor{ true }, hasDefaultAmbientColor{ true }, hasDefaultAmbientStrength{ true };
     void setTextureWrapFilter(unsigned int wrap_s, unsigned int wrap_t, unsigned int min_filter, unsigned int max_filter);
@@ -34,6 +35,7 @@ public:
     GLMesh(std::string meshName, glm::vec3 position, unsigned int shaderProgram, unsigned int vao, unsigned int vbo);
     void setTexture0(std::string texturePath);
     void setColor(glm::vec3 color, bool isNormalized);
+    void setOpacity(float opacity);
     void setAmbientColor(glm::vec3 ambientColor, bool isNormalized);
     void setAmbientStrength(float ambientStrength);
     void setToDefaultColor(); // @Resets to world value defaultObjectColor

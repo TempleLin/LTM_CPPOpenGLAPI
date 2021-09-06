@@ -2,9 +2,9 @@
 out vec4 FragColor;
   
 uniform vec3 cameraViewPos;
-uniform vec4 objectColor;
+uniform vec3 objectColor;
 // @Ambient light is the minimum light around. Making it not completely dark.
-uniform vec4 ambientColor;
+uniform vec3 ambientColor;
 uniform float ambientStrength;
 uniform vec3 lightColor;
 uniform vec3 lightPos;
@@ -25,15 +25,15 @@ void main()
     // @The more perpendicular the light and fragment angle, the higher the brightness.
     float diff = max(dot(norm, lightDir), 0.0); 
 
-    vec4 diffuse = vec4(diff * lightColor * lightStrength, 1);
+    vec3 diffuse = diff * lightColor * lightStrength;
 
-    vec4 ambient = ambientColor * ambientStrength;
+    vec3 ambient = ambientColor * ambientStrength;
 
     float specularStrength = 0.5; //temp
 
     // @Vector direction from view to fragment.
     vec3 viewDir = normalize(cameraViewPos - FragPos);
-    // @Vector direction of reflection from light passing with normal as reflection point.
+    // @Vectoyr direction of reflection from light passing with normal as reflection point.
     vec3 reflectDir = reflect(-lightDir, norm);
 
     // @Using power, the more center of reflection point, the stronger the specular.
@@ -42,9 +42,9 @@ void main()
 
     if (enableTexture){
         // @Multiply the texture by color mixes the RGB color and texture.
-        FragColor = texture(ourTexture, TexCoord) * (ambient + diffuse + (specular,1)) * objectColor;
+        FragColor = texture(ourTexture, TexCoord) * vec4(((ambient + diffuse + specular) * objectColor), 1);
     } else {
-        FragColor = (ambient + diffuse + (specular,1)) * objectColor;
+        FragColor = vec4(((ambient + diffuse + specular) * objectColor), 1);
     }
-    FragColor.a = 1;
+    FragColor.a = objectOpacity;
 }

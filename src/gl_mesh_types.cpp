@@ -37,18 +37,23 @@ GLMesh::GLMesh(std::string meshName, glm::vec3 position, unsigned int shaderProg
     glUseProgram(this->shaderProgram);
 
     this->color = GLGC::getDefaultObjectColor();
+    this->ambientColor = GLGC::getDefaultAmbientColor();
+    this->ambientStrength = GLGC::getDefaultAmbientStrength();
+    this->opacity = 1.f;
     this->glUniViewCameraPos = glGetUniformLocation(this->shaderProgram, "cameraViewPos");
     this->glUniEnableTexture = glGetUniformLocation(this->shaderProgram, "enableTexture");
     this->glUniObjectColor = glGetUniformLocation(this->shaderProgram, "objectColor");
+    this->glUniObjectOpacity = glGetUniformLocation(this->shaderProgram, "objectOpacity");
     this->glUniAmbientColor = glGetUniformLocation(this->shaderProgram, "ambientColor");
     this->glUniAmbientStrength = glGetUniformLocation(this->shaderProgram, "ambientStrength");
     this->glUniAffectedLightPos = glGetUniformLocation(this->shaderProgram, "lightPos");
     this->glUniAffectedLightColor = glGetUniformLocation(this->shaderProgram, "lightColor");
     this->glUniAffectedLightStrength = glGetUniformLocation(this->shaderProgram, "lightStrength");
-    glUniform4fv(glUniViewCameraPos, 1, &cameraPos[0]);
+    glUniform3fv(glUniViewCameraPos, 1, &cameraPos[0]);
     glUniform1ui(glUniEnableTexture, false);
-    glUniform4fv(glUniObjectColor, 1, &GLGC::getDefaultObjectColor()[0]);
-    glUniform4fv(glUniAmbientColor, 1, &GLGC::getDefaultAmbientColor()[0]);
+    glUniform3fv(glUniObjectColor, 1, &GLGC::getDefaultObjectColor()[0]);
+    glUniform1f(glUniObjectOpacity, opacity);
+    glUniform3fv(glUniAmbientColor, 1, &GLGC::getDefaultAmbientColor()[0]);
     glUniform1f(glUniAmbientStrength, GLGC::getDefaultAmbientStrength());
     glUniform4f(glUniAffectedLightColor, 1, 1, 1, 1);
     glUniform1f(glUniAffectedLightStrength, 1.f);
@@ -97,8 +102,13 @@ void GLMesh::setColor(glm::vec3 color, bool isNormalized) {
         this->color = color / 255.f;
     }
     glUseProgram(this->shaderProgram);
-    glUniform4fv(this->glUniObjectColor, 1, &this->color[0]);
+    glUniform3fv(this->glUniObjectColor, 1, &this->color[0]);
     this->hasDefaultColor = false;
+}
+void GLMesh::setOpacity(float opacity) {
+    this->opacity = (opacity > 1) ? 1 : ((opacity < 0) ? 0 : opacity);
+    glUseProgram(this->shaderProgram);
+    glUniform1f(this->glUniObjectOpacity, this->opacity);
 }
 void GLMesh::setAmbientColor(glm::vec3 ambientColor, bool isNormalized) {
     if (isNormalized) {
@@ -107,7 +117,7 @@ void GLMesh::setAmbientColor(glm::vec3 ambientColor, bool isNormalized) {
         this->color = ambientColor / 255.f;
     }
     glUseProgram(this->shaderProgram);
-    glUniform4fv(glUniAmbientColor, 1, &this->ambientColor[0]);
+    glUniform3fv(glUniAmbientColor, 1, &this->ambientColor[0]);
     this->hasDefaultAmbientColor = false;
 }
 void GLMesh::setAmbientStrength(float ambientStrength) {
@@ -139,8 +149,6 @@ bool GLMesh::isDefaultAmbientStrength() {
 }
 
 void GLMesh::detectGlobalLightSource(glm::vec3& lightPos, glm::vec3& lightColor, float lightStrength) {
-    std::cout << "Light position: " << lightPos.x << "," << lightPos.y << "," << lightPos.z << "\n";
-    std::cout << "Light color: " << lightColor.r << "," << lightColor.g << "," << lightColor.b << "\n";
     glUseProgram(this->shaderProgram);
     glUniform3fv(glUniAffectedLightPos, 1, &lightPos[0]);
     glUniform3fv(glUniAffectedLightColor, 1, &lightColor[0]);

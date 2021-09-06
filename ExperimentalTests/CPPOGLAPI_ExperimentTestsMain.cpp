@@ -98,4 +98,7 @@ void testGLMPassDuration() {
 
 int main(){
 	testGLMPassDuration();
+	float opacity = .5f;
+	opacity = (opacity > 1) ? 1 : ((opacity < 0) ? 0 : opacity);
+	std::cout << opacity << "\n";
 }

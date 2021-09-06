@@ -33,14 +33,14 @@ int main() {
     createVBOs(2, vbos);
     GLBasicCubeMesh basicCube0("Basic Lighting Cube 0", glm::vec3(0.5f, 0.8f, -1.0f), shaderProgramHandle, vaos[0], vbos[0]);
     basicCube0.setTexture0("assets/imgs/360_F_144681519_gw1oCkcy5WzZ6RI9utXh61eIWkgcdiZ9.jpg");
-    basicCube0.setColor(glm::vec4(1, 1, 1, 1), true);
+    basicCube0.setColor(glm::vec3(1, 1, 1), true);
 
     createShaderProgram(vertexShaderHandle, "shaders/shaderVS.glsl", fragmentShaderHandle, "shaders/shaderFS.glsl", shaderProgramHandle);
     GLEmmiterbleCubeMesh emitterbleCube0("Basic Lighting Cube 1", glm::vec3(-10.f, -10.f, -10.f), shaderProgramHandle, vaos[1], vbos[1], 10.0f);
     emitterbleCube0.enableLightEmit();
-    emitterbleCube0.changeLightStrength(10.f);
+    emitterbleCube0.changeLightStrength(30.f);
     emitterbleCube0.setAmbientStrength(1.f);
-    emitterbleCube0.setAmbientColor(glm::vec4(1, 1, 1, 1), true);
+    emitterbleCube0.setAmbientColor(glm::vec3(1, 1, 1), true);
 
     // Our state (Dear ImGUI)
     bool show_demo_window = true;
@@ -54,6 +54,9 @@ int main() {
     GLGC::changeDefaultAmbientStrength(.1f);
     emitterbleCube0.setColor(glm::vec3(0, 1, 1), true);
     basicCube0.setColor(glm::vec3(1, 0, 1), true);
+    basicCube0.setAmbientStrength(1.f);
+    basicCube0.setAmbientColor(glm::vec3(1, 1, 1), true);
+    basicCube0.setOpacity(0.5f);
 
     while (!glfwWindowShouldClose(window)) {
         glfwPollEvents();
