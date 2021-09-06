@@ -261,7 +261,7 @@ void GLGlobalControl::resetAllMeshesAmbientStrength() {
         (*it)->setToDefaultAmbientStrength();
     }
 }
-void GLGlobalControl::destructAllPointersValue() {
+void GLGlobalControl::destructAllGlobalValue() {
     viewBackgroundColor.reset();
     defaultObjectColor.reset();
     defaultAmbientColor.reset();

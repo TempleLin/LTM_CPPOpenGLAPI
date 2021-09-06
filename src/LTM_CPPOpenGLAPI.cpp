@@ -138,5 +138,5 @@ int main() {
     ImGui::DestroyContext();
 
     cleanGLObjectsGarbage();
-    GLGC::destructAllPointersValue();
+    GLGC::destructAllGlobalValue();
 }

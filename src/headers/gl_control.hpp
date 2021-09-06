@@ -41,17 +41,21 @@ public:
 	static void updateCameraViewPosToMeshes();
 	static void enableMeshesTransparency();
 	static glm::vec3 getViewBackgroundColor();
+
+
 	static glm::vec3 getDefaultObjectColor();
 	static glm::vec3 getDefaultAmbientColor();
-	static float getDefaultAmbientStrength();
+
 	static void changeDefaultColor(glm::vec3 color, bool normalized); // @Changes all current meshes having default color.
+	static float getDefaultAmbientStrength();
 	static void changeDefaultAmbientColor(glm::vec3 ambientColor, bool normalized);
 	static void changeDefaultAmbientStrength(float ambientStrength);
+
 	static void resetAllDefaultValues();
 	static void resetAllMeshesColor();
 	static void resetAllMeshesAmbientColor();
 	static void resetAllMeshesAmbientStrength();
-	static void destructAllPointersValue();
+	static void destructAllGlobalValue();
 };
 
 typedef GLGlobalControl GLGC;
