@@ -15,6 +15,7 @@ public:
 };
 
 class GLMesh {
+    friend class GLMeshControl;
 protected:
     bool enableTexture = false;
     std::string name;

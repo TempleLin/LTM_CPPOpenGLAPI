@@ -95,10 +95,43 @@ void testGLMPassDuration() {
 }
 #endif
 
-
-int main(){
-	testGLMPassDuration();
+void testNestedTernaryOperator() {
 	float opacity = .5f;
 	opacity = (opacity > 1) ? 1 : ((opacity < 0) ? 0 : opacity);
 	std::cout << opacity << "\n";
+}
+
+class ClassC;
+
+class ClassA {
+	friend class ClassC;
+protected:
+	int a;
+public:
+	ClassA() {
+		a = 12;
+	}
+};
+
+class ClassB : public ClassA {
+
+};
+
+class ClassC {
+public:
+	void printA(ClassA A) {
+		std::cout << "a of ClassA: " << A.a << "\n";
+	}
+};
+
+void testPrintFriendClassMember() {
+	ClassB b;
+	ClassC c;
+	c.printA(b);
+}
+
+int main(){
+	//testGLMPassDuration();
+	//testNestedTernaryOperator();
+	testPrintFriendClassMember();
 }

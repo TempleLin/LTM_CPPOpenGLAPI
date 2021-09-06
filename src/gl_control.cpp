@@ -20,7 +20,7 @@ std::vector<GLMesh*> meshesCollector;
 std::list<GLLightSource*> globalLightSources;
 
 
-void setMeshCoordSystem(unsigned int& shaderProgram) {
+void GLMeshControl::setMeshCoordSystem(unsigned int& shaderProgram) {
     glUseProgram(shaderProgram);
 
     glEnable(GL_DEPTH_TEST);
@@ -39,15 +39,15 @@ void setMeshCoordSystem(unsigned int& shaderProgram) {
     glUniformMatrix4fv(projectionLoc, 1, GL_FALSE, glm::value_ptr(projectionMatrix));
 }
 
-void setBasicMeshSpawnPos(GLMesh& mesh) {
+void GLMeshControl::setBasicMeshSpawnPos(GLMesh& mesh) {
     modelMatrix = glm::translate(modelMatrix, mesh.getPosition());
 }
 
-void spinBasicMeshAnim(GLMesh& mesh) {
+void GLMeshControl::spinBasicMeshAnim(GLMesh& mesh) {
     modelMatrix = glm::rotate(modelMatrix, (float)glfwGetTime() * glm::radians(50.0f), glm::vec3(1.0f, 0.3f, 0.5f));
 }
 
-void drawBasicMesh(GLMesh& mesh) {
+void GLMeshControl::drawBasicMesh(GLMesh& mesh) {
     glBindVertexArray(mesh.getVAO());
     static unsigned int modelLoc = glGetUniformLocation(mesh.getShaderProgram(), "model");
     glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(modelMatrix));

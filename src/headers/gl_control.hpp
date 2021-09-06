@@ -9,13 +9,14 @@ extern std::vector<unsigned int> vaoGarbageCollector, vboGarbageCollector, progr
 extern std::vector<GLMesh*> meshesCollector;
 extern std::list<GLLightSource*> globalLightSources;
 
-void setMeshCoordSystem(unsigned int& shaderProgram);
+class GLMeshControl {
+public:
+	static void setMeshCoordSystem(unsigned int& shaderProgram);
+	static void setBasicMeshSpawnPos(GLMesh& mesh);
+	static void spinBasicMeshAnim(GLMesh& mesh);
+	static void drawBasicMesh(GLMesh& mesh);
+};
 
-void setBasicMeshSpawnPos(GLMesh& mesh);
-
-void spinBasicMeshAnim(GLMesh& mesh);
-
-void drawBasicMesh(GLMesh& mesh);
 
 
 void checkCompileErrors(unsigned int shader, char* type);
@@ -59,3 +60,4 @@ public:
 };
 
 typedef GLGlobalControl GLGC;
+typedef GLMeshControl GLMC;

@@ -38,7 +38,7 @@ int main() {
     createShaderProgram(vertexShaderHandle, "shaders/shaderVS.glsl", fragmentShaderHandle, "shaders/shaderFS.glsl", shaderProgramHandle);
     GLEmmiterbleCubeMesh emitterbleCube0("Emitterble Cube 0", glm::vec3(-10.f, -10.f, -10.f), shaderProgramHandle, vaos[1], vbos[1], 10.0f);
     emitterbleCube0.enableLightEmit();
-    emitterbleCube0.changeLightStrength(30.f);
+    emitterbleCube0.changeLightStrength(5.f);
     emitterbleCube0.setAmbientStrength(1.f);
     emitterbleCube0.setAmbientColor(glm::vec3(1, 1, 1), true);
 
@@ -56,7 +56,7 @@ int main() {
     basicCube0.setColor(glm::vec3(1, 0, 1), true);
     basicCube0.setAmbientStrength(1.f);
     basicCube0.setAmbientColor(glm::vec3(1, 1, 1), true);
-    basicCube0.setOpacity(0.5f);
+    basicCube0.setOpacity(1.f);
 
     while (!glfwWindowShouldClose(window)) {
         glfwPollEvents();
@@ -112,15 +112,15 @@ int main() {
         GLGC::updateGlobalLightSource();
         GLGC::updateCameraViewPosToMeshes();
 
-        setMeshCoordSystem(basicCube0.getShaderProgram());
-        setBasicMeshSpawnPos(basicCube0);
-        spinBasicMeshAnim(basicCube0);
-        drawBasicMesh(basicCube0);
+        GLMC::setMeshCoordSystem(basicCube0.getShaderProgram());
+        GLMC::setBasicMeshSpawnPos(basicCube0);
+        GLMC::spinBasicMeshAnim(basicCube0);
+        GLMC::drawBasicMesh(basicCube0);
 
-        setMeshCoordSystem(emitterbleCube0.getShaderProgram());
-        setBasicMeshSpawnPos(emitterbleCube0);
-        spinBasicMeshAnim(emitterbleCube0);
-        drawBasicMesh(emitterbleCube0);
+        GLMC::setMeshCoordSystem(emitterbleCube0.getShaderProgram());
+        GLMC::setBasicMeshSpawnPos(emitterbleCube0);
+        GLMC::spinBasicMeshAnim(emitterbleCube0);
+        GLMC::drawBasicMesh(emitterbleCube0);
 
         processInput(window);
 
