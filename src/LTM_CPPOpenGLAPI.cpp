@@ -36,7 +36,7 @@ int main() {
     basicCube0.setColor(glm::vec3(1, 1, 1), true);
 
     createShaderProgram(vertexShaderHandle, "shaders/shaderVS.glsl", fragmentShaderHandle, "shaders/shaderFS.glsl", shaderProgramHandle);
-    GLEmmiterbleCubeMesh emitterbleCube0("Basic Lighting Cube 1", glm::vec3(-10.f, -10.f, -10.f), shaderProgramHandle, vaos[1], vbos[1], 10.0f);
+    GLEmmiterbleCubeMesh emitterbleCube0("Emitterble Cube 0", glm::vec3(-10.f, -10.f, -10.f), shaderProgramHandle, vaos[1], vbos[1], 10.0f);
     emitterbleCube0.enableLightEmit();
     emitterbleCube0.changeLightStrength(30.f);
     emitterbleCube0.setAmbientStrength(1.f);
