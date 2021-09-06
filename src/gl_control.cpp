@@ -283,6 +283,9 @@ glm::vec3 GLGlobalCtrl::getDefaultAmbientColor() {
 float GLGlobalCtrl::getDefaultAmbientStrength() {
     return defaultAmbientStrength;
 }
+void GLGlobalCtrl::changeViewBackgroundColor(glm::vec3 color, bool normalized) {
+    viewBackgroundColor = normalized ? color : color / 255.f;
+}
 void GLGlobalCtrl::changeDefaultColor(glm::vec3 color, bool normalized) {
     defaultObjectColor = normalized ? color : color / 255.f;
     for (std::vector<GLMesh*>::iterator it = meshesCollector.begin(); it != meshesCollector.end(); ++it) {
@@ -308,10 +311,13 @@ void GLGlobalCtrl::changeDefaultAmbientStrength(float ambientStrength) {
     }
 }
 void GLGlobalCtrl::resetAllDefaultValues() {
-    viewBackgroundColor = glm::vec4(0.2f, 0.3f, 0.3f, 1.0f);
+    changeViewBackgroundColor(glm::vec3(0.2f, 0.3f, 0.3f), true);
     defaultObjectColor = glm::vec4(0.f, 0.f, 0.f, 1.f);
+    changeDefaultColor(defaultObjectColor, true);
     defaultAmbientColor = glm::vec4(1.f, 1.f, 1.f, 1.f);
+    changeDefaultAmbientColor(defaultAmbientColor, true);
     defaultAmbientStrength = .1f;
+    changeDefaultAmbientStrength(defaultAmbientStrength);
 }
 void GLGlobalCtrl::resetAllMeshesColor() {
     for (std::vector<GLMesh*>::iterator it = meshesCollector.begin(); it != meshesCollector.end(); ++it) {

@@ -56,6 +56,7 @@ public:
 	static glm::vec3 getDefaultAmbientColor();
 	static float getDefaultAmbientStrength();
 
+	static void changeViewBackgroundColor(glm::vec3 color, bool normalized);
 	static void changeDefaultColor(glm::vec3 color, bool normalized); // @Changes all current meshes having default color.
 	static void changeDefaultAmbientColor(glm::vec3 ambientColor, bool normalized);
 	static void changeDefaultAmbientStrength(float ambientStrength);
