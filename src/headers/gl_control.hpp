@@ -15,6 +15,15 @@ public:
 	static void setBasicMeshSpawnPos(GLMesh& mesh);
 	static void spinBasicMeshAnim(GLMesh& mesh);
 	static void drawBasicMesh(GLMesh& mesh);
+
+	static void setTexture0(GLMesh& mesh, std::string texturePath);
+	static void setColor(GLMesh& mesh, glm::vec3 color, bool isNormalized);
+	static void setOpacity(GLMesh& mesh, float opacity);
+	static void setAmbientColor(GLMesh& mesh, glm::vec3 ambientColor, bool isNormalized);
+	static void setAmbientStrength(GLMesh& mesh, float ambientStrength);
+	static void setToDefaultColor(GLMesh& mesh); // @Resets to world value defaultObjectColor
+	static void setToDefaultAmbientColor(GLMesh& mesh); // @Resets to world value defaultAmbientColor
+	static void setToDefaultAmbientStrength(GLMesh& mesh); // @Resets to world value defaultAmbientStrength
 };
 
 
@@ -31,24 +40,23 @@ void cleanGLObjectsGarbage();
 
 class GLGlobalCtrl {
 private:
-	static std::unique_ptr<glm::vec3> viewBackgroundColor;
-	static std::unique_ptr<glm::vec3> defaultObjectColor;
-	static std::unique_ptr<glm::vec3> defaultAmbientColor;
-	static std::unique_ptr<float> defaultAmbientStrength;
+	static glm::vec3 viewBackgroundColor;
+	static glm::vec3 defaultObjectColor;
+	static glm::vec3 defaultAmbientColor;
+	static float defaultAmbientStrength;
 public:
 	// @Set delta time according to each fps.
 	static void setDeltaTime();
 	static void updateGlobalLightSource();
 	static void updateCameraViewPosToMeshes();
 	static void enableMeshesTransparency();
+
 	static glm::vec3 getViewBackgroundColor();
-
-
 	static glm::vec3 getDefaultObjectColor();
 	static glm::vec3 getDefaultAmbientColor();
+	static float getDefaultAmbientStrength();
 
 	static void changeDefaultColor(glm::vec3 color, bool normalized); // @Changes all current meshes having default color.
-	static float getDefaultAmbientStrength();
 	static void changeDefaultAmbientColor(glm::vec3 ambientColor, bool normalized);
 	static void changeDefaultAmbientStrength(float ambientStrength);
 
@@ -56,5 +64,4 @@ public:
 	static void resetAllMeshesColor();
 	static void resetAllMeshesAmbientColor();
 	static void resetAllMeshesAmbientStrength();
-	static void destructAllGlobalValue();
 };

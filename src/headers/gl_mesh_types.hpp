@@ -3,6 +3,7 @@
 #include <string>
 
 class GLLightSource {
+    friend class GLGlobalCtrl;
 private:
     glm::vec3* color;
     glm::vec3* position;
@@ -32,20 +33,13 @@ protected:
     int glUniViewCameraPos, glUniObjectColor, glUniObjectOpacity, glUniAmbientColor, glUniAmbientStrength, 
         glUniEnableTexture, glUniAffectedLightPos, glUniAffectedLightColor, glUniAffectedLightStrength;
     bool hasDefaultColor{ true }, hasDefaultAmbientColor{ true }, hasDefaultAmbientStrength{ true };
+
+    // @Functions below are called by global control.
     void setTextureWrapFilter(unsigned int wrap_s, unsigned int wrap_t, unsigned int min_filter, unsigned int max_filter);
-    // @Called by global control.
     void detectGlobalLightSource(glm::vec3& lightPos, glm::vec3& lightColor, float lightStrength);
     void detectViewCameraPos(glm::vec3& cameraPos);
 public:
     GLMesh(std::string meshName, glm::vec3 position, unsigned int shaderProgram, unsigned int vao, unsigned int vbo);
-    void setTexture0(std::string texturePath);
-    void setColor(glm::vec3 color, bool isNormalized);
-    void setOpacity(float opacity);
-    void setAmbientColor(glm::vec3 ambientColor, bool isNormalized);
-    void setAmbientStrength(float ambientStrength);
-    void setToDefaultColor(); // @Resets to world value defaultObjectColor
-    void setToDefaultAmbientColor(); // @Resets to world value defaultAmbientColor
-    void setToDefaultAmbientStrength(); // @Resets to world value defaultAmbientStrength
     bool isTextureEnabled();
     bool isDefaultColor(); // @Check if the mesh's color is default world color.
     bool isDefaultAmbientColor();

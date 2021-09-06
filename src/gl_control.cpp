@@ -6,6 +6,7 @@
 #include "headers/gl_control.hpp"
 #include "headers/gl_values.hpp"
 #include "headers/gl_mesh_types.hpp"
+#include "headers/image_edit.hpp"
 #include <LTM_CPPOpenGLAPIConfig.h>
 
 #include <glad/glad.h>
@@ -40,7 +41,7 @@ void GLMeshCtrl::setMeshCoordSystem(unsigned int& shaderProgram) {
 }
 
 void GLMeshCtrl::setBasicMeshSpawnPos(GLMesh& mesh) {
-    modelMatrix = glm::translate(modelMatrix, mesh.getPosition());
+    modelMatrix = glm::translate(modelMatrix, mesh.position);
 }
 
 void GLMeshCtrl::spinBasicMeshAnim(GLMesh& mesh) {
@@ -48,8 +49,8 @@ void GLMeshCtrl::spinBasicMeshAnim(GLMesh& mesh) {
 }
 
 void GLMeshCtrl::drawBasicMesh(GLMesh& mesh) {
-    glBindVertexArray(mesh.getVAO());
-    static unsigned int modelLoc = glGetUniformLocation(mesh.getShaderProgram(), "model");
+    glBindVertexArray(mesh.vao);
+    static unsigned int modelLoc = glGetUniformLocation(mesh.shaderProgram, "model");
     glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(modelMatrix));
     if (mesh.isTextureEnabled()) {
         glActiveTexture(GL_TEXTURE0);
@@ -58,8 +59,74 @@ void GLMeshCtrl::drawBasicMesh(GLMesh& mesh) {
         glActiveTexture(0);
         glBindTexture(GL_TEXTURE_2D, 0);
     }
-    glUseProgram(mesh.getShaderProgram());
-    glDrawArrays(GL_TRIANGLES, 0, mesh.getVerticesCount());
+    glUseProgram(mesh.shaderProgram);
+    glDrawArrays(GL_TRIANGLES, 0, mesh.verticesCount);
+}
+
+void GLMeshCtrl::setTexture0(GLMesh& mesh, std::string texturePath) {
+    mesh.enableTexture = true;
+    glUniform1ui(mesh.glUniEnableTexture, true);
+    mesh.texture0 = new GLuint(0);
+    glGenTextures(1, mesh.texture0);
+    glBindTexture(GL_TEXTURE_2D, *(mesh.texture0));
+
+    mesh.setTextureWrapFilter(GL_REPEAT, GL_REPEAT, GL_LINEAR, GL_LINEAR);
+
+    int width, height, nrChannels;
+    unsigned char* data = loadImage(PROJECT_SOURCE_RELATIVEPATH + texturePath, width, height, nrChannels);
+    if (data) {
+        glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, data);
+        glGenerateMipmap(GL_TEXTURE_2D);
+        freeImage(*data);
+    } else {
+        std::cout << "Failed to load texture." << std::endl;
+    }
+    glUseProgram(mesh.shaderProgram);
+    int ourTexture = glGetUniformLocation(mesh.shaderProgram, "ourTexture");
+    glUniform1i(ourTexture, 0);
+}
+void GLMeshCtrl::setColor(GLMesh& mesh, glm::vec3 color, bool isNormalized) {
+    if (isNormalized) {
+        mesh.color = color;
+    } else {
+        mesh.color = color / 255.f;
+    }
+    glUseProgram(mesh.shaderProgram);
+    glUniform3fv(mesh.glUniObjectColor, 1, &(mesh.color[0]));
+    mesh.hasDefaultColor = false;
+}
+void GLMeshCtrl::setOpacity(GLMesh& mesh, float opacity) {
+    mesh.opacity = (opacity > 1) ? 1 : ((opacity < 0) ? 0 : opacity);
+    glUseProgram(mesh.shaderProgram);
+    glUniform1f(mesh.glUniObjectOpacity, mesh.opacity);
+}
+void GLMeshCtrl::setAmbientColor(GLMesh& mesh, glm::vec3 ambientColor, bool isNormalized) {
+    if (isNormalized) {
+        mesh.ambientColor = ambientColor;
+    } else {
+        mesh.color = ambientColor / 255.f;
+    }
+    glUseProgram(mesh.shaderProgram);
+    glUniform3fv(mesh.glUniAmbientColor, 1, &(mesh.ambientColor[0]));
+    mesh.hasDefaultAmbientColor = false;
+}
+void GLMeshCtrl::setAmbientStrength(GLMesh& mesh, float ambientStrength) {
+    mesh.ambientStrength = ambientStrength;
+    glUseProgram(mesh.shaderProgram);
+    glUniform1f(mesh.glUniAmbientStrength, mesh.ambientStrength);
+    mesh.hasDefaultAmbientStrength = false;
+}
+void GLMeshCtrl::setToDefaultColor(GLMesh& mesh) {
+    setColor(mesh, GLGlobalCtrl::getDefaultObjectColor(), true);
+    mesh.hasDefaultColor = true;
+}
+void GLMeshCtrl::setToDefaultAmbientColor(GLMesh& mesh) {
+    setAmbientColor(mesh, GLGlobalCtrl::getDefaultAmbientColor(), true);
+    mesh.hasDefaultAmbientColor = true;
+}
+void GLMeshCtrl::setToDefaultAmbientStrength(GLMesh& mesh) {
+    setAmbientStrength(mesh, GLGlobalCtrl::getDefaultAmbientStrength());
+    mesh.hasDefaultAmbientStrength = true;
 }
 
 void checkCompileErrors(unsigned int shader, char* type) {
@@ -177,10 +244,10 @@ void cleanGLObjectsGarbage() {
 }
 
 
-std::unique_ptr<glm::vec3> GLGlobalCtrl::viewBackgroundColor = std::make_unique<glm::vec3>(0.2f, 0.3f, 0.3f);
-std::unique_ptr<glm::vec3> GLGlobalCtrl::defaultObjectColor = std::make_unique<glm::vec3>(0.f, 0.f, 0.f);
-std::unique_ptr<glm::vec3> GLGlobalCtrl::defaultAmbientColor = std::make_unique<glm::vec3>(1.f, 1.f, 1.f);
-std::unique_ptr<float> GLGlobalCtrl::defaultAmbientStrength = std::make_unique<float>(.1f);
+glm::vec3 GLGlobalCtrl::viewBackgroundColor = glm::vec3(0.2f, 0.3f, 0.3f);
+glm::vec3 GLGlobalCtrl::defaultObjectColor = glm::vec3(0.f, 0.f, 0.f);
+glm::vec3 GLGlobalCtrl::defaultAmbientColor = glm::vec3(1.f, 1.f, 1.f);
+float GLGlobalCtrl::defaultAmbientStrength = float(.1f);
 
 void GLGlobalCtrl::setDeltaTime() {
     float currentFrame = glfwGetTime();
@@ -192,7 +259,7 @@ void GLGlobalCtrl::updateGlobalLightSource() {
     auto lightSourcesIT = globalLightSources.begin();
     GLLightSource& firstLightSource = **lightSourcesIT;
     for (std::vector<GLMesh*>::iterator meshIT = meshesCollector.begin(); meshIT != meshesCollector.end(); ++meshIT) {
-        (*meshIT)->detectGlobalLightSource(firstLightSource.getPosition(), glm::vec3(firstLightSource.getColor()), firstLightSource.getStrength());
+        (*meshIT)->detectGlobalLightSource(*firstLightSource.position, glm::vec3(*firstLightSource.color), *firstLightSource.strength);
     }
 }
 void GLGlobalCtrl::updateCameraViewPosToMeshes() {
@@ -205,65 +272,59 @@ void GLGlobalCtrl::enableMeshesTransparency() {
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 }
 glm::vec3 GLGlobalCtrl::getViewBackgroundColor() {
-    return *viewBackgroundColor;
+    return viewBackgroundColor;
 }
 glm::vec3 GLGlobalCtrl::getDefaultObjectColor() {
-    return *defaultObjectColor;
+    return defaultObjectColor;
 }
 glm::vec3 GLGlobalCtrl::getDefaultAmbientColor() {
-    return *defaultAmbientColor;
+    return defaultAmbientColor;
 }
 float GLGlobalCtrl::getDefaultAmbientStrength() {
-    return *defaultAmbientStrength;
+    return defaultAmbientStrength;
 }
 void GLGlobalCtrl::changeDefaultColor(glm::vec3 color, bool normalized) {
-    *defaultObjectColor = normalized ? color : color / 255.f;
+    defaultObjectColor = normalized ? color : color / 255.f;
     for (std::vector<GLMesh*>::iterator it = meshesCollector.begin(); it != meshesCollector.end(); ++it) {
         if ((*it)->isDefaultColor()) {
-            (*it)->setToDefaultColor();
+            GLMeshCtrl::setToDefaultColor(**it);
         }
     }
 }
 void GLGlobalCtrl::changeDefaultAmbientColor(glm::vec3 ambientColor, bool normalized) {
-    *defaultAmbientColor = normalized ? ambientColor : ambientColor / 255.f;
+    defaultAmbientColor = normalized ? ambientColor : ambientColor / 255.f;
     for (std::vector<GLMesh*>::iterator it = meshesCollector.begin(); it != meshesCollector.end(); ++it) {
         if ((*it)->isDefaultAmbientColor()) {
-            (*it)->setToDefaultAmbientColor();
+            GLMeshCtrl::setToDefaultAmbientColor(**it);
         }
     }
 }
 void GLGlobalCtrl::changeDefaultAmbientStrength(float ambientStrength) {
-    *defaultAmbientStrength = ambientStrength;
+    defaultAmbientStrength = ambientStrength;
     for (std::vector<GLMesh*>::iterator it = meshesCollector.begin(); it != meshesCollector.end(); ++it) {
         if ((*it)->isDefaultAmbientStrength()) {
-            (*it)->setToDefaultAmbientStrength();
+            GLMeshCtrl::setToDefaultAmbientStrength(**it);
         }
     }
 }
 void GLGlobalCtrl::resetAllDefaultValues() {
-    *viewBackgroundColor = glm::vec4(0.2f, 0.3f, 0.3f, 1.0f);
-    *defaultObjectColor = glm::vec4(0.f, 0.f, 0.f, 1.f);
-    *defaultAmbientColor = glm::vec4(1.f, 1.f, 1.f, 1.f);
-    *defaultAmbientStrength = .1f;
+    viewBackgroundColor = glm::vec4(0.2f, 0.3f, 0.3f, 1.0f);
+    defaultObjectColor = glm::vec4(0.f, 0.f, 0.f, 1.f);
+    defaultAmbientColor = glm::vec4(1.f, 1.f, 1.f, 1.f);
+    defaultAmbientStrength = .1f;
 }
 void GLGlobalCtrl::resetAllMeshesColor() {
     for (std::vector<GLMesh*>::iterator it = meshesCollector.begin(); it != meshesCollector.end(); ++it) {
-        (*it)->setToDefaultColor();
+        GLMeshCtrl::setToDefaultColor(**it);
     }
 }
 void GLGlobalCtrl::resetAllMeshesAmbientColor() {
     for (std::vector<GLMesh*>::iterator it = meshesCollector.begin(); it != meshesCollector.end(); ++it) {
-        (*it)->setToDefaultAmbientColor();
+        GLMeshCtrl::setToDefaultAmbientColor(**it);
     }
 }
 void GLGlobalCtrl::resetAllMeshesAmbientStrength() {
     for (std::vector<GLMesh*>::iterator it = meshesCollector.begin(); it != meshesCollector.end(); ++it) {
-        (*it)->setToDefaultAmbientStrength();
+        GLMeshCtrl::setToDefaultAmbientStrength(**it);
     }
-}
-void GLGlobalCtrl::destructAllGlobalValue() {
-    viewBackgroundColor.reset();
-    defaultObjectColor.reset();
-    defaultAmbientColor.reset();
-    defaultAmbientStrength.reset();
 }

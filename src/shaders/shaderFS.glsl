@@ -38,7 +38,7 @@ void main()
 
     // @Using power, the more center of reflection point, the stronger the specular.
     float spec = pow(max(dot(viewDir, reflectDir), 0.0), 32);
-    vec3 specular = specularStrength * spec * lightColor;  
+    vec3 specular = specularStrength * spec * lightColor * lightStrength;  
 
     if (enableTexture){
         // @Multiply the texture by color mixes the RGB color and texture.

@@ -32,15 +32,15 @@ int main() {
     createVAOs(2, vaos);
     createVBOs(2, vbos);
     GLBasicCubeMesh basicCube0("Basic Lighting Cube 0", glm::vec3(0.5f, 0.8f, -1.0f), shaderProgramHandle, vaos[0], vbos[0]);
-    basicCube0.setTexture0("assets/imgs/360_F_144681519_gw1oCkcy5WzZ6RI9utXh61eIWkgcdiZ9.jpg");
-    basicCube0.setColor(glm::vec3(1, 1, 1), true);
+    GLMeshCtrl::setTexture0(basicCube0, "assets/imgs/360_F_144681519_gw1oCkcy5WzZ6RI9utXh61eIWkgcdiZ9.jpg");
+    GLMeshCtrl::setColor(basicCube0, glm::vec3(1, 1, 1), true);
 
     createShaderProgram(vertexShaderHandle, "shaders/shaderVS.glsl", fragmentShaderHandle, "shaders/shaderFS.glsl", shaderProgramHandle);
     GLEmmiterbleCubeMesh emitterbleCube0("Emitterble Cube 0", glm::vec3(-10.f, -10.f, -10.f), shaderProgramHandle, vaos[1], vbos[1], 10.0f);
     emitterbleCube0.enableLightEmit();
     emitterbleCube0.changeLightStrength(5.f);
-    emitterbleCube0.setAmbientStrength(1.f);
-    emitterbleCube0.setAmbientColor(glm::vec3(1, 1, 1), true);
+    GLMeshCtrl::setAmbientStrength(emitterbleCube0, 1.f);
+    GLMeshCtrl::setAmbientColor(emitterbleCube0, glm::vec3(1, 1, 1), true);
 
     // Our state (Dear ImGUI)
     bool show_demo_window = true;
@@ -50,13 +50,12 @@ int main() {
     GLGlobalCtrl::enableMeshesTransparency();
     GLGlobalCtrl::resetAllMeshesColor();
     GLGlobalCtrl::changeDefaultColor(glm::vec3(1, 1, 1), true);
-    //GLGC::changeDefaultAmbientColor(glm::vec4(1, 0.2, 0.6, 1), true);
     GLGlobalCtrl::changeDefaultAmbientStrength(.1f);
-    emitterbleCube0.setColor(glm::vec3(0, 1, 1), true);
-    basicCube0.setColor(glm::vec3(1, 0, 1), true);
-    basicCube0.setAmbientStrength(1.f);
-    basicCube0.setAmbientColor(glm::vec3(1, 1, 1), true);
-    basicCube0.setOpacity(1.f);
+    GLMeshCtrl::setColor(emitterbleCube0, glm::vec3(0, 1, 1), true);
+    GLMeshCtrl::setColor(basicCube0, glm::vec3(1, 0, 1), true);
+    GLMeshCtrl::setAmbientStrength(basicCube0, 1.f);
+    GLMeshCtrl::setAmbientColor(basicCube0, glm::vec3(1, 1, 1), true);
+    GLMeshCtrl::setOpacity(basicCube0, 1.f);
 
     while (!glfwWindowShouldClose(window)) {
         glfwPollEvents();
@@ -138,5 +137,4 @@ int main() {
     ImGui::DestroyContext();
 
     cleanGLObjectsGarbage();
-    GLGlobalCtrl::destructAllGlobalValue();
 }
