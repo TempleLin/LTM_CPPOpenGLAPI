@@ -94,6 +94,21 @@ void GLMesh::detectViewCameraPos(glm::vec3& cameraPos) {
 std::string& GLMesh::getName() {
     return this->name;
 }
+glm::vec3& GLMesh::getPosition() {
+    return this->position;
+}
+glm::vec3& GLMesh::getColor() {
+    return this->color;
+}
+glm::vec3& GLMesh::getAmbientColor() {
+    return this->ambientColor;
+}
+float GLMesh::getOpacity() {
+    return this->opacity;
+}
+float GLMesh::getAmbientStrength() {
+    return this->ambientStrength;
+}
 unsigned int GLMesh::getTexture0() {
     return texture0 ? *texture0 : NULL;
 }
@@ -107,10 +122,7 @@ unsigned int& GLMesh::getShaderProgram() {
     return this->shaderProgram;
 }
 unsigned int GLMesh::getVerticesCount() {
-    return verticesCount;
-}
-glm::vec3& GLMesh::getPosition() {
-    return position;
+    return this->verticesCount;
 }
 
 GLMesh::~GLMesh() {

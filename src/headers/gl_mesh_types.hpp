@@ -46,12 +46,16 @@ public:
     bool isDefaultAmbientStrength();
 
     std::string& getName();
+    glm::vec3& getPosition();
+    glm::vec3& getColor();
+    glm::vec3& getAmbientColor();
+    float getOpacity();
+    float getAmbientStrength();
     unsigned int getTexture0();
     unsigned int& getVAO();
     unsigned int& getVBO();
-    unsigned int getVerticesCount();
-    glm::vec3& getPosition();
     unsigned int& getShaderProgram();
+    unsigned int getVerticesCount();
     ~GLMesh();
 };
 
