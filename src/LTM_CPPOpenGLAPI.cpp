@@ -111,12 +111,12 @@ int main() {
         GLGlobalCtrl::updateGlobalLightSource();
         GLGlobalCtrl::updateCameraViewPosToMeshes();
 
-        GLMeshCtrl::setMeshCoordSystem(basicCube0.getShaderProgram());
+        GLMeshCtrl::setMeshCoordSystem(basicCube0);
         GLMeshCtrl::setBasicMeshSpawnPos(basicCube0);
         GLMeshCtrl::spinBasicMeshAnim(basicCube0);
         GLMeshCtrl::drawBasicMesh(basicCube0);
 
-        GLMeshCtrl::setMeshCoordSystem(emitterbleCube0.getShaderProgram());
+        GLMeshCtrl::setMeshCoordSystem(emitterbleCube0);
         GLMeshCtrl::setBasicMeshSpawnPos(emitterbleCube0);
         GLMeshCtrl::spinBasicMeshAnim(emitterbleCube0);
         GLMeshCtrl::drawBasicMesh(emitterbleCube0);

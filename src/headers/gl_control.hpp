@@ -11,7 +11,7 @@ extern std::list<GLLightSource*> globalLightSources;
 
 class GLMeshCtrl {
 public:
-	static void setMeshCoordSystem(unsigned int& shaderProgram);
+	static void setMeshCoordSystem(GLMesh& mesh);
 	static void setBasicMeshSpawnPos(GLMesh& mesh);
 	static void spinBasicMeshAnim(GLMesh& mesh);
 	static void drawBasicMesh(GLMesh& mesh);
@@ -29,7 +29,8 @@ public:
 
 
 void checkCompileErrors(unsigned int shader, char* type);
-void createShaderProgram(unsigned int& vertexShader, std::string vsPath, unsigned int& fragmentShader, std::string fsPath, unsigned int& shaderProgram);
+void createShaderProgram(unsigned int& vertexShader, std::string vsPath, unsigned int& fragmentShader, 
+	std::string fsPath, unsigned int& shaderProgram);
 void createVAOs(unsigned int count, unsigned int* vaos);
 void createVBOs(unsigned int count, unsigned int* vbos);
 void cleanProgramsGarbage();

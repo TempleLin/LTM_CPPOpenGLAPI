@@ -19,6 +19,7 @@ class GLMesh {
     friend class GLMeshCtrl;
     friend class GLGlobalCtrl;
 protected:
+    glm::mat4 modelMatrix = glm::mat4{ 1.f };
     bool enableTexture = false;
     std::string name;
     glm::vec3 position;

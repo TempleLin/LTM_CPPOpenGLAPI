@@ -8,7 +8,6 @@ extern float fovMax; // @Maximum field of view.
 extern float fovMin; //@Minimum field of view.
 extern float fov; // @Current field of view.
 
-extern glm::mat4 modelMatrix;
 extern glm::mat4 viewMatrix;
 extern glm::mat4 projectionMatrix;
 

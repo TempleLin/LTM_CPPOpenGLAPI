@@ -7,7 +7,6 @@ float fovMax { 45.0f };
 float fovMin { 1.0f };
 float fov { 45.0f };
 
-glm::mat4 modelMatrix{ glm::mat4(1.0f) };
 glm::mat4 viewMatrix{ glm::mat4(1.0f) };
 glm::mat4 projectionMatrix{ glm::mat4(1.0f) };
 
