@@ -9,7 +9,7 @@ extern std::vector<unsigned int> vaoGarbageCollector, vboGarbageCollector, progr
 extern std::vector<GLMesh*> meshesCollector;
 extern std::list<GLLightSource*> globalLightSources;
 
-class GLMeshControl {
+class GLMeshCtrl {
 public:
 	static void setMeshCoordSystem(unsigned int& shaderProgram);
 	static void setBasicMeshSpawnPos(GLMesh& mesh);
@@ -29,7 +29,7 @@ void cleanVBOsGarbage();
 void cleanGLObjectsGarbage();
 
 
-class GLGlobalControl {
+class GLGlobalCtrl {
 private:
 	static std::unique_ptr<glm::vec3> viewBackgroundColor;
 	static std::unique_ptr<glm::vec3> defaultObjectColor;
@@ -58,6 +58,3 @@ public:
 	static void resetAllMeshesAmbientStrength();
 	static void destructAllGlobalValue();
 };
-
-typedef GLGlobalControl GLGC;
-typedef GLMeshControl GLMC;

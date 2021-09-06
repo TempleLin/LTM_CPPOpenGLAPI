@@ -20,7 +20,7 @@ std::vector<GLMesh*> meshesCollector;
 std::list<GLLightSource*> globalLightSources;
 
 
-void GLMeshControl::setMeshCoordSystem(unsigned int& shaderProgram) {
+void GLMeshCtrl::setMeshCoordSystem(unsigned int& shaderProgram) {
     glUseProgram(shaderProgram);
 
     glEnable(GL_DEPTH_TEST);
@@ -39,15 +39,15 @@ void GLMeshControl::setMeshCoordSystem(unsigned int& shaderProgram) {
     glUniformMatrix4fv(projectionLoc, 1, GL_FALSE, glm::value_ptr(projectionMatrix));
 }
 
-void GLMeshControl::setBasicMeshSpawnPos(GLMesh& mesh) {
+void GLMeshCtrl::setBasicMeshSpawnPos(GLMesh& mesh) {
     modelMatrix = glm::translate(modelMatrix, mesh.getPosition());
 }
 
-void GLMeshControl::spinBasicMeshAnim(GLMesh& mesh) {
+void GLMeshCtrl::spinBasicMeshAnim(GLMesh& mesh) {
     modelMatrix = glm::rotate(modelMatrix, (float)glfwGetTime() * glm::radians(50.0f), glm::vec3(1.0f, 0.3f, 0.5f));
 }
 
-void GLMeshControl::drawBasicMesh(GLMesh& mesh) {
+void GLMeshCtrl::drawBasicMesh(GLMesh& mesh) {
     glBindVertexArray(mesh.getVAO());
     static unsigned int modelLoc = glGetUniformLocation(mesh.getShaderProgram(), "model");
     glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(modelMatrix));
@@ -177,17 +177,17 @@ void cleanGLObjectsGarbage() {
 }
 
 
-std::unique_ptr<glm::vec3> GLGlobalControl::viewBackgroundColor = std::make_unique<glm::vec3>(0.2f, 0.3f, 0.3f);
-std::unique_ptr<glm::vec3> GLGlobalControl::defaultObjectColor = std::make_unique<glm::vec3>(0.f, 0.f, 0.f);
-std::unique_ptr<glm::vec3> GLGlobalControl::defaultAmbientColor = std::make_unique<glm::vec3>(1.f, 1.f, 1.f);
-std::unique_ptr<float> GLGlobalControl::defaultAmbientStrength = std::make_unique<float>(.1f);
+std::unique_ptr<glm::vec3> GLGlobalCtrl::viewBackgroundColor = std::make_unique<glm::vec3>(0.2f, 0.3f, 0.3f);
+std::unique_ptr<glm::vec3> GLGlobalCtrl::defaultObjectColor = std::make_unique<glm::vec3>(0.f, 0.f, 0.f);
+std::unique_ptr<glm::vec3> GLGlobalCtrl::defaultAmbientColor = std::make_unique<glm::vec3>(1.f, 1.f, 1.f);
+std::unique_ptr<float> GLGlobalCtrl::defaultAmbientStrength = std::make_unique<float>(.1f);
 
-void GLGlobalControl::setDeltaTime() {
+void GLGlobalCtrl::setDeltaTime() {
     float currentFrame = glfwGetTime();
     deltaTime = currentFrame - lastFrame;
     lastFrame = currentFrame;
 }
-void GLGlobalControl::updateGlobalLightSource() {
+void GLGlobalCtrl::updateGlobalLightSource() {
     if (globalLightSources.empty()) return;
     auto lightSourcesIT = globalLightSources.begin();
     GLLightSource& firstLightSource = **lightSourcesIT;
@@ -195,28 +195,28 @@ void GLGlobalControl::updateGlobalLightSource() {
         (*meshIT)->detectGlobalLightSource(firstLightSource.getPosition(), glm::vec3(firstLightSource.getColor()), firstLightSource.getStrength());
     }
 }
-void GLGlobalControl::updateCameraViewPosToMeshes() {
+void GLGlobalCtrl::updateCameraViewPosToMeshes() {
     for (std::vector<GLMesh*>::iterator meshIT = meshesCollector.begin(); meshIT != meshesCollector.end(); ++meshIT) {
         (*meshIT)->detectViewCameraPos(cameraPos);
     }
 }
-void GLGlobalControl::enableMeshesTransparency() {
+void GLGlobalCtrl::enableMeshesTransparency() {
     glEnable(GL_BLEND);
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 }
-glm::vec3 GLGlobalControl::getViewBackgroundColor() {
+glm::vec3 GLGlobalCtrl::getViewBackgroundColor() {
     return *viewBackgroundColor;
 }
-glm::vec3 GLGlobalControl::getDefaultObjectColor() {
+glm::vec3 GLGlobalCtrl::getDefaultObjectColor() {
     return *defaultObjectColor;
 }
-glm::vec3 GLGlobalControl::getDefaultAmbientColor() {
+glm::vec3 GLGlobalCtrl::getDefaultAmbientColor() {
     return *defaultAmbientColor;
 }
-float GLGlobalControl::getDefaultAmbientStrength() {
+float GLGlobalCtrl::getDefaultAmbientStrength() {
     return *defaultAmbientStrength;
 }
-void GLGlobalControl::changeDefaultColor(glm::vec3 color, bool normalized) {
+void GLGlobalCtrl::changeDefaultColor(glm::vec3 color, bool normalized) {
     *defaultObjectColor = normalized ? color : color / 255.f;
     for (std::vector<GLMesh*>::iterator it = meshesCollector.begin(); it != meshesCollector.end(); ++it) {
         if ((*it)->isDefaultColor()) {
@@ -224,7 +224,7 @@ void GLGlobalControl::changeDefaultColor(glm::vec3 color, bool normalized) {
         }
     }
 }
-void GLGlobalControl::changeDefaultAmbientColor(glm::vec3 ambientColor, bool normalized) {
+void GLGlobalCtrl::changeDefaultAmbientColor(glm::vec3 ambientColor, bool normalized) {
     *defaultAmbientColor = normalized ? ambientColor : ambientColor / 255.f;
     for (std::vector<GLMesh*>::iterator it = meshesCollector.begin(); it != meshesCollector.end(); ++it) {
         if ((*it)->isDefaultAmbientColor()) {
@@ -232,7 +232,7 @@ void GLGlobalControl::changeDefaultAmbientColor(glm::vec3 ambientColor, bool nor
         }
     }
 }
-void GLGlobalControl::changeDefaultAmbientStrength(float ambientStrength) {
+void GLGlobalCtrl::changeDefaultAmbientStrength(float ambientStrength) {
     *defaultAmbientStrength = ambientStrength;
     for (std::vector<GLMesh*>::iterator it = meshesCollector.begin(); it != meshesCollector.end(); ++it) {
         if ((*it)->isDefaultAmbientStrength()) {
@@ -240,28 +240,28 @@ void GLGlobalControl::changeDefaultAmbientStrength(float ambientStrength) {
         }
     }
 }
-void GLGlobalControl::resetAllDefaultValues() {
+void GLGlobalCtrl::resetAllDefaultValues() {
     *viewBackgroundColor = glm::vec4(0.2f, 0.3f, 0.3f, 1.0f);
     *defaultObjectColor = glm::vec4(0.f, 0.f, 0.f, 1.f);
     *defaultAmbientColor = glm::vec4(1.f, 1.f, 1.f, 1.f);
     *defaultAmbientStrength = .1f;
 }
-void GLGlobalControl::resetAllMeshesColor() {
+void GLGlobalCtrl::resetAllMeshesColor() {
     for (std::vector<GLMesh*>::iterator it = meshesCollector.begin(); it != meshesCollector.end(); ++it) {
         (*it)->setToDefaultColor();
     }
 }
-void GLGlobalControl::resetAllMeshesAmbientColor() {
+void GLGlobalCtrl::resetAllMeshesAmbientColor() {
     for (std::vector<GLMesh*>::iterator it = meshesCollector.begin(); it != meshesCollector.end(); ++it) {
         (*it)->setToDefaultAmbientColor();
     }
 }
-void GLGlobalControl::resetAllMeshesAmbientStrength() {
+void GLGlobalCtrl::resetAllMeshesAmbientStrength() {
     for (std::vector<GLMesh*>::iterator it = meshesCollector.begin(); it != meshesCollector.end(); ++it) {
         (*it)->setToDefaultAmbientStrength();
     }
 }
-void GLGlobalControl::destructAllGlobalValue() {
+void GLGlobalCtrl::destructAllGlobalValue() {
     viewBackgroundColor.reset();
     defaultObjectColor.reset();
     defaultAmbientColor.reset();

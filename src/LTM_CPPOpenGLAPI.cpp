@@ -47,11 +47,11 @@ int main() {
     bool show_another_window = false;
     ImVec4 clear_color = ImVec4(0.45f, 0.55f, 0.60f, 1.00f);
 
-    GLGC::enableMeshesTransparency();
-    GLGC::resetAllMeshesColor();
-    GLGC::changeDefaultColor(glm::vec3(1, 1, 1), true);
+    GLGlobalCtrl::enableMeshesTransparency();
+    GLGlobalCtrl::resetAllMeshesColor();
+    GLGlobalCtrl::changeDefaultColor(glm::vec3(1, 1, 1), true);
     //GLGC::changeDefaultAmbientColor(glm::vec4(1, 0.2, 0.6, 1), true);
-    GLGC::changeDefaultAmbientStrength(.1f);
+    GLGlobalCtrl::changeDefaultAmbientStrength(.1f);
     emitterbleCube0.setColor(glm::vec3(0, 1, 1), true);
     basicCube0.setColor(glm::vec3(1, 0, 1), true);
     basicCube0.setAmbientStrength(1.f);
@@ -103,24 +103,24 @@ int main() {
         }
 
         // @glClearColor does not do any clearing itself -- it just sets what the color will be when you do actually clear. 
-        glClearColor(GLGC::getViewBackgroundColor().r, GLGC::getViewBackgroundColor().g, 
-            GLGC::getViewBackgroundColor().b, 1);
+        glClearColor(GLGlobalCtrl::getViewBackgroundColor().r, GLGlobalCtrl::getViewBackgroundColor().g,
+            GLGlobalCtrl::getViewBackgroundColor().b, 1);
         // @Clear both color buffer and Z-depth buffer before each frame render.
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-        GLGC::setDeltaTime();
-        GLGC::updateGlobalLightSource();
-        GLGC::updateCameraViewPosToMeshes();
+        GLGlobalCtrl::setDeltaTime();
+        GLGlobalCtrl::updateGlobalLightSource();
+        GLGlobalCtrl::updateCameraViewPosToMeshes();
 
-        GLMC::setMeshCoordSystem(basicCube0.getShaderProgram());
-        GLMC::setBasicMeshSpawnPos(basicCube0);
-        GLMC::spinBasicMeshAnim(basicCube0);
-        GLMC::drawBasicMesh(basicCube0);
+        GLMeshCtrl::setMeshCoordSystem(basicCube0.getShaderProgram());
+        GLMeshCtrl::setBasicMeshSpawnPos(basicCube0);
+        GLMeshCtrl::spinBasicMeshAnim(basicCube0);
+        GLMeshCtrl::drawBasicMesh(basicCube0);
 
-        GLMC::setMeshCoordSystem(emitterbleCube0.getShaderProgram());
-        GLMC::setBasicMeshSpawnPos(emitterbleCube0);
-        GLMC::spinBasicMeshAnim(emitterbleCube0);
-        GLMC::drawBasicMesh(emitterbleCube0);
+        GLMeshCtrl::setMeshCoordSystem(emitterbleCube0.getShaderProgram());
+        GLMeshCtrl::setBasicMeshSpawnPos(emitterbleCube0);
+        GLMeshCtrl::spinBasicMeshAnim(emitterbleCube0);
+        GLMeshCtrl::drawBasicMesh(emitterbleCube0);
 
         processInput(window);
 
@@ -138,5 +138,5 @@ int main() {
     ImGui::DestroyContext();
 
     cleanGLObjectsGarbage();
-    GLGC::destructAllGlobalValue();
+    GLGlobalCtrl::destructAllGlobalValue();
 }

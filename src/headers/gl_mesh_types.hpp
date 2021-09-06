@@ -15,7 +15,8 @@ public:
 };
 
 class GLMesh {
-    friend class GLMeshControl;
+    friend class GLMeshCtrl;
+    friend class GLGlobalCtrl;
 protected:
     bool enableTexture = false;
     std::string name;
@@ -32,6 +33,9 @@ protected:
         glUniEnableTexture, glUniAffectedLightPos, glUniAffectedLightColor, glUniAffectedLightStrength;
     bool hasDefaultColor{ true }, hasDefaultAmbientColor{ true }, hasDefaultAmbientStrength{ true };
     void setTextureWrapFilter(unsigned int wrap_s, unsigned int wrap_t, unsigned int min_filter, unsigned int max_filter);
+    // @Called by global control.
+    void detectGlobalLightSource(glm::vec3& lightPos, glm::vec3& lightColor, float lightStrength);
+    void detectViewCameraPos(glm::vec3& cameraPos);
 public:
     GLMesh(std::string meshName, glm::vec3 position, unsigned int shaderProgram, unsigned int vao, unsigned int vbo);
     void setTexture0(std::string texturePath);
@@ -46,10 +50,6 @@ public:
     bool isDefaultColor(); // @Check if the mesh's color is default world color.
     bool isDefaultAmbientColor();
     bool isDefaultAmbientStrength();
-
-    // @Called by global control.
-    void detectGlobalLightSource(glm::vec3& lightPos, glm::vec3& lightColor, float lightStrength);
-    void detectViewCameraPos(glm::vec3& cameraPos);
 
     std::string& getName();
     unsigned int getTexture0();

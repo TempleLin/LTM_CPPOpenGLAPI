@@ -36,9 +36,9 @@ GLMesh::GLMesh(std::string meshName, glm::vec3 position, unsigned int shaderProg
     this->shaderProgram = shaderProgram;
     glUseProgram(this->shaderProgram);
 
-    this->color = GLGC::getDefaultObjectColor();
-    this->ambientColor = GLGC::getDefaultAmbientColor();
-    this->ambientStrength = GLGC::getDefaultAmbientStrength();
+    this->color = GLGlobalCtrl::getDefaultObjectColor();
+    this->ambientColor = GLGlobalCtrl::getDefaultAmbientColor();
+    this->ambientStrength = GLGlobalCtrl::getDefaultAmbientStrength();
     this->opacity = 1.f;
     this->glUniViewCameraPos = glGetUniformLocation(this->shaderProgram, "cameraViewPos");
     this->glUniEnableTexture = glGetUniformLocation(this->shaderProgram, "enableTexture");
@@ -51,10 +51,10 @@ GLMesh::GLMesh(std::string meshName, glm::vec3 position, unsigned int shaderProg
     this->glUniAffectedLightStrength = glGetUniformLocation(this->shaderProgram, "lightStrength");
     glUniform3fv(glUniViewCameraPos, 1, &cameraPos[0]);
     glUniform1ui(glUniEnableTexture, false);
-    glUniform3fv(glUniObjectColor, 1, &GLGC::getDefaultObjectColor()[0]);
+    glUniform3fv(glUniObjectColor, 1, &GLGlobalCtrl::getDefaultObjectColor()[0]);
     glUniform1f(glUniObjectOpacity, opacity);
-    glUniform3fv(glUniAmbientColor, 1, &GLGC::getDefaultAmbientColor()[0]);
-    glUniform1f(glUniAmbientStrength, GLGC::getDefaultAmbientStrength());
+    glUniform3fv(glUniAmbientColor, 1, &GLGlobalCtrl::getDefaultAmbientColor()[0]);
+    glUniform1f(glUniAmbientStrength, GLGlobalCtrl::getDefaultAmbientStrength());
     glUniform4f(glUniAffectedLightColor, 1, 1, 1, 1);
     glUniform1f(glUniAffectedLightStrength, 1.f);
     std::cout << "GLMesh: " << meshName << " Constructed" << std::endl;
@@ -127,15 +127,15 @@ void GLMesh::setAmbientStrength(float ambientStrength) {
     this->hasDefaultAmbientStrength = false;
 }
 void GLMesh::setToDefaultColor() {
-    setColor(GLGC::getDefaultObjectColor(), true);
+    setColor(GLGlobalCtrl::getDefaultObjectColor(), true);
     this->hasDefaultColor = true;
 }
 void GLMesh::setToDefaultAmbientColor() {
-    setAmbientColor(GLGC::getDefaultAmbientColor(), true);
+    setAmbientColor(GLGlobalCtrl::getDefaultAmbientColor(), true);
     this->hasDefaultAmbientColor = true;
 }
 void GLMesh::setToDefaultAmbientStrength() {
-    setAmbientStrength(GLGC::getDefaultAmbientStrength());
+    setAmbientStrength(GLGlobalCtrl::getDefaultAmbientStrength());
     this->hasDefaultAmbientStrength = true;
 }
 bool GLMesh::isDefaultColor() {
