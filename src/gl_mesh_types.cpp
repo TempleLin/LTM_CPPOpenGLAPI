@@ -81,7 +81,7 @@ bool GLMesh::isDefaultAmbientStrength() {
     return this->hasDefaultAmbientStrength;
 }
 
-void GLMesh::detectGlobalLightSource(glm::vec3& lightPos, glm::vec3& lightColor, float lightStrength) {
+void GLMesh::detectGlobalLightSource(const glm::vec3& lightPos, const glm::vec3& lightColor, float lightStrength) {
     glUseProgram(this->shaderProgram);
     glUniform3fv(glUniAffectedLightPos, 1, &lightPos[0]);
     glUniform3fv(glUniAffectedLightColor, 1, &lightColor[0]);

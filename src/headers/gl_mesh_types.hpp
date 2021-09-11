@@ -37,7 +37,7 @@ protected:
 
     // @Functions below are called by global control.
     void setTextureWrapFilter(unsigned int wrap_s, unsigned int wrap_t, unsigned int min_filter, unsigned int max_filter);
-    void detectGlobalLightSource(glm::vec3& lightPos, glm::vec3& lightColor, float lightStrength);
+    void detectGlobalLightSource(const glm::vec3& lightPos, const glm::vec3& lightColor, float lightStrength);
     void detectViewCameraPos(glm::vec3& cameraPos);
 public:
     GLMesh(std::string meshName, glm::vec3 position, unsigned int shaderProgram, unsigned int vao, unsigned int vbo);

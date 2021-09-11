@@ -22,6 +22,4 @@ int test(int argc, char** argv) {
 
 GTEST_API_ int main(int argc, char** argv) {
 	test(argc, argv);
-	std::cout << "Press any key to end." << std::endl;
-	std::cin.get();
 }
