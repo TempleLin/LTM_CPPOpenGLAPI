@@ -85,15 +85,25 @@ void GLMeshCtrl::setTexture0(GLMesh& mesh, std::string texturePath) {
     int ourTexture = glGetUniformLocation(mesh.shaderProgram, "ourTexture");
     glUniform1i(ourTexture, 0);
 }
-void GLMeshCtrl::setColor(GLMesh& mesh, glm::vec3 color, bool isNormalized) {
+void GLMeshCtrl::setDiffuseColor(GLMesh& mesh, glm::vec3 color, bool isNormalized) {
     if (isNormalized) {
         mesh.color = color;
     } else {
         mesh.color = color / 255.f;
     }
     glUseProgram(mesh.shaderProgram);
-    glUniform3fv(mesh.glUniObjectColor, 1, &(mesh.color[0]));
+    glUniform3fv(mesh.glUniDiffuseColor, 1, &(mesh.color[0]));
     mesh.hasDefaultColor = false;
+}
+void GLMeshCtrl::setShininess(GLMesh& mesh, float shininess) {
+    glUseProgram(mesh.shaderProgram);
+    glUniform1f(mesh.glUniShininess, shininess);
+    mesh.hasDefaultShininess = false;
+}
+void GLMeshCtrl::setSpecularStrength(GLMesh& mesh, float specularStrength) {
+    glUseProgram(mesh.shaderProgram);
+    glUniform1f(mesh.glUniSpecularStrength, specularStrength);
+    mesh.hasDefaultAmbientStrength = false;
 }
 void GLMeshCtrl::setOpacity(GLMesh& mesh, float opacity) {
     mesh.opacity = (opacity > 1) ? 1 : ((opacity < 0) ? 0 : opacity);
@@ -117,7 +127,7 @@ void GLMeshCtrl::setAmbientStrength(GLMesh& mesh, float ambientStrength) {
     mesh.hasDefaultAmbientStrength = false;
 }
 void GLMeshCtrl::setToDefaultColor(GLMesh& mesh) {
-    setColor(mesh, GLGlobalCtrl::getDefaultObjectColor(), true);
+    setDiffuseColor(mesh, GLGlobalCtrl::getDefaultObjectColor(), true);
     mesh.hasDefaultColor = true;
 }
 void GLMeshCtrl::setToDefaultAmbientColor(GLMesh& mesh) {
@@ -127,6 +137,14 @@ void GLMeshCtrl::setToDefaultAmbientColor(GLMesh& mesh) {
 void GLMeshCtrl::setToDefaultAmbientStrength(GLMesh& mesh) {
     setAmbientStrength(mesh, GLGlobalCtrl::getDefaultAmbientStrength());
     mesh.hasDefaultAmbientStrength = true;
+}
+void GLMeshCtrl::setToDefaultSpecularStrength(GLMesh& mesh) {
+    setSpecularStrength(mesh, GLGlobalCtrl::getDefaultSpecularStrength());
+    mesh.hasDefaultSpecularStrength = true;
+}
+void GLMeshCtrl::setToDefaultShininess(GLMesh& mesh) {
+    setShininess(mesh, GLGlobalCtrl::getDefaultShininess());
+    mesh.hasDefaultShininess = true;
 }
 
 void checkCompileErrors(unsigned int shader, char* type) {
@@ -247,7 +265,9 @@ void cleanGLObjectsGarbage() {
 glm::vec3 GLGlobalCtrl::viewBackgroundColor = glm::vec3(0.2f, 0.3f, 0.3f);
 glm::vec3 GLGlobalCtrl::defaultObjectColor = glm::vec3(0.f, 0.f, 0.f);
 glm::vec3 GLGlobalCtrl::defaultAmbientColor = glm::vec3(1.f, 1.f, 1.f);
-float GLGlobalCtrl::defaultAmbientStrength = float(.1f);
+float GLGlobalCtrl::defaultAmbientStrength = .1f;
+float GLGlobalCtrl::defaultSpecularStrength = .5f;
+float GLGlobalCtrl::defaultShininess = 32.f;
 
 void GLGlobalCtrl::setDeltaTime() {
     float currentFrame = glfwGetTime();
@@ -283,6 +303,12 @@ glm::vec3 GLGlobalCtrl::getDefaultAmbientColor() {
 float GLGlobalCtrl::getDefaultAmbientStrength() {
     return defaultAmbientStrength;
 }
+float GLGlobalCtrl::getDefaultSpecularStrength() {
+    return defaultSpecularStrength;
+}
+float GLGlobalCtrl::getDefaultShininess() {
+    return defaultShininess;
+}
 void GLGlobalCtrl::changeViewBackgroundColor(glm::vec3 color, bool normalized) {
     viewBackgroundColor = normalized ? color : color / 255.f;
 }
@@ -310,6 +336,22 @@ void GLGlobalCtrl::changeDefaultAmbientStrength(float ambientStrength) {
         }
     }
 }
+void GLGlobalCtrl::changeDefaultSpecularStrength(float specularStrength) {
+    defaultSpecularStrength = specularStrength;
+    for (std::vector<GLMesh*>::iterator it = meshesCollector.begin(); it != meshesCollector.end(); ++it) {
+        if ((*it)->isDefaultSpecularStrength()) {
+            GLMeshCtrl::setToDefaultSpecularStrength(**it);
+        }
+    }
+}
+void GLGlobalCtrl::changeDefaultShiness(float shininess) {
+    defaultShininess = shininess;
+    for (std::vector<GLMesh*>::iterator it = meshesCollector.begin(); it != meshesCollector.end(); ++it) {
+        if ((*it)->isDefaultShininess()) {
+            GLMeshCtrl::setToDefaultShininess(**it);
+        }
+    }
+}
 void GLGlobalCtrl::resetAllDefaultValues() {
     changeViewBackgroundColor(glm::vec3(0.2f, 0.3f, 0.3f), true);
     defaultObjectColor = glm::vec4(0.f, 0.f, 0.f, 1.f);
@@ -318,6 +360,10 @@ void GLGlobalCtrl::resetAllDefaultValues() {
     changeDefaultAmbientColor(defaultAmbientColor, true);
     defaultAmbientStrength = .1f;
     changeDefaultAmbientStrength(defaultAmbientStrength);
+    defaultSpecularStrength = .5f;
+    changeDefaultSpecularStrength(defaultSpecularStrength);
+    defaultShininess = 32.f;
+    changeDefaultSpecularStrength(defaultShininess);
 }
 void GLGlobalCtrl::resetAllMeshesColor() {
     for (std::vector<GLMesh*>::iterator it = meshesCollector.begin(); it != meshesCollector.end(); ++it) {
@@ -332,5 +378,15 @@ void GLGlobalCtrl::resetAllMeshesAmbientColor() {
 void GLGlobalCtrl::resetAllMeshesAmbientStrength() {
     for (std::vector<GLMesh*>::iterator it = meshesCollector.begin(); it != meshesCollector.end(); ++it) {
         GLMeshCtrl::setToDefaultAmbientStrength(**it);
+    }
+}
+void GLGlobalCtrl::resetAllMeshesSpecularStrength() {
+    for (std::vector<GLMesh*>::iterator it = meshesCollector.begin(); it != meshesCollector.end(); ++it) {
+        GLMeshCtrl::setToDefaultSpecularStrength(**it);
+    }
+}
+void GLGlobalCtrl::resetAllMeshesDefaultShininess() {
+    for (std::vector<GLMesh*>::iterator it = meshesCollector.begin(); it != meshesCollector.end(); ++it) {
+        GLMeshCtrl::setToDefaultShininess(**it);
     }
 }

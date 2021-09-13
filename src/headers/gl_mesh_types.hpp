@@ -31,9 +31,10 @@ protected:
     unsigned int vao, vbo;
     unsigned int verticesCount;
     unsigned int shaderProgram;
-    int glUniViewCameraPos, glUniObjectColor, glUniObjectOpacity, glUniAmbientColor, glUniAmbientStrength, 
-        glUniEnableTexture, glUniAffectedLightPos, glUniAffectedLightColor, glUniAffectedLightStrength;
-    bool hasDefaultColor{ true }, hasDefaultAmbientColor{ true }, hasDefaultAmbientStrength{ true };
+    int glUniViewCameraPos, glUniDiffuseColor, glUniDiffuseStrength, glUniObjectOpacity, glUniAmbientColor, glUniAmbientStrength, 
+        glUniEnableTexture, glUniAffectedLightPos, glUniAffectedLightColor, glUniAffectedLightStrength, glUniSpecularStrength, glUniShininess;
+    bool hasDefaultColor{ true }, hasDefaultAmbientColor{ true }, hasDefaultAmbientStrength{ true }, hasDefaultSpecularStrength{ true },
+        hasDefaultShininess{ true };
 
     // @Functions below are called by global control.
     void setTextureWrapFilter(unsigned int wrap_s, unsigned int wrap_t, unsigned int min_filter, unsigned int max_filter);
@@ -45,10 +46,12 @@ public:
     bool isDefaultColor(); // @Check if the mesh's color is default world color.
     bool isDefaultAmbientColor();
     bool isDefaultAmbientStrength();
+    bool isDefaultSpecularStrength();
+    bool isDefaultShininess();
 
     std::string& getName();
     glm::vec3& getPosition();
-    glm::vec3& getColor();
+    glm::vec3& getDiffuseColor();
     glm::vec3& getAmbientColor();
     float getOpacity();
     float getAmbientStrength();

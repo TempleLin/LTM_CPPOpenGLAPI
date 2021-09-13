@@ -3,7 +3,6 @@ out vec4 FragColor;
   
 struct Colors{
     vec3 objectColor;
-    // @Ambient light is the minimum light around. Making it not completely dark.
     vec3 ambientColor;
     vec3 lightColor;
 };
@@ -13,14 +12,17 @@ struct Strengths{
     float lightStrength;
     float specularStrength;
     float shininess;
-    float objectOpacity;
 };
 
-uniform Colors colors;
-uniform Strengths strengths;
-
 uniform vec3 cameraViewPos;
+uniform vec3 objectColor;
+// @Ambient light is the minimum light around. Making it not completely dark.
+uniform vec3 ambientColor;
+uniform float ambientStrength;
+uniform vec3 lightColor;
 uniform vec3 lightPos;
+uniform float lightStrength;
+uniform float objectOpacity;
 
 in vec3 FragPos; // @Position of the fragment(vertex) in world space.
 in vec2 TexCoord;
@@ -36,11 +38,11 @@ void main()
     // @The more perpendicular the light and fragment angle, the higher the brightness.
     float diff = max(dot(norm, lightDir), 0.0); 
 
-    vec3 diffuse = diff * colors.lightColor * strengths.lightStrength;
+    vec3 diffuse = diff * lightColor * lightStrength;
 
-    vec3 ambient = colors.ambientColor * strengths.ambientStrength;
+    vec3 ambient = ambientColor * ambientStrength;
 
-//    float specularStrength = 0.5; //temp
+    float specularStrength = 0.5; //temp
 
     // @Vector direction from view to fragment.
     vec3 viewDir = normalize(cameraViewPos - FragPos);
@@ -48,14 +50,14 @@ void main()
     vec3 reflectDir = reflect(-lightDir, norm);
 
     // @Using power, the more center of reflection point, the stronger the specular.
-    float spec = pow(max(dot(viewDir, reflectDir), 0.0), strengths.shininess);
-    vec3 specular = strengths.specularStrength * spec * colors.lightColor * strengths.lightStrength;  
+    float spec = pow(max(dot(viewDir, reflectDir), 0.0), 32);
+    vec3 specular = specularStrength * spec * lightColor * lightStrength;  
 
     if (enableTexture){
         // @Multiply the texture by color mixes the RGB color and texture.
-        FragColor = texture(ourTexture, TexCoord) * vec4(((ambient + diffuse + specular) * colors.objectColor), 1);
+        FragColor = texture(ourTexture, TexCoord) * vec4(((ambient + diffuse + specular) * objectColor), 1);
     } else {
-        FragColor = vec4(((ambient + diffuse + specular) * colors.objectColor), 1);
+        FragColor = vec4(((ambient + diffuse + specular) * objectColor), 1);
     }
-    FragColor.a = strengths.objectOpacity;
+    FragColor.a = objectOpacity;
 }

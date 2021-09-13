@@ -33,7 +33,7 @@ int main() {
     createVBOs(2, vbos);
     GLBasicCubeMesh basicCube0("Basic Lighting Cube 0", glm::vec3(0.5f, 0.8f, -1.0f), shaderProgramHandle, vaos[0], vbos[0]);
     GLMeshCtrl::setTexture0(basicCube0, "assets/imgs/360_F_144681519_gw1oCkcy5WzZ6RI9utXh61eIWkgcdiZ9.jpg");
-    GLMeshCtrl::setColor(basicCube0, glm::vec3(1, 1, 1), true);
+    GLMeshCtrl::setDiffuseColor(basicCube0, glm::vec3(1, 1, 1), true);
 
     createShaderProgram(vertexShaderHandle, "shaders/shaderVS.glsl", fragmentShaderHandle, "shaders/shaderFS.glsl", shaderProgramHandle);
     GLEmmiterbleCubeMesh emitterbleCube0("Emitterble Cube 0", glm::vec3(-10.f, -10.f, -10.f), shaderProgramHandle, vaos[1], vbos[1], 10.0f);
@@ -51,11 +51,15 @@ int main() {
     GLGlobalCtrl::resetAllMeshesColor();
     GLGlobalCtrl::changeDefaultColor(glm::vec3(1, 1, 1), true);
     GLGlobalCtrl::changeDefaultAmbientStrength(.1f);
-    GLMeshCtrl::setColor(emitterbleCube0, glm::vec3(0, 1, 1), true);
-    GLMeshCtrl::setColor(basicCube0, glm::vec3(1, 0, 1), true);
+    GLMeshCtrl::setDiffuseColor(emitterbleCube0, glm::vec3(0, 1, 1), true);
+    GLMeshCtrl::setDiffuseColor(basicCube0, glm::vec3(1, 0, 1), true);
     GLMeshCtrl::setAmbientStrength(basicCube0, 1.f);
     GLMeshCtrl::setAmbientColor(basicCube0, glm::vec3(1, 1, 1), true);
     GLMeshCtrl::setOpacity(basicCube0, 1.f);
+    GLGlobalCtrl::changeDefaultShiness(128);
+    GLGlobalCtrl::changeDefaultSpecularStrength(1.f);
+    GLMeshCtrl::setShininess(basicCube0, 32.f);
+    GLMeshCtrl::setSpecularStrength(basicCube0, .5f);
 
     while (!glfwWindowShouldClose(window)) {
         glfwPollEvents();
