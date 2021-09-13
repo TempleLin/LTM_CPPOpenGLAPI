@@ -32,19 +32,13 @@ int main() {
     createVAOs(2, vaos);
     createVBOs(2, vbos);
     GLBasicCubeMesh basicCube0("Basic Lighting Cube 0", glm::vec3(0.5f, 0.8f, -1.0f), shaderProgramHandle, vaos[0], vbos[0]);
-    GLMeshCtrl::setDiffuseMap(basicCube0, "assets/imgs/container2.png", true);
-    GLMeshCtrl::setSpecularMap(basicCube0, "assets/imgs/container2_specular.png", true);
-    GLMeshCtrl::overrideDiffuseColor(basicCube0, glm::vec3(1, 1, 1), true);
-    GLMeshCtrl::overrideAmbientStrength(basicCube0, .2f);
-    GLMeshCtrl::overrideSpecularStrength(basicCube0, 1.0f);
+    
 
     createShaderProgram(vertexShaderHandle, "shaders/shaderVS.glsl", fragmentShaderHandle, "shaders/shaderFS.glsl", shaderProgramHandle);
-    GLEmmiterbleCubeMesh emitterbleCube0("Emitterble Cube 0", glm::vec3(-10.f, -10.f, -10.f), shaderProgramHandle, vaos[1], vbos[1], 10.0f);
+    GLEmmiterbleCubeMesh emitterbleCube0("Emitterble Cube 0", glm::vec3(-1.f, -1.f, -1.f), shaderProgramHandle, vaos[1], vbos[1], 10.0f);
     emitterbleCube0.enableLightEmit();
-    emitterbleCube0.changeLightStrength(.7f);
-    //GLMeshCtrl::overrideAmbientStrength(emitterbleCube0, .3f);
-    GLMeshCtrl::overrideDiffuseColor(emitterbleCube0, glm::vec3(1, 1, 1), true);
-    GLMeshCtrl::overrideAmbientColor(emitterbleCube0, glm::vec3(1, 1, 1), true);
+    emitterbleCube0.changeLightStrength(1.f);
+
 
     // Our state (Dear ImGUI)
     bool show_demo_window = true;
@@ -52,21 +46,17 @@ int main() {
     ImVec4 clear_color = ImVec4(0.45f, 0.55f, 0.60f, 1.00f);
 
     {
-        GLMeshCtrl::overrideShininess(basicCube0, 64);
-        /*GLGlobalCtrl::enableMeshesTransparency();
-        GLGlobalCtrl::resetAllMeshesColor();
-        GLGlobalCtrl::changeDefaultColor(glm::vec3(1, 1, 1), true);
-        GLGlobalCtrl::changeDefaultAmbientStrength(.1f);
-        GLMeshCtrl::overrideDiffuseColor(emitterbleCube0, glm::vec3(0, 1, 1), true);
-        GLMeshCtrl::overrideDiffuseColor(basicCube0, glm::vec3(1, 0, 1), true);
-        GLMeshCtrl::overrideAmbientStrength(basicCube0, 1.f);
-        GLMeshCtrl::overrideAmbientColor(basicCube0, glm::vec3(1, 1, 1), true);
-        GLMeshCtrl::setOpacity(basicCube0, 1.f);
-        GLGlobalCtrl::changeDefaultShininess(128);
-        GLGlobalCtrl::changeDefaultSpecularStrength(1.f);
-        GLMeshCtrl::overrideShininess(basicCube0, 32.f);
-        GLMeshCtrl::overrideSpecularStrength(basicCube0, .5f);
-        GLMeshCtrl::overrideDiffuseColor(emitterbleCube0, glm::vec3(1, .3f, .2f), true);*/
+        GLGlobalCtrl::enableMeshesTransparency();
+
+        GLMeshCtrl::overrideShininess(basicCube0, 16);
+        GLMeshCtrl::setDiffuseMap(basicCube0, "assets/imgs/container2.png", true);
+        GLMeshCtrl::setSpecularMap(basicCube0, "assets/imgs/container2_specular.png", true);
+        GLMeshCtrl::overrideDiffuseColor(basicCube0, glm::vec3(1, 1, 1), true);
+        GLMeshCtrl::overrideAmbientStrength(basicCube0, .2f);
+        GLMeshCtrl::overrideSpecularStrength(basicCube0, 1.0f);
+
+        GLMeshCtrl::overrideDiffuseColor(emitterbleCube0, glm::vec3(1, 1, 1), true);
+        GLMeshCtrl::overrideAmbientColor(emitterbleCube0, glm::vec3(1, 1, 1), true);
     }
     
 
@@ -130,7 +120,7 @@ int main() {
 
         GLMeshCtrl::setMeshCoordSystem(emitterbleCube0);
         GLMeshCtrl::setBasicMeshSpawnPos(emitterbleCube0);
-        GLMeshCtrl::spinBasicMeshAnim(emitterbleCube0);
+        //GLMeshCtrl::spinBasicMeshAnim(emitterbleCube0);
         GLMeshCtrl::drawBasicMesh(emitterbleCube0);
 
         processInput(window);
