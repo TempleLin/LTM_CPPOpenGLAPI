@@ -130,8 +130,39 @@ void testPrintFriendClassMember() {
 	c.printA(b);
 }
 
+class A {
+protected:
+	int test;
+public:
+	A() {
+		test = 12;
+	}
+	int getTest() {
+		return test;
+	}
+};
+
+class B : public A {
+protected:
+	int test2;
+public:
+	B() {
+		test2 = 13;
+	}
+	int getTest2() {
+		return test2;
+	}
+};
+
+void testDownCast() {
+	A* testing = new B();
+	std::cout << testing->getTest() << "\n";
+	/*B testing2 = static_cast<B>(*testing);*/ //Cannot downcast.
+}
+
 int main(){
 	//testGLMPassDuration();
 	//testNestedTernaryOperator();
-	testPrintFriendClassMember();
+	//testPrintFriendClassMember();
+	//testDownCast();
 }

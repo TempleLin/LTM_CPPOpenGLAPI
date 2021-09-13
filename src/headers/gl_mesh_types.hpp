@@ -20,11 +20,11 @@ class GLMesh {
     friend class GLGlobalCtrl;
 protected:
     glm::mat4 modelMatrix = glm::mat4{ 1.f };
-    bool enableTexture = false;
+    bool diffMapEnabled{ false }, specMapEnabled{ false };
     std::string name;
     glm::vec3 position;
     float* vertices;
-    unsigned int* texture0 = nullptr;
+    unsigned int* texture0{ nullptr }, *texture1{ nullptr };
     glm::vec3 color, ambientColor;
     float opacity;
     float ambientStrength;
@@ -32,7 +32,7 @@ protected:
     unsigned int verticesCount;
     unsigned int shaderProgram;
     int glUniViewCameraPos, glUniDiffuseColor, glUniDiffuseStrength, glUniObjectOpacity, glUniAmbientColor, glUniAmbientStrength, 
-        glUniEnableTexture, glUniAffectedLightPos, glUniAffectedLightColor, glUniAffectedLightStrength, glUniSpecularStrength, glUniShininess;
+        glUniDiffuseMapEnabled, glUniSpecularMapEnabled, glUniAffectedLightPos, glUniAffectedLightColor, glUniAffectedLightStrength, glUniSpecularStrength, glUniShininess;
     bool hasDefaultColor{ true }, hasDefaultAmbientColor{ true }, hasDefaultAmbientStrength{ true }, hasDefaultSpecularStrength{ true },
         hasDefaultShininess{ true };
 
@@ -42,7 +42,9 @@ protected:
     void detectViewCameraPos(glm::vec3& cameraPos);
 public:
     GLMesh(std::string meshName, glm::vec3 position, unsigned int shaderProgram, unsigned int vao, unsigned int vbo);
-    bool isTextureEnabled();
+    bool isDiffuseMapEnabled();
+    bool isSpecularMapEnabled();
+
     bool isDefaultColor(); // @Check if the mesh's color is default world color.
     bool isDefaultAmbientColor();
     bool isDefaultAmbientStrength();
@@ -55,7 +57,8 @@ public:
     glm::vec3& getAmbientColor();
     float getOpacity();
     float getAmbientStrength();
-    unsigned int getTexture0();
+    unsigned int getTexture0_diffuse();
+    unsigned int getTexture1_specular();
     unsigned int& getVAO();
     unsigned int& getVBO();
     unsigned int& getShaderProgram();

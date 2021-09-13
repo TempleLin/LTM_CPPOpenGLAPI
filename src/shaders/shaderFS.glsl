@@ -25,8 +25,10 @@ uniform vec3 lightPos;
 in vec3 FragPos; // @Position of the fragment(vertex) in world space.
 in vec2 TexCoord;
 in vec3 Normal;
-uniform sampler2D ourTexture;
-uniform bool enableTexture;
+uniform sampler2D diffuseMap;
+uniform sampler2D specMap;
+uniform bool diffuseMapEnabled;
+uniform bool specularMapEnabled;
 
 void main()
 {
@@ -48,12 +50,16 @@ void main()
     // @Using power, the more center of reflection point, the stronger the specular.
     float spec = pow(max(dot(viewDir, reflectDir), 0.0), strengths.shininess);
     vec3 specular = strengths.specularStrength * spec * colors.lightColor * strengths.lightStrength;  
+    if (specularMapEnabled){
+        specular *= vec3(texture(specMap, TexCoord));
+    }
 
-    if (enableTexture){
+    if (diffuseMapEnabled){
         // @Multiply the texture by color mixes the RGB color and texture.
-        FragColor = texture(ourTexture, TexCoord) * vec4(((ambient + diffuse + specular) * colors.objectColor), 1);
+        FragColor = texture(diffuseMap, TexCoord) * vec4(((ambient + diffuse + specular) * colors.objectColor), 1);
     } else {
         FragColor = vec4(((ambient + diffuse + specular) * colors.objectColor), 1);
     }
+    
     FragColor.a = strengths.objectOpacity;
 }

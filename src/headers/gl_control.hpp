@@ -16,7 +16,8 @@ public:
 	static void spinBasicMeshAnim(GLMesh& mesh);
 	static void drawBasicMesh(GLMesh& mesh);
 
-	static void setTexture0(GLMesh& mesh, std::string texturePath);
+	static void setDiffuseMap(GLMesh& mesh, std::string texturePath, bool hasAlpha);
+	static void setSpecularMap(GLMesh& mesh, std::string texturePath, bool hasAlpha);
 	static void overrideDiffuseColor(GLMesh& mesh, glm::vec3 color, bool isNormalized);
 	static void setOpacity(GLMesh& mesh, float opacity);
 	static void overrideAmbientColor(GLMesh& mesh, glm::vec3 ambientColor, bool isNormalized);

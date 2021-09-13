@@ -42,20 +42,24 @@ void GLMeshCtrl::drawBasicMesh(GLMesh& mesh) {
     glBindVertexArray(mesh.vao);
     static unsigned int modelLoc = glGetUniformLocation(mesh.shaderProgram, "model");
     glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(mesh.modelMatrix));
-    if (mesh.isTextureEnabled()) {
+    if (mesh.isDiffuseMapEnabled()) {
         glActiveTexture(GL_TEXTURE0);
-        glBindTexture(GL_TEXTURE_2D, mesh.getTexture0());
+        glBindTexture(GL_TEXTURE_2D, mesh.getTexture0_diffuse());
     } else {
         glActiveTexture(0);
         glBindTexture(GL_TEXTURE_2D, 0);
+    }
+    if (mesh.isSpecularMapEnabled()) {
+        glActiveTexture(GL_TEXTURE1);
+        glBindTexture(GL_TEXTURE_2D, mesh.getTexture1_specular());
     }
     glUseProgram(mesh.shaderProgram);
     glDrawArrays(GL_TRIANGLES, 0, mesh.verticesCount);
 }
 
-void GLMeshCtrl::setTexture0(GLMesh& mesh, std::string texturePath) {
-    mesh.enableTexture = true;
-    glUniform1ui(mesh.glUniEnableTexture, true);
+void GLMeshCtrl::setDiffuseMap(GLMesh& mesh, std::string texturePath, bool hasAlpha) {
+    mesh.diffMapEnabled = true;
+    glUniform1ui(mesh.glUniDiffuseMapEnabled, true);
     mesh.texture0 = new GLuint(0);
     glGenTextures(1, mesh.texture0);
     glBindTexture(GL_TEXTURE_2D, *(mesh.texture0));
@@ -65,15 +69,43 @@ void GLMeshCtrl::setTexture0(GLMesh& mesh, std::string texturePath) {
     int width, height, nrChannels;
     unsigned char* data = loadImage(PROJECT_SOURCE_RELATIVEPATH + texturePath, width, height, nrChannels);
     if (data) {
-        glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, data);
+        if (hasAlpha)
+            glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, data);
+        else
+            glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, data);
         glGenerateMipmap(GL_TEXTURE_2D);
         freeImage(*data);
     } else {
-        std::cout << "Failed to load texture." << std::endl;
+        std::cout << "Failed to load diffuse map texture." << std::endl;
     }
     glUseProgram(mesh.shaderProgram);
-    int ourTexture = glGetUniformLocation(mesh.shaderProgram, "ourTexture");
-    glUniform1i(ourTexture, 0);
+    int diffuseTexture = glGetUniformLocation(mesh.shaderProgram, "diffuseMap");
+    glUniform1i(diffuseTexture, 0);
+}
+void GLMeshCtrl::setSpecularMap(GLMesh& mesh, std::string texturePath, bool hasAlpha) {
+    mesh.specMapEnabled = true;
+    glUniform1ui(mesh.glUniSpecularMapEnabled, true);
+    mesh.texture1 = new GLuint(0);
+    glGenTextures(1, mesh.texture1);
+    glBindTexture(GL_TEXTURE_2D, *(mesh.texture1));
+
+    mesh.setTextureWrapFilter(GL_REPEAT, GL_REPEAT, GL_LINEAR, GL_LINEAR);
+
+    int width, height, nrChannels;
+    unsigned char* data = loadImage(PROJECT_SOURCE_RELATIVEPATH + texturePath, width, height, nrChannels);
+    if (data) {
+        if (hasAlpha)
+            glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, data);
+        else
+            glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, data);
+        glGenerateMipmap(GL_TEXTURE_2D);
+        freeImage(*data);
+    } else {
+        std::cout << "Failed to load specular map texture." << std::endl;
+    }
+    glUseProgram(mesh.shaderProgram);
+    int specTexture = glGetUniformLocation(mesh.shaderProgram, "specMap");
+    glUniform1i(specTexture, 1);
 }
 void GLMeshCtrl::overrideDiffuseColor(GLMesh& mesh, glm::vec3 color, bool isNormalized) {
     if (isNormalized) {

@@ -41,7 +41,8 @@ GLMesh::GLMesh(std::string meshName, glm::vec3 position, unsigned int shaderProg
     this->ambientStrength = GLGlobalCtrl::getDefaultAmbientStrength();
     this->opacity = 1.f;
     this->glUniViewCameraPos = glGetUniformLocation(this->shaderProgram, "cameraViewPos");
-    this->glUniEnableTexture = glGetUniformLocation(this->shaderProgram, "enableTexture");
+    this->glUniDiffuseMapEnabled = glGetUniformLocation(this->shaderProgram, "diffuseMapEnabled");
+    this->glUniSpecularMapEnabled = glGetUniformLocation(this->shaderProgram, "specularMapEnabled");
     this->glUniDiffuseColor = glGetUniformLocation(this->shaderProgram, "colors.objectColor");
     this->glUniObjectOpacity = glGetUniformLocation(this->shaderProgram, "strengths.objectOpacity");
     this->glUniAmbientColor = glGetUniformLocation(this->shaderProgram, "colors.ambientColor");
@@ -52,7 +53,8 @@ GLMesh::GLMesh(std::string meshName, glm::vec3 position, unsigned int shaderProg
     this->glUniSpecularStrength = glGetUniformLocation(this->shaderProgram, "strengths.specularStrength");
     this->glUniShininess = glGetUniformLocation(this->shaderProgram, "strengths.shininess");
     glUniform3fv(glUniViewCameraPos, 1, &cameraPos[0]);
-    glUniform1ui(glUniEnableTexture, false);
+    glUniform1ui(glUniDiffuseMapEnabled, false);
+    glUniform1ui(glUniSpecularMapEnabled, false);
     glUniform3fv(glUniDiffuseColor, 1, &GLGlobalCtrl::getDefaultObjectColor()[0]);
     glUniform1f(glUniObjectOpacity, opacity);
     glUniform3fv(glUniAmbientColor, 1, &GLGlobalCtrl::getDefaultAmbientColor()[0]);
@@ -72,8 +74,11 @@ void GLMesh::setTextureWrapFilter(unsigned int wrap_s, unsigned int wrap_t, unsi
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, max_filter);
 }
 
-bool GLMesh::isTextureEnabled() {
-    return this->enableTexture;
+bool GLMesh::isDiffuseMapEnabled() {
+    return this->diffMapEnabled;
+}
+bool GLMesh::isSpecularMapEnabled() {
+    return this->specMapEnabled;
 }
 bool GLMesh::isDefaultColor() {
     return this->hasDefaultColor;
@@ -119,8 +124,11 @@ float GLMesh::getOpacity() {
 float GLMesh::getAmbientStrength() {
     return this->ambientStrength;
 }
-unsigned int GLMesh::getTexture0() {
+unsigned int GLMesh::getTexture0_diffuse() {
     return texture0 ? *texture0 : NULL;
+}
+unsigned int GLMesh::getTexture1_specular() {
+    return texture1 ? *texture1 : NULL;
 }
 unsigned int& GLMesh::getVAO() {
     return this->vao;
