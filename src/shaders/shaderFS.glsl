@@ -40,8 +40,6 @@ void main()
 
     vec3 ambient = colors.ambientColor * strengths.ambientStrength;
 
-//    float specularStrength = 0.5; //temp
-
     // @Vector direction from view to fragment.
     vec3 viewDir = normalize(cameraViewPos - FragPos);
     // @Vectoyr direction of reflection from light passing with normal as reflection point.
