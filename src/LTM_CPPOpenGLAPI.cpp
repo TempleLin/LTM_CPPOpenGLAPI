@@ -33,14 +33,14 @@ int main() {
     createVBOs(2, vbos);
     GLBasicCubeMesh basicCube0("Basic Lighting Cube 0", glm::vec3(0.5f, 0.8f, -1.0f), shaderProgramHandle, vaos[0], vbos[0]);
     GLMeshCtrl::setTexture0(basicCube0, "assets/imgs/360_F_144681519_gw1oCkcy5WzZ6RI9utXh61eIWkgcdiZ9.jpg");
-    GLMeshCtrl::setDiffuseColor(basicCube0, glm::vec3(1, 1, 1), true);
+    GLMeshCtrl::overrideDiffuseColor(basicCube0, glm::vec3(1, 1, 1), true);
 
     createShaderProgram(vertexShaderHandle, "shaders/shaderVS.glsl", fragmentShaderHandle, "shaders/shaderFS.glsl", shaderProgramHandle);
     GLEmmiterbleCubeMesh emitterbleCube0("Emitterble Cube 0", glm::vec3(-10.f, -10.f, -10.f), shaderProgramHandle, vaos[1], vbos[1], 10.0f);
     emitterbleCube0.enableLightEmit();
     emitterbleCube0.changeLightStrength(5.f);
-    GLMeshCtrl::setAmbientStrength(emitterbleCube0, 1.f);
-    GLMeshCtrl::setAmbientColor(emitterbleCube0, glm::vec3(1, 1, 1), true);
+    GLMeshCtrl::overrideAmbientStrength(emitterbleCube0, 1.f);
+    GLMeshCtrl::overrideAmbientColor(emitterbleCube0, glm::vec3(1, 1, 1), true);
 
     // Our state (Dear ImGUI)
     bool show_demo_window = true;
@@ -51,15 +51,16 @@ int main() {
     GLGlobalCtrl::resetAllMeshesColor();
     GLGlobalCtrl::changeDefaultColor(glm::vec3(1, 1, 1), true);
     GLGlobalCtrl::changeDefaultAmbientStrength(.1f);
-    GLMeshCtrl::setDiffuseColor(emitterbleCube0, glm::vec3(0, 1, 1), true);
-    GLMeshCtrl::setDiffuseColor(basicCube0, glm::vec3(1, 0, 1), true);
-    GLMeshCtrl::setAmbientStrength(basicCube0, 1.f);
-    GLMeshCtrl::setAmbientColor(basicCube0, glm::vec3(1, 1, 1), true);
+    GLMeshCtrl::overrideDiffuseColor(emitterbleCube0, glm::vec3(0, 1, 1), true);
+    GLMeshCtrl::overrideDiffuseColor(basicCube0, glm::vec3(1, 0, 1), true);
+    GLMeshCtrl::overrideAmbientStrength(basicCube0, 1.f);
+    GLMeshCtrl::overrideAmbientColor(basicCube0, glm::vec3(1, 1, 1), true);
     GLMeshCtrl::setOpacity(basicCube0, 1.f);
     GLGlobalCtrl::changeDefaultShiness(128);
     GLGlobalCtrl::changeDefaultSpecularStrength(1.f);
-    GLMeshCtrl::setShininess(basicCube0, 32.f);
-    GLMeshCtrl::setSpecularStrength(basicCube0, .5f);
+    GLMeshCtrl::overrideShininess(basicCube0, 32.f);
+    GLMeshCtrl::overrideSpecularStrength(basicCube0, .5f);
+    GLMeshCtrl::overrideDiffuseColor(emitterbleCube0, glm::vec3(1, .3f, .2f), true);
 
     while (!glfwWindowShouldClose(window)) {
         glfwPollEvents();

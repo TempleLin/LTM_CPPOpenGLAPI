@@ -17,17 +17,17 @@ public:
 	static void drawBasicMesh(GLMesh& mesh);
 
 	static void setTexture0(GLMesh& mesh, std::string texturePath);
-	static void setDiffuseColor(GLMesh& mesh, glm::vec3 color, bool isNormalized);
+	static void overrideDiffuseColor(GLMesh& mesh, glm::vec3 color, bool isNormalized);
 	static void setOpacity(GLMesh& mesh, float opacity);
-	static void setAmbientColor(GLMesh& mesh, glm::vec3 ambientColor, bool isNormalized);
-	static void setAmbientStrength(GLMesh& mesh, float ambientStrength);
-	static void setSpecularStrength(GLMesh& mesh, float specularStrength);
-	static void setShininess(GLMesh& mesh, float shininess);
-	static void setToDefaultColor(GLMesh& mesh); // @Resets to world value defaultObjectColor
-	static void setToDefaultAmbientColor(GLMesh& mesh); // @Resets to world value defaultAmbientColor
-	static void setToDefaultAmbientStrength(GLMesh& mesh); // @Resets to world value defaultAmbientStrength
-	static void setToDefaultSpecularStrength(GLMesh& mesh);
-	static void setToDefaultShininess(GLMesh& mesh);
+	static void overrideAmbientColor(GLMesh& mesh, glm::vec3 ambientColor, bool isNormalized);
+	static void overrideAmbientStrength(GLMesh& mesh, float ambientStrength);
+	static void overrideSpecularStrength(GLMesh& mesh, float specularStrength);
+	static void overrideShininess(GLMesh& mesh, float shininess);
+	static void resetToDefaultColor(GLMesh& mesh); // @Resets to world value defaultObjectColor
+	static void resetToDefaultAmbientColor(GLMesh& mesh); // @Resets to world value defaultAmbientColor
+	static void resetToDefaultAmbientStrength(GLMesh& mesh); // @Resets to world value defaultAmbientStrength
+	static void resetToDefaultSpecularStrength(GLMesh& mesh);
+	static void resetToDefaultShininess(GLMesh& mesh);
 };
 
 
