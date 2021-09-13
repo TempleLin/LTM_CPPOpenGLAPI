@@ -70,7 +70,7 @@ public:
 	static void changeDefaultAmbientColor(glm::vec3 ambientColor, bool normalized);
 	static void changeDefaultAmbientStrength(float ambientStrength);
 	static void changeDefaultSpecularStrength(float specularStrength);
-	static void changeDefaultShiness(float shininess);
+	static void changeDefaultShininess(float shininess);
 
 	static void resetAllDefaultValues();
 	static void resetAllMeshesColor();

@@ -56,7 +56,7 @@ int main() {
     GLMeshCtrl::overrideAmbientStrength(basicCube0, 1.f);
     GLMeshCtrl::overrideAmbientColor(basicCube0, glm::vec3(1, 1, 1), true);
     GLMeshCtrl::setOpacity(basicCube0, 1.f);
-    GLGlobalCtrl::changeDefaultShiness(128);
+    GLGlobalCtrl::changeDefaultShininess(128);
     GLGlobalCtrl::changeDefaultSpecularStrength(1.f);
     GLMeshCtrl::overrideShininess(basicCube0, 32.f);
     GLMeshCtrl::overrideSpecularStrength(basicCube0, .5f);
@@ -105,7 +105,6 @@ int main() {
                 show_another_window = false;
             ImGui::End();
         }
-
         // @glClearColor does not do any clearing itself -- it just sets what the color will be when you do actually clear. 
         glClearColor(GLGlobalCtrl::getViewBackgroundColor().r, GLGlobalCtrl::getViewBackgroundColor().g,
             GLGlobalCtrl::getViewBackgroundColor().b, 1);

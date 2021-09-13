@@ -91,7 +91,7 @@ void GLGlobalCtrl::changeDefaultSpecularStrength(float specularStrength) {
         }
     }
 }
-void GLGlobalCtrl::changeDefaultShiness(float shininess) {
+void GLGlobalCtrl::changeDefaultShininess(float shininess) {
     defaultShininess = shininess;
     for (std::vector<GLMesh*>::iterator it = meshesCollector.begin(); it != meshesCollector.end(); ++it) {
         if ((*it)->isDefaultShininess()) {
