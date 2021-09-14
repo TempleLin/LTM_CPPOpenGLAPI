@@ -146,8 +146,10 @@ unsigned int GLMesh::getVerticesCount() {
 GLMesh::~GLMesh() {
     delete[] vertices;
     delete texture0;
+    delete texture1;
     vertices = nullptr;
     texture0 = nullptr;
+    texture1 = nullptr;
 }
 
 GLBasicCubeMesh::GLBasicCubeMesh(std::string meshName, glm::vec3 position, unsigned int shaderProgram, unsigned int vao, unsigned int vbo) : GLMesh(meshName, position, shaderProgram, vao, vbo) {
