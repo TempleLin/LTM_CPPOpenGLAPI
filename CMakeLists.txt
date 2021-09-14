@@ -65,15 +65,30 @@ add_subdirectory(external/glfw)
 
 #---INSTALL DEAR IMGUI AS LIBARY-----------------------------------------------------------------
 
-
 list(APPEND DEAR_IMGUI_INCLUDE 
     "external/dear_imgui"
     "external/dear_imgui/backends"
 )
 
-
 #------------------------------------------------------------------------------------------------
 
+
+#---find SFML 2.5--------------------------------------------------------------------------------
+
+add_subdirectory(external/sfml)
+set(SFML_DIR "${PROJECT_SOURCE_DIR}/external/sfml/build")
+find_package(SFML 2.5 COMPONENTS graphics window system audio network REQUIRED)
+
+if (WIN32)
+    set(SFML_STATIC_LIBRARIES TRUE)
+endif()
+if (CMAKE_BUILD_TYPE EQUAL "Release")
+    set(SFML_LINK_DIR "${SFML_DIR}/lib/Release")
+else()
+    set(SFML_LINK_DIR "${SFML_DIR}/lib/Debug")
+endif()
+
+#------------------------------------------------------------------------------------------------
 
 
 #---CREATE AND LINK DIRS FIRST BEFORE ADDING SUBDIRECTORIES TO PASS VARS TO IT----------------------------
@@ -86,9 +101,11 @@ list(APPEND PROJECT_INCLUDE_DIRS
     PUBLIC "${CMAKE_SOURCE_DIR}/external/glm"
     PUBLIC "${CMAKE_SOURCE_DIR}/external/stb_image"
     PUBLIC "${CMAKE_SOURCE_DIR}/external/dear_imgui"
+    PUBLIC "${PROJECT_SOURCE_DIR}/external/sfml/include"
 )
 list(APPEND PROJECT_LINK_DIRS
     PUBLIC "${CMAKE_SOURCE_DIR}/external/glfw/src"
+    PUBLIC "${SFML_LINK_DIR}"
 )
 
 
@@ -105,6 +122,7 @@ target_link_directories(${PROJECT_NAME}
 
 target_link_libraries(${PROJECT_NAME} 
     glfw
+    sfml-system sfml-window sfml-graphics sfml-network sfml-audio
 )
 
 #--------------------------------------------------------------------------------------------------------------------------------

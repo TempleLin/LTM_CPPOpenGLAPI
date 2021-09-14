@@ -1,6 +1,5 @@
 #include "headers/image_edit.hpp"
 
-#define STB_IMAGE_IMPLEMENTATION
 #include <stb_image.h>
 
 unsigned char* loadImage(std::string texturePath, int& width, int& height, int& nrChannels) {
