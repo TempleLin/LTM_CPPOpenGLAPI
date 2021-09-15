@@ -193,10 +193,17 @@ void testSFMLWindow() {
 	}
 }
 
+void testDotProduct() {
+	glm::vec3 test(0.1f, .3f, .5f), test2(.8f, .7f, .4f);
+	std::cout << glm::dot(test, test2) << std::endl;
+	std::cout << glm::dot(-test, -test2) << std::endl;
+}
+
 int main(){
 	//testGLMPassDuration();
 	//testNestedTernaryOperator();
 	//testPrintFriendClassMember();
 	//testDownCast();
-	testSFMLWindow();
+	//testSFMLWindow();
+	testDotProduct();
 }
