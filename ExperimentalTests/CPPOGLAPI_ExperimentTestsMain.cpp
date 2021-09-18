@@ -7,6 +7,8 @@
 #include <SFML/Audio.hpp>
 #include <SFML/Graphics.hpp>
 
+#include <bitset>
+
 #include <CPPOGLAPI_ExperimentTestsConfig.h>
 
 
@@ -199,11 +201,32 @@ void testDotProduct() {
 	std::cout << glm::dot(-test, -test2) << std::endl;
 }
 
+void testBitwiseOperation() {
+	int a, b, c, d;
+	a = 5;
+	b = 1;
+	d = 3;
+	c = 0;
+
+	c = (a << 6 | b << 3 | d);
+
+	//std::bitset<9> e(c);
+
+	std::cout << c << "\n";
+	if (c == 0b10100101100) {
+		std::cout << "TRUE" << std::endl;
+	}
+	if (c == 0b101001011) {
+		std::cout << "TRUE2" << std::endl;
+	}
+}
+
 int main(){
 	//testGLMPassDuration();
 	//testNestedTernaryOperator();
 	//testPrintFriendClassMember();
 	//testDownCast();
 	//testSFMLWindow();
-	testDotProduct();
+	//testDotProduct();
+	testBitwiseOperation();
 }

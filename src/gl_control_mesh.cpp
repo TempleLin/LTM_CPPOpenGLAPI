@@ -1,6 +1,6 @@
 #include "headers/gl_control.hpp"
 #include "headers/gl_values.hpp"
-#include "headers/image_edit.hpp"
+#include "headers/assets_edit.hpp"
 #include <LTM_CPPOpenGLAPIConfig.h>
 
 #include <glad/glad.h>
@@ -67,7 +67,7 @@ void GLMeshCtrl::setDiffuseMap(GLMesh& mesh, std::string texturePath, bool hasAl
     mesh.setTextureWrapFilter(GL_REPEAT, GL_REPEAT, GL_LINEAR, GL_LINEAR);
 
     int width, height, nrChannels;
-    unsigned char* data = loadImage(PROJECT_SOURCE_RELATIVEPATH + texturePath, width, height, nrChannels);
+    unsigned char* data = loadImage(AssetsRelativePath::getPath() + texturePath, width, height, nrChannels);
     if (data) {
         if (hasAlpha)
             glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, data);
@@ -92,7 +92,7 @@ void GLMeshCtrl::setSpecularMap(GLMesh& mesh, std::string texturePath, bool hasA
     mesh.setTextureWrapFilter(GL_REPEAT, GL_REPEAT, GL_LINEAR, GL_LINEAR);
 
     int width, height, nrChannels;
-    unsigned char* data = loadImage(PROJECT_SOURCE_RELATIVEPATH + texturePath, width, height, nrChannels);
+    unsigned char* data = loadImage(AssetsRelativePath::getPath() + texturePath, width, height, nrChannels);
     if (data) {
         if (hasAlpha)
             glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, data);

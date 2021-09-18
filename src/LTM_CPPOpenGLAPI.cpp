@@ -8,6 +8,7 @@
 #include <SFML/Audio.hpp>
 #include <SFML/Graphics.hpp>
 
+#include "headers/assets_edit.hpp"
 #include "headers/gl_setup.hpp"
 #include "headers/gl_mesh_types.hpp"
 #include "headers/gl_control.hpp"
@@ -24,12 +25,18 @@
 #pragma comment(lib, "legacy_stdio_definitions")
 #endif
 
-int main() {
+int main(int argc, char* argv[]) {
     CHECK_CONFIGS_FROM_CMAKE();
+
+    setAppRunMode(LTM_VSDEBUG);
+    if (!runModeNotSet()) {
+        std::cout << "RUN MODE NOT SET" << "\n";
+        return -1;
+    }
     
     GLFWwindow* window = configureOpenGL();
     unsigned int vertexShaderHandle{ 0 }, fragmentShaderHandle{ 0 }, shaderProgramHandle{ 0 };
-    createShaderProgram(vertexShaderHandle, "shaders/shaderVS.glsl", fragmentShaderHandle, "shaders/shaderFS.glsl", shaderProgramHandle);
+    createShaderProgram(vertexShaderHandle, "shaders/shaderVS.glsl", fragmentShaderHandle, "./shaders/shaderFS.glsl", shaderProgramHandle);
 
     unsigned int vaos[2], vbos[2];
     createVAOs(2, vaos);
@@ -37,7 +44,7 @@ int main() {
     GLBasicCubeMesh basicCube0("Basic Lighting Cube 0", glm::vec3(0.5f, 0.8f, -1.0f), shaderProgramHandle, vaos[0], vbos[0]);
     
 
-    createShaderProgram(vertexShaderHandle, "shaders/shaderVS.glsl", fragmentShaderHandle, "shaders/shaderFS.glsl", shaderProgramHandle);
+    createShaderProgram(vertexShaderHandle, "shaders/shaderVS.glsl", fragmentShaderHandle, "./shaders/shaderFS.glsl", shaderProgramHandle);
     GLEmmiterbleCubeMesh emitterbleCube0("Emitterble Cube 0", glm::vec3(-1.f, -1.f, -1.f), shaderProgramHandle, vaos[1], vbos[1], 10.0f);
     emitterbleCube0.enableLightEmit();
     emitterbleCube0.changeLightStrength(1.f);
@@ -52,8 +59,8 @@ int main() {
         GLGlobalCtrl::enableMeshesTransparency();
 
         GLMeshCtrl::overrideShininess(basicCube0, 16);
-        GLMeshCtrl::setDiffuseMap(basicCube0, "assets/imgs/container2.png", true);
-        GLMeshCtrl::setSpecularMap(basicCube0, "assets/imgs/container2_specular.png", true);
+        GLMeshCtrl::setDiffuseMap(basicCube0, "imgs/container2.png", true);
+        GLMeshCtrl::setSpecularMap(basicCube0, "imgs/container2_specular.png", true);
         GLMeshCtrl::overrideDiffuseColor(basicCube0, glm::vec3(1, 1, 1), true);
         GLMeshCtrl::overrideAmbientStrength(basicCube0, .2f);
         GLMeshCtrl::overrideSpecularStrength(basicCube0, 1.0f);

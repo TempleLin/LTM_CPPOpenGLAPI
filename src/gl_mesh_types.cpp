@@ -5,7 +5,7 @@
 #include <GLFW/glfw3.h>
 #include <glm/gtx/string_cast.hpp>
 
-#include "headers/image_edit.hpp"
+#include "headers/assets_edit.hpp"
 #include "headers/gl_values.hpp"
 #include "headers/gl_control.hpp"
 #include <LTM_CPPOpenGLAPIConfig.h>
